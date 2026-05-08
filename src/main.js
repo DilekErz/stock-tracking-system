@@ -17,12 +17,12 @@ async function initApp() {
   const app = document.getElementById("app");
 
   try {
-    const loginHtml = await loadPartial("/src/partials/login.html");
-    const homepageHtml = await loadPartial("/src/partials/homepage.html");
+    const loginHtml = await loadPartial("./src/partials/login.html");
+    const homepageHtml = await loadPartial("./src/partials/homepage.html");
     
-    const registerHtml = await loadPartial("/src/partials/create-account.html");
-const profileHtml = await loadPartial("/src/partials/profile.html");
-const forgotHtml = await loadPartial("/src/partials/forgot-password.html");
+    const registerHtml = await loadPartial("./src/partials/create-account.html");
+const profileHtml = await loadPartial("./src/partials/profile.html");
+const forgotHtml = await loadPartial("./src/partials/forgot-password.html");
 
     console.log("sidebar string var mı:", homepageHtml.includes('id="sidebar"'));
 console.log("closeMenu string var mı:", homepageHtml.includes('id="closeMenu"'));
