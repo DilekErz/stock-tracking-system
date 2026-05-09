@@ -232,57 +232,110 @@ function setupForgotPasswordNavigation() {
 }
 
 function setupLogin() {
-  const loginForm = document.querySelector(".loginform");
-  const loginPage = document.getElementById("loginPage");
-  const homepagePage = document.getElementById("homepagePage");
 
-  if (!loginForm) {
-    console.error("loginForm bulunamadı");
-    return;
-  }
+document.addEventListener("submit", async function (event) {
+    const loginForm = event.target.closest(".loginform");
 
- loginForm.addEventListener("submit", async function (event) {
-  event.preventDefault();
+    if (!loginForm) return;
 
-  const emailOrUsername = document.querySelector('input[name="name"]')?.value.trim();
-  const password = document.querySelector('input[name="password"]')?.value.trim();
+    event.preventDefault();
 
-  if (!emailOrUsername || !password) {
-    alert("Lütfen tüm alanları doldurun");
-    return;
-  }
+    console.log("Login form çalıştı");
 
-  try {
-    const response = await fetch(`${API_URL}/api/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        emailOrUsername,
-        password
-      })
-    });
+    const emailOrUsername = loginForm.querySelector('input[name="name"]')?.value.trim();
+    const password = loginForm.querySelector('input[name="password"]')?.value.trim();
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      alert(data.message);
+    if (!emailOrUsername || !password) {
+      alert("Lütfen tüm alanları doldurun");
       return;
     }
 
-    alert(data.message);
+    try {
+      const response = await fetch(`${API_URL}/api/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          emailOrUsername,
+          password
+        })
+      });
 
-    loginPage.style.display = "none";
-    homepagePage.style.display = "block";
+      const data = await response.json();
 
-    renderPriceChart();
+      if (!response.ok) {
+        alert(data.message);
+        return;
+      }
 
-  } catch (error) {
-    console.log(error);
-    alert("Login sırasında hata oluştu");
-  }
-});
+      alert(data.message);
+
+      document.getElementById("loginPage").style.display = "none";
+      document.getElementById("homepagePage").style.display = "block";
+
+      renderPriceChart();
+
+    } catch (error) {
+      console.log(error);
+      alert("Login sırasında hata oluştu");
+    }
+  });
+
+
+
+
+//   const loginForm = document.querySelector(".loginform");
+//   const loginPage = document.getElementById("loginPage");
+//   const homepagePage = document.getElementById("homepagePage");
+
+//   if (!loginForm) {
+//     console.error("loginForm bulunamadı");
+//     return;
+//   }
+
+//  loginForm.addEventListener("submit", async function (event) {
+//   event.preventDefault();
+
+//   const emailOrUsername = document.querySelector('input[name="name"]')?.value.trim();
+//   const password = document.querySelector('input[name="password"]')?.value.trim();
+
+//   if (!emailOrUsername || !password) {
+//     alert("Lütfen tüm alanları doldurun");
+//     return;
+//   }
+
+//   try {
+//     const response = await fetch(`${API_URL}/api/login`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json"
+//       },
+//       body: JSON.stringify({
+//         emailOrUsername,
+//         password
+//       })
+//     });
+
+//     const data = await response.json();
+
+//     if (!response.ok) {
+//       alert(data.message);
+//       return;
+//     }
+
+//     alert(data.message);
+
+//     loginPage.style.display = "none";
+//     homepagePage.style.display = "block";
+
+//     renderPriceChart();
+
+//   } catch (error) {
+//     console.log(error);
+//     alert("Login sırasında hata oluştu");
+//   }
+// });
 }
 
 function setupSidebarDelegation() {
