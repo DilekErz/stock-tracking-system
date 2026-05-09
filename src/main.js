@@ -1,6 +1,7 @@
 
  import "./css/styles.css";
  import { renderPriceChart } from './charts.js';
+ const API_URL = "https://stock-tracking-system-production.up.railway.app";
 
 async function loadPartial(path) {
   const response = await fetch(path);
@@ -69,7 +70,7 @@ console.log("overlay string var mı:", homepageHtml.includes('id="overlay"'));
 }
 
 function updateHomepageLogo() {
-  const homepageLogo = document.getElementById("homepage-logo"); // ✅ BURAYA AL
+  const homepageLogo = document.getElementById("homepage-logo"); //  BURAYA AL
 
   if (!homepageLogo) return;
 
@@ -152,7 +153,7 @@ document.addEventListener("submit", async function (event) {
   try {
 
     const response = await fetch(
-      "http://localhost:3000/api/register",
+      `${API_URL}/api/register`,
       {
         method: "POST",
 
@@ -231,7 +232,7 @@ function setupLogin() {
   }
 
   try {
-    const response = await fetch("http://localhost:3000/api/login", {
+    const response = await fetch(`${API_URL}/api/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -323,7 +324,7 @@ function setupForgotPasswordSubmit() {
 
       const email = emailForm.querySelector('input[name="email"]').value.trim();
 
-      const response = await fetch("http://localhost:3000/api/check-email", {
+      const response = await fetch(`${API_URL}/api/check-email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -359,7 +360,7 @@ function setupForgotPasswordSubmit() {
         return;
       }
 
-      const response = await fetch("http://localhost:3000/api/reset-password", {
+      const response = await fetch(`${API_URL}/api/reset-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
@@ -8,28 +9,32 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-/* MYSQL BAĞLANTISI */
+/*  RAİLWAY MYSQL BAĞLANTISI */
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "12345", 
-  database: "ai_predict_db"
+  host: process.env.MYSQLHOST,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE,
+  port: process.env.MYSQLPORT
 });
 
-
 db.connect((err) => {
-
   if (err) {
     console.log("MySQL bağlantı hatası:", err);
     return;
   }
 
-  console.log("MySQL bağlantısı başarılı ");
+  console.log("MySQL bağlantısı başarılı");
 });
 
-
 app.get("/", (req, res) => {
-  res.send("Backend çalışıyor ");
+  res.send("Backend çalışıyor");
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server ${PORT} portunda çalışıyor`);
 });
 
 /* REGISTER */
