@@ -76,8 +76,8 @@ function updateHomepageLogo() {
   const isLight = document.body.classList.contains("light-mode");
 
   homepageLogo.src = isLight
-    ? "/assets/logos/logo-light.png"
-    : "/assets/logos/logo-dark.png";
+    ? "./assets/logos/logo-light.png"
+    : "./assets/logos/logo-dark.png";
 }
 
 function updateThemeStatus() {
