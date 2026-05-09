@@ -1,0 +1,383 @@
+
+<section>
+  <div class="dashboard">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+<div class="homepage-card"> 
+<img id="homepage-logo" src="/assets/logos/logo-dark.png" alt="AI Predict Logo" class="homepage-logo">
+</div>
+
+      <div class="market-info">
+        <span class="asset-name">BIST100</span>
+        <div class="price-row">
+          <span class="price">10,542.35</span>
+          <span class="currency">USD</span>
+          <span class="change">+2.4% ▲</span>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+
+        <button class="theme-btn" id="themeToggle" aria-label="Tema değiştir">
+    🌙
+  </button>
+
+  <button type="button" class="profile-btn" id="openProfile" aria-label="Profil sayfası">
+  👤
+</button>
+
+      <button class="menu-btn" id="openMenu" aria-label="Open Menu">
+        ☰
+      </button>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- TOP SECTION -->
+      <section class="top-section">
+        <!-- PRICE CHART -->
+        <div class="chart-card big-chart">
+          <div class="chart-title">Price Time Series</div>
+
+          <div class="candlestick-chart" id="main-price-chart">
+            <!-- <div class="candles">
+              <div class="candle green" style="left:3%; height:85px; bottom:30px;"></div>
+              <div class="candle green" style="left:7%; height:110px; bottom:35px;"></div>
+              <div class="candle green" style="left:11%; height:135px; bottom:28px;"></div>
+              <div class="candle red" style="left:15%; height:125px; bottom:55px;"></div>
+              <div class="candle green" style="left:19%; height:145px; bottom:30px;"></div>
+              <div class="candle green" style="left:23%; height:170px; bottom:30px;"></div>
+              <div class="candle red" style="left:27%; height:160px; bottom:60px;"></div>
+              <div class="candle green" style="left:31%; height:120px; bottom:38px;"></div>
+              <div class="candle red" style="left:35%; height:155px; bottom:48px;"></div>
+              <div class="candle green" style="left:39%; height:130px; bottom:40px;"></div>
+              <div class="candle green" style="left:43%; height:140px; bottom:30px;"></div>
+              <div class="candle red" style="left:47%; height:135px; bottom:42px;"></div>
+              <div class="candle green" style="left:51%; height:160px; bottom:28px;"></div>
+              <div class="candle green" style="left:55%; height:170px; bottom:30px;"></div>
+              <div class="candle red" style="left:59%; height:160px; bottom:75px;"></div>
+              <div class="candle green" style="left:63%; height:165px; bottom:32px;"></div>
+              <div class="candle red" style="left:67%; height:185px; bottom:55px;"></div>
+              <div class="candle green" style="left:71%; height:178px; bottom:30px;"></div>
+              <div class="candle red" style="left:75%; height:182px; bottom:78px;"></div>
+              <div class="candle green" style="left:79%; height:125px; bottom:40px;"></div>
+              <div class="candle red" style="left:83%; height:155px; bottom:50px;"></div>
+              <div class="candle green" style="left:87%; height:130px; bottom:35px;"></div>
+              <div class="candle red" style="left:91%; height:140px; bottom:60px;"></div>
+            </div>
+
+            <svg class="line-overlay" viewBox="0 0 1000 300" preserveAspectRatio="none">
+              <path d="M30,240 
+                       C120,210 180,160 250,155
+                       S380,205 470,185
+                       S590,215 680,150
+                       S790,190 860,135
+                       S920,110 970,95"
+                    fill="none"
+                    stroke="#53b8ff"
+                    stroke-width="3"/>
+            </svg>
+
+            <div class="time-labels bottom-labels">
+              <span>Apr 23</span>
+              <span>May 23</span>
+              <span>Jun 23</span>
+              <span>Jul 23</span>
+              <span>Aug 23</span>
+              <span>Sep 23</span>
+              <span>Oct 23</span>
+            </div>
+
+            <div class="side-labels">
+              <span>18:00</span>
+              <span>17:00</span>
+              <span>16:00</span>
+              <span>15:00</span>
+              <span>14:00</span>
+              <span>13:00</span>
+              <span>12:00</span>
+              <span>11:00</span>
+              <span>10:00</span>
+              <span>09:00</span>
+            </div>-->
+          </div> 
+        </div>
+
+        <!-- PREDICTION -->
+        <div class="prediction-card">
+          <h3><span>AI</span> PREDICTION</h3>
+          <div class="prediction-price">11,200.00 USD</div>
+          <div class="arrow-up">↑</div>
+          <div class="confidence">88% Confidence</div>
+        </div>
+      </section>
+
+      <div class="card-two">
+        <div>
+      <!-- RSI -->
+      <section class="chart-card medium-chart">
+        <div class="chart-title">RSI(14)</div>
+        <div class="mini-chart">
+          <div class="rsi-band"></div>
+
+          <svg class="line-overlay" viewBox="0 0 1000 180" preserveAspectRatio="none">
+            <path d="M0,90
+                     C90,88 110,45 180,40
+                     S300,120 380,110
+                     S470,40 560,45
+                     S650,115 720,100
+                     S820,80 890,115
+                     S940,80 1000,85"
+                  fill="none"
+                  stroke="#4eb6f4"
+                  stroke-width="3"/>
+          </svg>
+
+          <div class="time-labels">
+            <span>10:00</span>
+            <span>12:00</span>
+            <span>14:00</span>
+            <span>16:00</span>
+            <span>18:00</span>
+            <span>20:00</span>
+            <span>22:00</span>
+          </div>
+
+          <div class="indicator-values">
+            <span>80</span>
+            <span>60</span>
+            <span>40</span>
+            <span>20</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- MACD -->
+      <section class="chart-card medium-chart">
+        <div class="chart-title">MACD(12,26,9)</div>
+        <div class="mini-chart macd-chart">
+          <div class="bars">
+            <span class="bar green" style="height:40px;"></span>
+            <span class="bar green" style="height:58px;"></span>
+            <span class="bar green" style="height:72px;"></span>
+            <span class="bar red" style="height:52px;"></span>
+            <span class="bar green" style="height:76px;"></span>
+            <span class="bar green" style="height:82px;"></span>
+            <span class="bar red" style="height:61px;"></span>
+            <span class="bar green" style="height:70px;"></span>
+            <span class="bar green" style="height:85px;"></span>
+            <span class="bar red" style="height:75px;"></span>
+            <span class="bar green" style="height:78px;"></span>
+            <span class="bar green" style="height:56px;"></span>
+            <span class="bar red" style="height:48px;"></span>
+            <span class="bar green" style="height:64px;"></span>
+            <span class="bar red" style="height:80px;"></span>
+            <span class="bar green" style="height:88px;"></span>
+            <span class="bar green" style="height:68px;"></span>
+            <span class="bar red" style="height:54px;"></span>
+            <span class="bar green" style="height:50px;"></span>
+            <span class="bar green" style="height:62px;"></span>
+            <span class="bar green" style="height:40px;"></span>
+            <span class="bar green" style="height:58px;"></span>
+            <span class="bar green" style="height:72px;"></span>
+            <span class="bar red" style="height:52px;"></span>
+            <span class="bar green" style="height:76px;"></span>
+            <span class="bar green" style="height:82px;"></span>
+            <span class="bar red" style="height:61px;"></span>
+            <span class="bar green" style="height:70px;"></span>
+            <span class="bar green" style="height:85px;"></span>
+            <span class="bar red" style="height:75px;"></span>
+            <span class="bar green" style="height:78px;"></span>
+            <span class="bar green" style="height:56px;"></span>
+            <span class="bar red" style="height:48px;"></span>
+            <span class="bar green" style="height:64px;"></span>
+            <span class="bar red" style="height:80px;"></span>
+            <span class="bar green" style="height:88px;"></span>
+            <span class="bar green" style="height:68px;"></span>
+            <span class="bar red" style="height:54px;"></span>
+            <span class="bar green" style="height:50px;"></span>
+            <span class="bar green" style="height:62px;"></span>
+            <span class="bar red" style="height:48px;"></span>
+            <span class="bar red" style="height:80px;"></span>
+            <span class="bar red" style="height:54px;"></span>
+            <span class="bar red" style="height:48px;"></span>
+            <span class="bar red" style="height:80px;"></span>
+            <span class="bar red" style="height:54px;"></span>
+          </div>
+
+          <svg class="line-overlay" viewBox="0 0 1000 180" preserveAspectRatio="none">
+            <path d="M0,92
+                     C70,85 110,55 170,80
+                     S280,70 350,82
+                     S470,58 540,90
+                     S670,62 740,86
+                     S860,68 1000,88"
+                  fill="none"
+                  stroke="#8e49d7"
+                  stroke-width="3"/>
+
+            <path d="M0,100
+                     C100,96 180,102 260,98
+                     S420,105 520,101
+                     S680,96 780,100
+                     S900,97 1000,101"
+                  fill="none"
+                  stroke="#36d6d0"
+                  stroke-width="3"/>
+          </svg>
+
+          <div class="time-labels">
+            <span>10:00</span>
+            <span>12:00</span>
+            <span>14:00</span>
+            <span>16:00</span>
+            <span>18:00</span>
+            <span>20:00</span>
+            <span>22:00</span>
+          </div>
+
+          <div class="indicator-values">
+            <span>1.5</span>
+            <span>0.5</span>
+            <span>0</span>
+            <span>-0.5</span>
+          </div>
+        </div>
+      </section>
+      </div>
+
+      <div class="prediction-card-two">
+<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsa voluptates quas amet suscipit sunt libero consequuntur recusandae, aliquid est qui facilis et similique enim asperiores doloremque illo omnis, ducimus ab.
+Quae voluptates tempore dolore illo dignissimos nihil praesentium fuga nam laudantium mollitia ipsum vero consequatur, perferendis ipsam animi unde ipsa quis et reprehenderit placeat consectetur nobis dolor! Suscipit, incidunt sint.
+Iste sapiente incidunt magni e</p>
+      </div>
+</div>
+      <!-- INFO BOXES -->
+      <section class="info-boxes">
+        <div class="info-box"><span>VOLUME 1.2B</span></div>
+        <div class="info-box"><span>HIGH / LOW</span></div>
+        <div class="info-box"><span>10,650.10 / 10,300.55</span></div>
+        <div class="info-box"><span>VOLATILITY</span></div>
+      </section>
+
+      <footer class="footer-note">
+        This application provides AI-based predictions for informational purposes only. It is not investment advice.
+      </footer>
+    </div>
+
+    <!-- OVERLAY -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h2>MENU</h2>
+        <button class="close-btn" id="closeMenu">✕</button>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Select Asset</h3>
+
+        <label class="asset-item active">
+          <input type="checkbox" />
+          <span>BIST 100</span>
+        </label>
+
+        <label class="asset-item">
+          <input type="checkbox" checked />
+          <span>ASELSAN</span>
+        </label>
+
+        <label class="asset-item">
+          <input type="checkbox" checked />
+          <span>THYAO</span>
+        </label>
+
+        <label class="asset-item">
+          <input type="checkbox" checked />
+          <span>USD / TRY</span>
+        </label>
+
+        <label class="asset-item">
+          <input type="checkbox" checked />
+          <span>EUR / TRY</span>
+        </label>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Time Range</h3>
+
+        <div class="range-row">
+          <div class="range-buttons">
+            <button>1D</button>
+            <button>1W</button>
+          </div>
+
+          <label class="switch">
+            <input type="checkbox" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="range-row active-range">
+          <div class="range-buttons">
+            <button>1M</button>
+            <button>3M</button>
+          </div>
+
+          <label class="switch">
+            <input type="checkbox" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Indicators</h3>
+
+        <div class="indicator-item">
+          <div class="left">
+            <input type="checkbox" checked />
+            <span>RSI (14)</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="indicator-item">
+          <div class="left">
+            <input type="checkbox" checked />
+            <span>MACD (12,26,9)</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="indicator-item">
+          <div class="left">
+            <input type="checkbox" checked />
+            <span>Moving Average</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="sidebar-links">
+        <a href="#">Predictions Details <span>›</span></a>
+        <a href="#">About Model <span>›</span></a>
+        <a href="#">Disclaimer <span>›</span></a>
+      </div>
+    </div>
+  </div>
+
+
+</section>
