@@ -85,6 +85,15 @@ font-weight: 800;
   color:#9eaaa2;
   padding: left 10px;
 }
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px rgba(10, 20, 18, 0.95) inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
 .login-a{
     display:flex;
     gap:34px;
@@ -173,4 +182,24 @@ font-weight: 800;
 }
 .logo-colour{
   color:#07f388d9;
+}
+.password-label {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #2fa36b;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.toggle-password:hover {
+  color: #00ff99;
 }

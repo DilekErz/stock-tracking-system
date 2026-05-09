@@ -61,6 +61,7 @@ console.log("overlay string var mı:", homepageHtml.includes('id="overlay"'));
     setupSidebarDelegation();
     setupThemeToggle();
     setupProfileNavigation();
+    setupPasswordToggle();
     updateThemeStatus();
 
   } catch (error) {
@@ -130,6 +131,25 @@ function setupRegisterNavigation() {
   });
 
 
+  function setupPasswordToggle() {
+  document.addEventListener("click", function (event) {
+    const toggleBtn = event.target.closest("#togglePassword");
+
+    if (!toggleBtn) return;
+
+    const passwordInput = document.getElementById("loginPassword");
+
+    if (!passwordInput) return;
+
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      toggleBtn.textContent = "🙈";
+    } else {
+      passwordInput.type = "password";
+      toggleBtn.textContent = "👁";
+    }
+  });
+}
   
 
 document.addEventListener("submit", async function (event) {
