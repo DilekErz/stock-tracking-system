@@ -3,10 +3,18 @@ const express = require("express");
 const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
 const cors = require("cors");
+const corsOptions = {
+  origin: [
+    "http://localhost:5173",
+    "https://dilekerz.github.io"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+};
 
 const app = express();
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 /*  RAİLWAY MYSQL BAĞLANTISI */
@@ -238,7 +246,7 @@ app.post("/api/reset-password", async (req, res) => {
 });
 
 /* SERVER */
-app.listen(3000, () => {
-  console.log("Server çalışıyor: http://localhost:3000");
-});
+// app.listen(3000, () => {
+//   console.log("Server çalışıyor: http://localhost:3000");
+// });
 
