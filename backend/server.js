@@ -82,7 +82,7 @@ app.post("/api/register", async (req, res) => {
         }
 
         res.json({
-          message: "Kayıt başarılı ✅"
+          message: "Kayıt başarılı "
         });
       }
     );
@@ -233,7 +233,7 @@ app.post("/api/reset-password", async (req, res) => {
       }
 
       res.json({
-        message: "Şifre başarıyla güncellendi ✅"
+        message: "Şifre başarıyla güncellendi "
       });
     });
 

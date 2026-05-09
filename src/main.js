@@ -251,16 +251,21 @@ document.addEventListener("submit", async function (event) {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          emailOrUsername,
-          password
-        })
-      });
+      console.log("Gönderilen kullanıcı:", emailOrUsername);
+console.log("Fetch isteği atılıyor...");
+
+const response = await fetch(`${API_URL}/api/login`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    emailOrUsername,
+    password
+  })
+});
+
+console.log("Response geldi:", response);
 
       const data = await response.json();
 
