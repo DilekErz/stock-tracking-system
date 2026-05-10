@@ -233,14 +233,20 @@ function setupForgotPasswordNavigation() {
 
 function setupLogin() {
 
-document.addEventListener("submit", async function (event) {
-    const loginForm = event.target.closest(".loginform");
+  const loginForm = document.querySelector(".loginform");
 
-    if (!loginForm) return;
+  if (!loginForm) {
+    console.error("loginForm bulunamadı");
+    return;
+  }
 
+  loginForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
     console.log("Login form çalıştı");
+
+    const loginPage = document.getElementById("loginPage");
+    const homepagePage = document.getElementById("homepagePage");
 
     const emailOrUsername = loginForm.querySelector('input[name="name"]')?.value.trim();
     const password = loginForm.querySelector('input[name="password"]')?.value.trim();
@@ -251,23 +257,23 @@ document.addEventListener("submit", async function (event) {
     }
 
     try {
-      console.log("Gönderilen kullanıcı:", emailOrUsername);
-console.log("Fetch isteği atılıyor...");
+      console.log("Fetch isteği atılıyor...");
 
-const response = await fetch(`${API_URL}/api/login`, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    emailOrUsername,
-    password
-  })
-});
+      const response = await fetch(`${API_URL}/api/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          emailOrUsername,
+          password
+        })
+      });
 
-console.log("Response geldi:", response);
+      console.log("Response geldi:", response);
 
       const data = await response.json();
+      console.log("Backend cevabı:", data);
 
       if (!response.ok) {
         alert(data.message);
@@ -276,8 +282,8 @@ console.log("Response geldi:", response);
 
       alert(data.message);
 
-      document.getElementById("loginPage").style.display = "none";
-      document.getElementById("homepagePage").style.display = "block";
+      loginPage.style.display = "none";
+      homepagePage.style.display = "block";
 
       renderPriceChart();
 
