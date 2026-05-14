@@ -63,6 +63,7 @@ console.log("overlay string var mı:", homepageHtml.includes('id="overlay"'));
     setupProfileNavigation();
     setupPasswordToggle();
     updateThemeStatus();
+    updateHomepageLogo();
 
   } catch (error) {
     console.error("Yükleme hatası:", error);
@@ -77,9 +78,14 @@ function updateHomepageLogo() {
 
   const isLight = document.body.classList.contains("light-mode");
 
+
   homepageLogo.src = isLight
-    ? "./assets/logos/logo-light.png"
-    : "./assets/logos/logo-dark.png";
+  ? `${import.meta.env.BASE_URL}assets/logos/logo-light.png`
+  : `${import.meta.env.BASE_URL}assets/logos/logo-dark.png`;
+
+  // homepageLogo.src = isLight
+  //   ? "./assets/logos/logo-light.png"
+  //   : "./assets/logos/logo-dark.png";
 }
 
 function updateThemeStatus() {
