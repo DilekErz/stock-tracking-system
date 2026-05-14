@@ -11,7 +11,7 @@ export async function renderPriceChart() {
 
     // 1. CSV Dosyasını Oku
     //Dosya bulunuyor mu,CSV boş mu,gerçekten veri geliyor mu
-    const response = await fetch('./Global.csv');
+    const response = await fetch(`${import.meta.env.BASE_URL}Global.csv`);
     console.log("fetch response:", response);
     const csvText = await response.text();
     console.log("csv text ilk 300 karakter:", csvText.slice(0, 300));
