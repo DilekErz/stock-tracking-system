@@ -187,19 +187,14 @@ font-weight: 800;
   position: relative;
 }
 
-.toggle-password {
-  position: absolute;
-  right: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  color: #2fa36b;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 0;
+#togglePassword {
+    position: absolute;
+    transform: translate(-40px, 18px);
+    color: #00f07c85;
+
 }
 
-.toggle-password:hover {
+
+#togglePassword:hover {
   color: #00ff99;
 }

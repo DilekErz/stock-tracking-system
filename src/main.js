@@ -209,7 +209,7 @@ function setupPasswordToggle() {
 
     if (passwordInput.type === "password") {
       passwordInput.type = "text";
-      toggleBtn.textContent = "🙈";
+      toggleBtn.innerHTML = ``;
     } else {
       passwordInput.type = "password";
       toggleBtn.textContent = "👁";
