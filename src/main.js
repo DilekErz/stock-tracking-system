@@ -209,10 +209,11 @@ function setupPasswordToggle() {
 
     if (passwordInput.type === "password") {
       passwordInput.type = "text";
-      toggleBtn.innerHTML = ``;
+      toggleBtn.innerHTML = `<svg class="icon icon-eye-slash"><use href="./assets/icons/symbol-defs2.svg#icon-eye-slash"></use></svg>`;
+
     } else {
       passwordInput.type = "password";
-      toggleBtn.textContent = "👁";
+      toggleBtn.innerHTML = `<svg class="icon icon-eye"><use href="./assets/icons/symbol-defs3.svg#icon-eye"></use></svg>`;
     }
   });
 }

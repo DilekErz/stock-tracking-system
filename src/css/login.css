@@ -198,3 +198,12 @@ font-weight: 800;
 #togglePassword:hover {
   color: #00ff99;
 }
+.icon-eye-slash .icon-eye{
+  position: absolute;
+    transform: translate(-40px, 18px);
+    width:16px;
+    height:21px;
+
+   stroke: #00ff99;
+
+}
