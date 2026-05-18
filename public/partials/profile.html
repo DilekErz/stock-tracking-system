@@ -8,22 +8,23 @@
     </div>
 
     <div class="profile-card">
-      <div class="profile-avatar">👤</div>
+      <div class="profile-avatar" id="profileAvatar">👤</div>
 
       <div class="profile-info">
-        <h2>Dilek Ayça Ersöz</h2>
+        <h2 id="profileFullName">User Name</h2>
         <p>AI Predict User</p>
       </div>
 
       <div class="profile-details">
         <div class="profile-row">
           <span>Username</span>
-          <strong>dilek_ayca</strong>
-        </div>
+          <strong id="profileUsername">-</strong>
+          </div>
+        
 
         <div class="profile-row">
           <span>Email</span>
-          <strong>dilek@example.com</strong>
+          <strong id="profileEmail">-</strong>
         </div>
 
         <div class="profile-row">
@@ -36,7 +37,17 @@
           <strong>USD</strong>
         </div>
       </div>
-    </div>
+
+<div class="profile-edit">
+    <input type="text" id="newUsername" placeholder="New username">
+
+    <input type="file" id="profileImageInput" accept="image/*">
+
+    <button id="saveProfileBtn">Save Profile</button>
+  </div>
+</div>
+
+   
 
     <div class="profile-grid">
       <div class="profile-stat">
