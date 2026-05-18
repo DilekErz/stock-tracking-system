@@ -199,33 +199,124 @@ body.light-mode .profile-back-btn {
   border-radius: 50%;
   object-fit: cover;
 }
+ 
 
-.profile-edit {
-  margin-top: 24px;
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+/* düzenleme */
+
+
+.profile-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
 }
 
-.profile-edit input {
+.profile-modal-overlay.active {
+  display: flex;
+}
+.profile-modal h2{
+  padding-bottom: 10px;
+}
+
+.profile-modal {
+  width: 400px;
+  min-height: 300px;
+  background: #08182f;
+  border: 1px solid rgba(0, 240, 124, 0.35);
+  border-radius: 22px;
+  padding: 24px;
+  text-align: center;
+  position: relative;
+}
+
+.modal-close-btn {
+  position: absolute;
+  right: 14px;
+  top: 10px;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.modal-avatar {
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  margin: 18px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.modal-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.modal-info-note{
+  padding-bottom: 10px;
+}
+
+.avatar-upload-label {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: #00f07c;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.avatar-upload-label input {
+  display: none;
+}
+
+.profile-modal input[type="text"],
+.profile-modal input[type="password"] {
+  width: 100%;
   background: rgba(87, 106, 138, 0.18);
   border: 1px solid rgba(140, 160, 200, 0.18);
   color: #ffffff;
   border-radius: 14px;
-  padding: 12px 14px;
+  padding: 12px;
+  margin-bottom: 14px;
 }
 
-.profile-edit button {
+.profile-modal button[id^="save"] {
+  width: 100%;
   background: #00f07c;
   color: #061226;
   border: none;
   border-radius: 14px;
-  padding: 12px 18px;
-  font-weight: 700;
+  padding: 12px;
+  font-weight: 800;
   cursor: pointer;
 }
 
-body.light-mode .profile-edit input {
-  background: rgba(40, 70, 110, 0.05);
-  color: #102033;
+.usernameModalh2{
+  padding-bottom: 10px;
+}
+.profile-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.profile-actions button {
+  background: transparent;
+  border: 1px solid rgba(0, 240, 124, 0.5);
+  color: #00f07c;
+  border-radius: 12px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: 700;
 }

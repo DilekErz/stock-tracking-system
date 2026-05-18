@@ -64,6 +64,8 @@ console.log("overlay string var mı:", homepageHtml.includes('id="overlay"'));
     setupPasswordToggle();
     updateThemeStatus();
     updateHomepageLogo();
+    loadSavedProfileImage();
+    loadUserProfile();
 
   } catch (error) {
     console.error("Yükleme hatası:", error);
@@ -196,6 +198,103 @@ document.addEventListener("submit", async function (event) {
   }
 });
 }
+ 
+// düzeltme
+
+let selectedProfileImage = null;
+
+document.addEventListener("change", function (event) {
+  if (event.target.id === "profileImageInput") {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      selectedProfileImage = e.target.result;
+
+      document.getElementById("modalAvatar").innerHTML = `
+        <img src="${selectedProfileImage}" alt="Profile Photo">
+      `;
+    };
+
+    reader.readAsDataURL(file);
+  }
+});
+
+document.addEventListener("click", function (event) {
+  if (event.target.id === "savePhotoBtn") {
+    if (!selectedProfileImage) {
+      alert("Lütfen önce bir fotoğraf seç.");
+      return;
+    }
+
+    document.getElementById("profileAvatar").innerHTML = `
+      <img src="${selectedProfileImage}" alt="Profile Photo">
+    `;
+
+    localStorage.setItem("profileImage", selectedProfileImage);
+
+    document.getElementById("photoModal").classList.remove("active");
+  }
+});
+
+document.addEventListener("click", function (event) {
+ 
+if (event.target.id === "openPhotoModal") {
+
+  const savedImage = localStorage.getItem("profileImage");
+
+  if (savedImage) {
+    document.getElementById("modalAvatar").innerHTML = `
+      <img src="${savedImage}" alt="Profile Photo">
+    `;
+  }
+
+  document.getElementById("photoModal").classList.add("active");
+}
+  if (event.target.id === "openUsernameModal") {
+    document.getElementById("usernameModal").classList.add("active");
+  }
+
+  if (event.target.id === "openPasswordModal") {
+    document.getElementById("passwordModal").classList.add("active");
+  }
+
+  if (event.target.classList.contains("modal-close-btn")) {
+    const modalId = event.target.dataset.close;
+    document.getElementById(modalId).classList.remove("active");
+  }
+});
+function loadSavedProfileImage() {
+  const savedImage = localStorage.getItem("profileImage");
+
+  if (savedImage) {
+    document.getElementById("profileAvatar").innerHTML = `
+      <img src="${savedImage}" alt="Profile Photo">
+    `;
+
+    document.getElementById("modalAvatar").innerHTML = `
+      <img src="${savedImage}" alt="Profile Photo">
+    `;
+  }
+}
+function loadUserProfile() {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+  if (!currentUser) return;
+
+  document.getElementById("profileFullName").textContent =
+    currentUser.username || "User Name";
+
+  document.getElementById("profileUsername").textContent =
+    currentUser.username || "-";
+
+  document.getElementById("profileEmail").textContent =
+    currentUser.email || "-";
+}
+
 
 function setupPasswordToggle() {
   document.addEventListener("click", function (event) {
@@ -283,11 +382,17 @@ function setupLogin() {
       console.log("Backend cevabı:", data);
 
       if (!response.ok) {
-        alert(data.message);
+        alert(data.message);   
         return;
       }
 
       alert(data.message);
+
+      /* kullanıcıyı kaydet */
+localStorage.setItem("currentUser", JSON.stringify(data.user));
+
+/* profile bilgilerini yükle */
+loadUserProfile();
 
       loginPage.style.display = "none";
       homepagePage.style.display = "block";

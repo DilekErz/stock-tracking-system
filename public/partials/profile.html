@@ -15,6 +15,12 @@
         <p>AI Predict User</p>
       </div>
 
+      <div class="profile-actions">
+  <button id="openPhotoModal">Edit Photo</button>
+  <button id="openUsernameModal">Change Username</button>
+  <button id="openPasswordModal">Change Password</button>
+</div>
+
       <div class="profile-details">
         <div class="profile-row">
           <span>Username</span>
@@ -38,15 +44,8 @@
         </div>
       </div>
 
-<div class="profile-edit">
-    <input type="text" id="newUsername" placeholder="New username">
 
-    <input type="file" id="profileImageInput" accept="image/*">
-
-    <button id="saveProfileBtn">Save Profile</button>
-  </div>
-</div>
-
+    </div>
    
 
     <div class="profile-grid">
@@ -67,4 +66,49 @@
     </div>
 
   </div>
+
+  <div class="profile-modal-overlay" id="photoModal">
+  <div class="profile-modal">
+    <button class="modal-close-btn" data-close="photoModal">×</button>
+    <h2>Edit Photo</h2>
+
+    <div class="modal-avatar" id="modalAvatar">👤</div>
+
+    <label class="avatar-upload-label">
+      Change Photo
+      <input type="file" id="profileImageInput" accept="image/*">
+    </label>
+
+    <button id="savePhotoBtn">Save Photo</button>
+  </div>
+</div>
+
+<div class="profile-modal-overlay" id="usernameModal">
+  <div class="profile-modal">
+    <button class="modal-close-btn" data-close="usernameModal">×</button>
+    <h2 class="usernameModalh2">Change Username</h2>
+
+    <p class="modal-info-note">
+      To change your username, please enter your current password.
+    </p>
+
+    <input type="text" id="newUsername" placeholder="New username">
+    <input type="password" id="usernameCurrentPassword" placeholder="Current password">
+
+    <button id="saveUsernameBtn">Save Username</button>
+  </div>
+</div>
+
+<div class="profile-modal-overlay" id="passwordModal">
+  <div class="profile-modal">
+    <button class="modal-close-btn" data-close="passwordModal">×</button>
+    <h2>Change Password</h2>
+
+    <input type="password" id="oldPassword" placeholder="Current password">
+    <input type="password" id="newPassword" placeholder="New password">
+    <input type="password" id="confirmNewPassword" placeholder="Confirm new password">
+
+    <button id="savePasswordBtn">Update Password</button>
+  </div>
+</div>
 </section>
