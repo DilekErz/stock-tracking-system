@@ -24,8 +24,11 @@ const db = mysql.createConnection({
   user: process.env.MYSQLUSER,
   password: process.env.MYSQLPASSWORD,
   database: process.env.MYSQLDATABASE,
-  port: process.env.MYSQLPORT
+  port: Number(process.env.MYSQLPORT)
 });
+console.log("HOST:", process.env.MYSQLHOST);
+console.log("DB:", process.env.MYSQLDATABASE);
+console.log("PORT:", process.env.MYSQLPORT);
 
 db.connect((err) => {
   if (err) {
@@ -123,7 +126,16 @@ app.post("/api/login", (req, res) => {
 
     const user = results[0];
 
-    const passwordCorrect = await bcrypt.compare(password, user.password);
+    let passwordCorrect;
+
+try {
+  passwordCorrect = await bcrypt.compare(password, user.password);
+} catch (error) {
+  console.log("Şifre karşılaştırma hatası:", error);
+  return res.status(500).json({
+    message: "Sunucu hatası"
+  });
+}
 
     if (!passwordCorrect) {
       return res.status(401).json({
