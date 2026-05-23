@@ -33,36 +33,72 @@
           <strong id="profileEmail">-</strong>
         </div>
 
-        <div class="profile-row">
-          <span>Selected Market</span>
-          <strong>BIST100</strong>
-        </div>
+        <div class="profile-row profile-dropdown-row">
+  <span>Preferred Asset</span>
+  <strong id="profilePreferredAsset">Gold</strong>
+  <button class="profile-dropdown-btn" data-target="assetMenu">⌄</button>
+</div>
+<div class="profile-dropdown-menu" id="assetMenu">
+  <button>Gold</button>
+  <button>BIST100</button>
+  <button>SP500</button>
+  <button>NASDAQ100</button>
+  <button>EUR/USD</button>
+  <button>Brent</button>
+</div>
 
-        <div class="profile-row">
-          <span>Preferred Currency</span>
-          <strong>USD</strong>
-        </div>
-      </div>
+<div class="profile-row profile-dropdown-row">
+  <span>Portfolio Currency</span>
+  <strong id="profilePortfolioCurrency">TRY</strong>
+  <button class="profile-dropdown-btn" data-target="currencyMenu">⌄</button>
+</div>
+<div class="profile-dropdown-menu" id="currencyMenu">
+  <button>TRY</button>
+  <button>USD</button>
+  <button>EUR</button>
+</div>
+
+<div class="profile-row profile-dropdown-row">
+  <span>Prediction Window</span>
+  <strong id="profilePredictionWindow">5 Days</strong>
+  <button class="profile-dropdown-btn" data-target="predictionMenu">⌄</button>
+</div>
+<div class="profile-dropdown-menu" id="predictionMenu">
+  <button>1 Day</button>
+  <button>3 Days</button>
+  <button>5 Days</button>
+  <button>7 Days</button>
+</div>
+
+<div class="profile-row profile-dropdown-row">
+  <span>Display Mode</span>
+  <strong id="profileDisplayMode">Original Market</strong>
+  <button class="profile-dropdown-btn" data-target="displayMenu">⌄</button>
+</div>
+<div class="profile-dropdown-menu" id="displayMenu">
+  <button>Original Market</button>
+  <button>Local Value</button>
+</div>
 
 
     </div>
    
 
     <div class="profile-grid">
-      <div class="profile-stat">
-        <h3>Watchlist</h3>
-        <p>5 Assets</p>
-      </div>
+       <div class="profile-stat">
+    <h3>Watchlist</h3>
+    <p>5 Assets</p>
+  </div>
 
-      <div class="profile-stat">
-        <h3>Prediction Mode</h3>
-        <p>AI Enabled</p>
-      </div>
+  <div class="profile-stat">
+    <h3>Default Prediction</h3>
+    <p id="profileDefaultPrediction">5 Days</p>
+  </div>
 
-      <div class="profile-stat">
-  <h3>Theme</h3>
-  <p id="themeStatus">Dark Mode</p>
-</div>
+  <div class="profile-stat">
+    <h3>Theme</h3>
+    <p id="themeStatus">Dark Mode</p>
+  </div>
     </div>
 
   </div>
