@@ -2,7 +2,8 @@
  import "./css/styles.css";
  import { renderPriceChart } from './charts.js';
 //  const API_URL = "https://stock-tracking-system-production.up.railway.app"; RAİLWAY ÇALIŞMAZSA ALTTAKİ LOCALHOST ÇALIŞTIR
-const API_URL = "http://localhost:3000";
+const API_URL =
+"https://stock-tracking-system-production.up.railway.app";
 
 async function loadPartial(path) {
   const response = await fetch(path);
