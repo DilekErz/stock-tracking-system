@@ -726,7 +726,14 @@ loadUserProfile();
       loginPage.style.display = "none";
       homepagePage.style.display = "block";
 
-      renderPriceChart();
+      applyPreferencesToHomepage();
+
+const selectedAsset =
+localStorage.getItem("selectedAsset")
+||
+"BIST100";
+
+renderPriceChart(selectedAsset);
       applyPreferencesToHomepage();
 
     } catch (error) {
