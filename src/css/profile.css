@@ -394,3 +394,24 @@ body.light-mode .profile-back-btn {
   border-color: #00f07c;
   color: #00f07c;
 }
+
+body.light-mode .profile-dropdown-menu {
+  background: #ffffff;
+  border: 1px solid #d8e1ec;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+}
+
+body.light-mode .profile-dropdown-menu button {
+  background: #f8fafc;
+  color: #102033;
+  border: 1px solid #d8e1ec;
+}
+
+body.light-mode .profile-dropdown-menu button:hover {
+  background: #e8f7ef;
+  color: #008f5a;
+  border-color: #00c878;
+}
+body.light-mode .profile-dropdown-btn {
+  color: #00b66a;
+}

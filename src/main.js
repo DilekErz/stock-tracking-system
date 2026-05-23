@@ -63,12 +63,14 @@ console.log("overlay string var mı:", homepageHtml.includes('id="overlay"'));
     setupThemeToggle();
     setupProfileNavigation();
     setupProfilePreferenceDropdowns();
+    saveProfilePreferences();
     setupPasswordToggle();
     updateThemeStatus();
     updateHomepageLogo();
     loadSavedProfileImage();
     loadUserProfile();
     setupSidebarSelections();
+    applyPreferencesToHomepage();
 
   } catch (error) {
     console.error("Yükleme hatası:", error);
@@ -119,6 +121,8 @@ function setupProfileNavigation() {
     if (backToHomepage) {
       profilePage.style.display = "none";
       homepagePage.style.display = "block";
+
+       applyPreferencesToHomepage();
     }
   });
 }
@@ -166,6 +170,72 @@ function setupProfilePreferenceDropdowns() {
   });
 }
 
+function saveProfilePreferences() {
+  const preferenceMap = {
+    assetMenu: "selectedAsset",
+    currencyMenu: "portfolioCurrency",
+    predictionMenu: "predictionWindow",
+    displayMenu: "displayMode",
+  };
+
+  document.querySelectorAll(".profile-dropdown-menu button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const menu = btn.parentElement;
+      const key = preferenceMap[menu.id];
+      const value = btn.textContent.trim();
+
+      localStorage.setItem(key, value);
+
+      const strong = menu.previousElementSibling.querySelector("strong");
+      if (strong) strong.textContent = value;
+
+      if (key === "predictionWindow") {
+        const defaultPrediction = document.getElementById("profileDefaultPrediction");
+        if (defaultPrediction) defaultPrediction.textContent = value;
+      }
+
+      menu.classList.remove("active");
+    });
+  });
+}
+
+function applyPreferencesToHomepage() {
+  const selectedAsset = localStorage.getItem("selectedAsset") || "Gold";
+  const portfolioCurrency = localStorage.getItem("portfolioCurrency") || "USD";
+  const predictionWindow = localStorage.getItem("predictionWindow") || "5 Days";
+  const displayMode = localStorage.getItem("displayMode") || "Original Market";
+
+  const assetName = document.querySelector(".asset-name");
+  const currency = document.querySelector(".currency");
+  const predictionTitle = document.querySelector(".prediction-price");
+  const chartTitle = document.querySelector(".big-chart .chart-title");
+  const confidence = document.querySelector(".confidence");
+
+  if (assetName) assetName.textContent = selectedAsset;
+  if (currency) currency.textContent = portfolioCurrency;
+
+  if (predictionTitle) {
+    predictionTitle.textContent = `${predictionWindow} Prediction`;
+  }
+
+  if (chartTitle) {
+    chartTitle.textContent = `${selectedAsset} Price Chart • 1M • ${displayMode}`;
+  }
+
+  if (confidence) {
+    confidence.textContent = `Selected view: ${displayMode}`;
+  }
+
+  const assetRadio = document.querySelector(`input[name="selectedAsset"][value="${selectedAsset}"]`);
+  if (assetRadio) assetRadio.checked = true;
+
+  const currencyRadio = document.querySelector(`input[name="portfolioCurrency"][value="${portfolioCurrency}"]`);
+  if (currencyRadio) currencyRadio.checked = true;
+
+  const viewValue = displayMode === "Local Value" ? "local" : "original";
+  const viewRadio = document.querySelector(`input[name="currencyView"][value="${viewValue}"]`);
+  if (viewRadio) viewRadio.checked = true;
+}
 
 function setupRegisterNavigation() {
   document.addEventListener("click", function (event) {
@@ -441,11 +511,22 @@ function updateDashboardFromSidebar() {
   const predictionPrice = document.querySelector(".prediction-price");
   const confidence = document.querySelector(".confidence");
 
-  if (assetName) assetName.textContent = selectedAsset;
+  // if (assetName) assetName.textContent = selectedAsset;
+  if (assetName) {
+  assetName.textContent =
+ localStorage.getItem("selectedAsset") || selectedAsset;
+}
 
   if (currencyText) {
-    currencyText.textContent =
-      selectedView === "local" ? selectedCurrency : getOriginalCurrency(selectedAsset);
+    // currencyText.textContent =
+    //   selectedView === "local" ? selectedCurrency : getOriginalCurrency(selectedAsset);
+currencyText.textContent =
+localStorage.getItem("portfolioCurrency")
+||
+(selectedView === "local"
+? selectedCurrency
+: getOriginalCurrency(selectedAsset));
+
   }
 
   if (priceText) {
@@ -462,8 +543,11 @@ function updateDashboardFromSidebar() {
   }
 
   if (predictionPrice) {
-    predictionPrice.textContent =
-      `${selectedPrediction.replace("(Recommended)", "").trim()} Prediction`;
+    // predictionPrice.textContent =
+    //   `${selectedPrediction.replace("(Recommended)", "").trim()} Prediction`;
+predictionPrice.textContent =
+`${localStorage.getItem("predictionWindow") || selectedPrediction} Prediction`;
+
   }
   if (changeText) {
   changeText.textContent = "N/A";
@@ -643,7 +727,7 @@ loadUserProfile();
       homepagePage.style.display = "block";
 
       renderPriceChart();
-      updateDashboardFromSidebar();
+      applyPreferencesToHomepage();
 
     } catch (error) {
       console.log(error);
