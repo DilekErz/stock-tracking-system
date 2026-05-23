@@ -1,7 +1,8 @@
 
  import "./css/styles.css";
  import { renderPriceChart } from './charts.js';
- const API_URL = "https://stock-tracking-system-production.up.railway.app";
+//  const API_URL = "https://stock-tracking-system-production.up.railway.app"; RAİLWAY ÇALIŞMAZSA ALTTAKİ LOCALHOST ÇALIŞTIR
+const API_URL = "http://localhost:3000";
 
 async function loadPartial(path) {
   const response = await fetch(path);
@@ -66,6 +67,7 @@ console.log("overlay string var mı:", homepageHtml.includes('id="overlay"'));
     updateHomepageLogo();
     loadSavedProfileImage();
     loadUserProfile();
+    setupSidebarSelections();
 
   } catch (error) {
     console.error("Yükleme hatası:", error);
@@ -139,7 +141,6 @@ function setupRegisterNavigation() {
   });
 
 
-  
   
 
 document.addEventListener("submit", async function (event) {
@@ -267,6 +268,204 @@ if (event.target.id === "openPhotoModal") {
     document.getElementById(modalId).classList.remove("active");
   }
 });
+
+function setupSidebarSelections() {
+  document.addEventListener("click", function (event) {
+
+    const currency = event.target.closest(".currency-option");
+    if (currency) {
+      document.querySelectorAll(".currency-option").forEach(item => {
+        item.classList.remove("active");
+      });
+
+      currency.classList.add("active");
+      currency.querySelector("input").checked = true;
+      updateDashboardFromSidebar();
+    }
+
+    const market = event.target.closest(".market-item");
+    if (market) {
+      document.querySelectorAll(".market-item").forEach(item => {
+        item.classList.remove("active");
+        item.querySelectorAll("strong").forEach(badge => badge.remove());
+      });
+
+      market.classList.add("active");
+      market.querySelector("input").checked = true;
+
+      const selectedBadge = document.createElement("strong");
+      selectedBadge.textContent = "Selected";
+      market.appendChild(selectedBadge);
+      updateDashboardFromSidebar();
+    }
+
+    const mode = event.target.closest(".view-mode");
+    if (mode) {
+      document.querySelectorAll(".view-mode").forEach(item => {
+        item.classList.remove("active");
+      });
+
+      mode.classList.add("active");
+      mode.querySelector("input").checked = true;
+      updateDashboardFromSidebar();
+    }
+
+    const predictionBtn = event.target.closest(".prediction-window-grid button");
+    if (predictionBtn) {
+      document.querySelectorAll(".prediction-window-grid button").forEach(btn => {
+        btn.classList.remove("active");
+      });
+
+      predictionBtn.classList.add("active");
+      updateDashboardFromSidebar();
+    }
+
+    const chartRangeBtn = event.target.closest(".chart-range-grid button");
+    if (chartRangeBtn) {
+      document.querySelectorAll(".chart-range-grid button").forEach(btn => {
+        btn.classList.remove("active");
+      });
+
+      chartRangeBtn.classList.add("active");
+      updateDashboardFromSidebar();
+    }
+
+    const infoLink = event.target.closest(".sidebar-links a");
+    if (infoLink) {
+      event.preventDefault();
+
+      const infoBox = document.getElementById("sidebarInfoBox");
+      const infoTitle = document.getElementById("infoTitle");
+      const infoText = document.getElementById("infoText");
+
+      if (!infoBox || !infoTitle || !infoText) return;
+
+      const linkText = infoLink.textContent.trim();
+
+      infoBox.classList.add("active");
+
+      if (linkText.includes("Predictions Details")) {
+        infoTitle.textContent = "Prediction Details";
+        infoText.textContent =
+          "The prediction result is generated using the selected asset, technical indicators, chart data and prediction window.";
+      }
+
+      if (linkText.includes("About Model")) {
+        infoTitle.textContent = "About Model";
+        infoText.textContent =
+          "This system uses a hybrid LSTM + XGBoost model. LSTM analyzes time-based price movements, while XGBoost supports decision-making with technical indicators.";
+      }
+
+      if (linkText.includes("Disclaimer")) {
+        infoTitle.textContent = "Disclaimer";
+        infoText.textContent =
+          "This application provides AI-based financial predictions for informational purposes only. It is not investment advice.";
+      }
+    }
+
+    const closeInfoBox = event.target.closest("#closeInfoBox");
+    if (closeInfoBox) {
+      document.getElementById("sidebarInfoBox").classList.remove("active");
+    }
+  });
+}
+
+
+function updateDashboardFromSidebar() {
+  const selectedAsset =
+    document.querySelector('input[name="selectedAsset"]:checked')?.value || "BIST100";
+
+  const selectedCurrency =
+    document.querySelector('input[name="portfolioCurrency"]:checked')?.value || "USD";
+
+  const selectedView =
+    document.querySelector('input[name="currencyView"]:checked')?.value || "original";
+
+  const selectedPrediction =
+    document.querySelector(".prediction-window-grid button.active")?.innerText || "5 Days";
+
+  const selectedRange =
+    document.querySelector(".chart-range-grid button.active")?.innerText || "1M";
+
+  const assetName = document.querySelector(".asset-name");
+  const currencyText = document.querySelector(".currency");
+  const priceText = document.querySelector(".price");
+  const changeText = document.querySelector(".change");
+  const chartTitle = document.querySelector(".big-chart .chart-title");
+  const predictionPrice = document.querySelector(".prediction-price");
+  const confidence = document.querySelector(".confidence");
+
+  if (assetName) assetName.textContent = selectedAsset;
+
+  if (currencyText) {
+    currencyText.textContent =
+      selectedView === "local" ? selectedCurrency : getOriginalCurrency(selectedAsset);
+  }
+
+  if (priceText) {
+    priceText.textContent = "Loading...";
+  }
+
+  if (chartTitle) {
+    chartTitle.textContent =
+      `${selectedAsset} Price Chart • ${selectedRange} • ${
+        selectedView === "local"
+          ? selectedCurrency + " View"
+          : "Original Market View"
+      }`;
+  }
+
+  if (predictionPrice) {
+    predictionPrice.textContent =
+      `${selectedPrediction.replace("(Recommended)", "").trim()} Prediction`;
+  }
+  if (changeText) {
+  changeText.textContent = "N/A";
+  changeText.classList.remove("positive", "negative");
+}
+
+  if (confidence) {
+    confidence.textContent =
+      `Selected view: ${selectedView === "local" ? selectedCurrency : "Original Currency"}`;
+  }
+}
+
+function getOriginalCurrency(asset) {
+  const currencyMap = {
+    BIST100: "TRY",
+    BIST30: "TRY",
+    TR10YT: "TRY",
+
+    SP500: "USD",
+    NASDAQ100: "USD",
+    DJI: "USD",
+    DOW: "USD",
+    Gold: "USD",
+    Silver: "USD",
+    Brent: "USD",
+    NaturalGas: "USD",
+    Copper: "USD",
+    US10YT: "USD",
+
+    DAX: "EUR",
+    CAC40: "EUR",
+
+    FTSE100: "GBP",
+    NIKKEI225: "JPY",
+    HSI: "HKD",
+
+    USD_TRY: "TRY",
+    EUR_TRY: "TRY",
+    GBP_TRY: "TRY",
+    JPY_TRY: "TRY",
+    HKD_TRY: "TRY",
+    EUR_USD: "USD"
+  };
+
+  return currencyMap[asset] || "USD";
+}
+
+
 function loadSavedProfileImage() {
   const savedImage = localStorage.getItem("profileImage");
 
@@ -398,6 +597,7 @@ loadUserProfile();
       homepagePage.style.display = "block";
 
       renderPriceChart();
+      updateDashboardFromSidebar();
 
     } catch (error) {
       console.log(error);

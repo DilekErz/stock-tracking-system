@@ -271,112 +271,327 @@ Iste sapiente incidunt magni e</p>
     <div class="overlay" id="overlay"></div>
 
     <!-- SIDEBAR -->
-    <div class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <h2>MENU</h2>
-        <button class="close-btn" id="closeMenu">✕</button>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h2>MENU</h2>
+    <button class="close-btn" id="closeMenu">✕</button>
+  </div>
+
+  <!-- PORTFOLIO CURRENCY -->
+  <div class="sidebar-section">
+    <h3> Portfolio Currency</h3>
+
+    <div class="currency-tabs">
+      <label class="currency-option">
+        <input type="radio" name="portfolioCurrency" value="TRY" />
+        <span>TRY ₺</span>
+      </label>
+
+      <label class="currency-option">
+        <input type="radio" name="portfolioCurrency" value="USD" checked />
+        <span>USD $</span>
+      </label>
+
+      <label class="currency-option">
+        <input type="radio" name="portfolioCurrency" value="EUR" />
+        <span>EUR €</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- PREDICTION WINDOW -->
+  <div class="sidebar-section">
+    <h3> Prediction Window</h3>
+
+    <div class="prediction-window-grid">
+      <button>1 Day</button>
+      <button>3 Days</button>
+      <button class="active">5 Days <small>(Recommended)</small></button>
+      <button>7 Days</button>
+    </div>
+
+    <p class="sidebar-note">ⓘ Model trained with 5-day window</p>
+  </div>
+
+  <!-- MARKET CATEGORIES -->
+  <div class="sidebar-section">
+    <h3> Market Categories</h3>
+
+    <details class="market-accordion">
+      <summary>
+        <span>  Stock Indexes (BIST & Global)</span>
+        <span class="accordion-arrow">›</span>
+      </summary>
+
+      <div class="accordion-content">
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="BIST100" />
+          <span>BIST100</span>
+        </label>
+
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="BIST30" />
+          <span>BIST30</span>
+        </label>
+
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="SP500" />
+          <span>SP500</span>
+        </label>
+
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="NASDAQ100" />
+          <span>NASDAQ100</span>
+        </label>
+
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="DJI" />
+          <span>DJI</span>
+        </label>
+
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="DOW" />
+          <span>DOW</span>
+        </label>
+
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="DAX" />
+          <span>DAX</span>
+        </label>
+
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="CAC40" />
+          <span>CAC40</span>
+        </label>
+
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="FTSE100" />
+          <span>FTSE100</span>
+        </label>
+
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="NIKKEI225" />
+          <span>NIKKEI225</span>
+        </label>
+
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="HSI" />
+          <span>HSI</span>
+        </label>
       </div>
+    </details>
 
-      <div class="sidebar-section">
-        <h3>Select Asset</h3>
+    <details class="market-accordion" open>
+      <summary>
+        <span> Precious Metals & Commodities</span>
+        <span class="accordion-arrow">›</span>
+      </summary>
 
-        <label class="asset-item active">
-          <input type="checkbox" />
-          <span>BIST 100</span>
+      <div class="accordion-content">
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="Gold" checked />
+          <span>🟡 Gold (Ounce)</span>
+          <!-- <strong>Selected</strong> -->
         </label>
 
-        <label class="asset-item">
-          <input type="checkbox" checked />
-          <span>ASELSAN</span>
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="Silver" />
+          <span>⚪ Silver </span>
         </label>
 
-        <label class="asset-item">
-          <input type="checkbox" checked />
-          <span>THYAO</span>
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="Brent" />
+          <span>🛢️ Brent Oil</span>
         </label>
 
-        <label class="asset-item">
-          <input type="checkbox" checked />
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="NaturalGas" />
+          <span>🔋 Natural Gas</span>
+        </label>
+
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="Copper" />
+          <span>🪵 Copper</span>
+        </label>
+      </div>
+    </details>
+
+    <details class="market-accordion">
+      <summary>
+        <span> Currency Pairs</span>
+        <span class="accordion-arrow">›</span>
+      </summary>
+
+      <div class="accordion-content">
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="USD_TRY" />
           <span>USD / TRY</span>
         </label>
 
-        <label class="asset-item">
-          <input type="checkbox" checked />
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="EUR_TRY" />
           <span>EUR / TRY</span>
         </label>
+
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="GBP_TRY" />
+          <span>GBP / TRY</span>
+        </label>
+
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="JPY_TRY" />
+          <span>JPY / TRY</span>
+        </label>
+
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="HKD_TRY" />
+          <span>HKD / TRY</span>
+        </label>
+
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="EUR_USD" />
+          <span>EUR / USD</span>
+        </label>
+      </div>
+    </details>
+
+    <details class="market-accordion">
+      <summary>
+        <span> Government Bonds / Interest Rates</span>
+        <span class="accordion-arrow">›</span>
+      </summary>
+
+      <div class="accordion-content">
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="TR10YT" />
+          <span>TR10YT</span>
+        </label>
+
+        <label class="market-item">
+          <input type="radio" name="selectedAsset" value="US10YT" />
+          <span>US10YT</span>
+        </label>
+      </div>
+    </details>
+  </div>
+
+  <!-- GRAPH SETTINGS -->
+  <div class="sidebar-section">
+    <h3> Graph Settings</h3>
+    <p class="setting-label">Display Mode:</p>
+
+    <label class="view-mode active">
+      <input type="radio" name="currencyView" value="original" checked />
+      <span>Original Price (USD)</span>
+    </label>
+
+    <label class="view-mode">
+      <input type="radio" name="currencyView" value="local" />
+      <span>Local Value (TRY)</span>
+    </label>
+  </div>
+
+  <!-- CHART RANGE -->
+  <div class="sidebar-section">
+    <h3>Chart Range</h3>
+
+    <div class="chart-range-grid">
+      <button>1D</button>
+      <button>1W</button>
+      <button class="active">1M</button>
+      <button>3M</button>
+      <button>6M</button>
+      <button>1Y</button>
+    </div>
+    <p class="sidebar-note">
+  ⓘ Select how much historical price data is displayed on the chart.
+</p>
+  </div>
+
+  <!-- INDICATORS -->
+  <div class="sidebar-section">
+    <h3>Indicators</h3>
+
+    <div class="indicator-item">
+      <div class="left">
+        <input type="checkbox" checked />
+        <span>RSI (14)</span>
+      </div>
+      <label class="switch">
+        <input type="checkbox" checked />
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="indicator-item">
+      <div class="left">
+        <input type="checkbox" checked />
+        <span>MACD (12,26,9)</span>
+      </div>
+      <label class="switch">
+        <input type="checkbox" checked />
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="indicator-item">
+      <div class="left">
+        <input type="checkbox" />
+        <span>Moving Average</span>
+      </div>
+      <label class="switch">
+        <input type="checkbox" />
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- MODEL -->
+  <div class="sidebar-section">
+    <h3> Prediction Model</h3>
+
+    <div class="model-select">
+      <span>LSTM + XGBoost Hybrid</span>
+      <span>⌄</span>
+    </div>
+
+    <div class="model-info-grid">
+      <div class="model-info-box">
+        <span>Prediction Horizon:</span>
+        <strong>5 Days</strong>
       </div>
 
-      <div class="sidebar-section">
-        <h3>Time Range</h3>
-
-        <div class="range-row">
-          <div class="range-buttons">
-            <button>1D</button>
-            <button>1W</button>
-          </div>
-
-          <label class="switch">
-            <input type="checkbox" checked />
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="range-row active-range">
-          <div class="range-buttons">
-            <button>1M</button>
-            <button>3M</button>
-          </div>
-
-          <label class="switch">
-            <input type="checkbox" checked />
-            <span class="slider"></span>
-          </label>
-        </div>
+      <div class="model-info-box">
+        <span>Indicators:</span>
+        <strong>RSI(14), MACD</strong>
       </div>
 
-      <div class="sidebar-section">
-        <h3>Indicators</h3>
-
-        <div class="indicator-item">
-          <div class="left">
-            <input type="checkbox" checked />
-            <span>RSI (14)</span>
-          </div>
-          <label class="switch">
-            <input type="checkbox" />
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="indicator-item">
-          <div class="left">
-            <input type="checkbox" checked />
-            <span>MACD (12,26,9)</span>
-          </div>
-          <label class="switch">
-            <input type="checkbox" />
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="indicator-item">
-          <div class="left">
-            <input type="checkbox" checked />
-            <span>Moving Average</span>
-          </div>
-          <label class="switch">
-            <input type="checkbox" />
-            <span class="slider"></span>
-          </label>
-        </div>
+      <div class="model-info-box">
+        <span>Accuracy:</span>
+        <strong>58.1%</strong>
       </div>
 
-      <div class="sidebar-links">
-        <a href="#">Predictions Details <span>›</span></a>
-        <a href="#">About Model <span>›</span></a>
-        <a href="#">Disclaimer <span>›</span></a>
+      <div class="model-info-box">
+        <span>Window:</span>
+        <strong>Sliding Window</strong>
       </div>
     </div>
+  </div>
+
+  <div class="sidebar-links">
+    <a href="#">Predictions Details <span>›</span></a>
+    <a href="#">About Model <span>›</span></a>
+    <a href="#">Disclaimer <span>›</span></a>
+  </div>
+
+  <button class="predict-action-btn"> PREDICT AND SHOW CHART</button>
+  <div class="sidebar-info-box" id="sidebarInfoBox">
+  <button class="info-close-btn" id="closeInfoBox">✕</button>
+  <h4 id="infoTitle">Information</h4>
+  <p id="infoText">Select a section to view details.</p>
+</div>
+
+</div>
   </div>
 
 
