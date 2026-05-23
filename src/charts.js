@@ -29,11 +29,20 @@ export async function renderPriceChart(selectedAsset = "BIST100") {
     });
 console.log("parse edilmiş ilk 5 satır:", data.slice(0, 5));
 console.log("ilk satır kolonları:", Object.keys(data[0] || {}));
+console.log(
+  "Tüm Metric değerleri:",
+  [...new Set(data.map(row => String(row.Metric).trim()))]
+);
 
 
     // 2. Veriyi Filtrele (Sadece BIST100 grafiği çizelim)
     // Not: Global.csv'de hangi varlığı görmek istiyorsan 'BIST100' yerine onu yazabilirsin.
-    const assetData = data.filter(row => row.Metric === selectedAsset);
+    // const assetData = data.filter(row => row.Metric === selectedAsset);
+
+    const assetData = data.filter(row =>
+  String(row.Metric).trim().toUpperCase() ===
+  String(selectedAsset).trim().toUpperCase()
+);
 console.log(`${selectedAsset} filtre sonucu:`, assetData);
 console.log(`${selectedAsset} satır sayısı:`, assetData.length);
 //console.log("Metric örnekleri:", data.map(row => row.Metric).slice(0, 20));
@@ -69,9 +78,12 @@ console.log(`${selectedAsset} satır sayısı:`, assetData.length);
 
 const chartSeries = assetData
   .map(row => {
+    const dateValue = row.date ?? row.Date;
+    const openValue = row.open ?? row.Open;
+
     return {
-      x: new Date(row.Date).getTime(),
-      y: Number(row.Open)
+      x: new Date(dateValue).getTime(),
+      y: Number(openValue)
     };
   })
   .filter(point => !isNaN(point.y) && !isNaN(point.x))

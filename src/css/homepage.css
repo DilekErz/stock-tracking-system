@@ -242,6 +242,7 @@ body {
 .prediction-price {
   font-size: 24px;
   font-weight: 800;
+  text-align: center;
 }
 
 .arrow-up {
@@ -774,21 +775,15 @@ rgba(40,70,110,.12);
 }
 
 body.light-mode #infoTitle{
-
 color:#00f07c;
-
 }
 
 body.light-mode #infoText{
-
 color:#20334a;
-
 }
 
 body.light-mode .info-close-btn{
-
 color:#20334a;
-
 }
 
 body.light-mode .asset-item,

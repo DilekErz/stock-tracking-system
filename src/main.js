@@ -212,7 +212,16 @@ function applyPreferencesToHomepage() {
   const confidence = document.querySelector(".confidence");
 
   if (assetName) assetName.textContent = selectedAsset;
-  if (currency) currency.textContent = portfolioCurrency;
+  if (currency) {
+  const viewValue = displayMode === "Local Value" ? "local" : "original";
+
+  currency.textContent =
+    selectedAsset.includes("_")
+      ? getOriginalCurrency(selectedAsset)
+      : viewValue === "local"
+        ? portfolioCurrency
+        : getOriginalCurrency(selectedAsset);
+}
 
   if (predictionTitle) {
     predictionTitle.textContent = `${predictionWindow} Prediction`;
@@ -513,34 +522,24 @@ function updateDashboardFromSidebar() {
 
   // if (assetName) assetName.textContent = selectedAsset;
   if (assetName) {
-  assetName.textContent =
- localStorage.getItem("selectedAsset") || selectedAsset;
+  assetName.textContent = selectedAsset;
 }
 
-  if (currencyText) {
-    // currencyText.textContent =
-    //   selectedView === "local" ? selectedCurrency : getOriginalCurrency(selectedAsset);
-currencyText.textContent =
-localStorage.getItem("portfolioCurrency")
-||
-(selectedView === "local"
-? selectedCurrency
-: getOriginalCurrency(selectedAsset));
-
-  }
 
   if (priceText) {
     priceText.textContent = "Loading...";
   }
 
-  if (chartTitle) {
-    chartTitle.textContent =
-      `${selectedAsset} Price Chart • ${selectedRange} • ${
-        selectedView === "local"
-          ? selectedCurrency + " View"
-          : "Original Market View"
-      }`;
-  }
+  const isCurrencyPair = selectedAsset.includes("_");
+
+if (currencyText) {
+  currencyText.textContent =
+    isCurrencyPair
+      ? getOriginalCurrency(selectedAsset)
+      : selectedView === "local"
+        ? selectedCurrency
+        : getOriginalCurrency(selectedAsset);
+}
 
   if (predictionPrice) {
     // predictionPrice.textContent =
@@ -555,9 +554,29 @@ predictionPrice.textContent =
 }
 
   if (confidence) {
-    confidence.textContent =
-      `Selected view: ${selectedView === "local" ? selectedCurrency : "Original Currency"}`;
+   confidence.textContent =
+  selectedView === "local"
+    ? `Viewing in portfolio currency: ${selectedCurrency}`
+    : `Viewing in original market currency: ${getOriginalCurrency(selectedAsset)}`;
   }
+
+  renderPriceChart(selectedAsset);
+
+  localStorage.setItem("selectedAsset", selectedAsset);
+localStorage.setItem("portfolioCurrency", selectedCurrency);
+
+localStorage.setItem(
+  "displayMode",
+  selectedView === "local"
+    ? "Local Value"
+    : "Original Market"
+);
+
+localStorage.setItem(
+  "predictionWindow",
+  selectedPrediction
+);
+applyPreferencesToHomepage();
 }
 
 function getOriginalCurrency(asset) {
@@ -591,6 +610,10 @@ function getOriginalCurrency(asset) {
     HKD_TRY: "TRY",
     EUR_USD: "USD"
   };
+
+   if (asset.includes("_")) {
+    return asset.split("_")[1];
+  }
 
   return currencyMap[asset] || "USD";
 }
