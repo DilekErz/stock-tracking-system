@@ -62,6 +62,7 @@ console.log("overlay string var mı:", homepageHtml.includes('id="overlay"'));
     setupSidebarDelegation();
     setupThemeToggle();
     setupProfileNavigation();
+    setupProfilePreferenceDropdowns();
     setupPasswordToggle();
     updateThemeStatus();
     updateHomepageLogo();
@@ -121,6 +122,51 @@ function setupProfileNavigation() {
     }
   });
 }
+
+function setupProfilePreferenceDropdowns() {
+  document.addEventListener("click", function (event) {
+    const dropdownBtn = event.target.closest(".profile-dropdown-btn");
+
+    if (dropdownBtn) {
+      const targetId = dropdownBtn.dataset.target;
+      const menu = document.getElementById(targetId);
+
+      document.querySelectorAll(".profile-dropdown-menu").forEach(item => {
+        if (item !== menu) item.classList.remove("active");
+      });
+
+      menu.classList.toggle("active");
+    }
+
+    const menuButton = event.target.closest(".profile-dropdown-menu button");
+
+    if (menuButton) {
+      const menu = menuButton.closest(".profile-dropdown-menu");
+      const value = menuButton.textContent.trim();
+
+      if (menu.id === "assetMenu") {
+        document.getElementById("profilePreferredAsset").textContent = value;
+      }
+
+      if (menu.id === "currencyMenu") {
+        document.getElementById("profilePortfolioCurrency").textContent = value;
+      }
+
+      if (menu.id === "predictionMenu") {
+        document.getElementById("profilePredictionWindow").textContent = value;
+        document.getElementById("profileDefaultPrediction").textContent = value;
+      }
+
+      if (menu.id === "displayMenu") {
+        document.getElementById("profileDisplayMode").textContent = value;
+      }
+
+      menu.classList.remove("active");
+    }
+  });
+}
+
+
 function setupRegisterNavigation() {
   document.addEventListener("click", function (event) {
     const createAccountBtn = event.target.closest("#createAccountBtn");
