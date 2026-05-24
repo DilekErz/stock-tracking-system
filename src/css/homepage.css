@@ -1192,3 +1192,58 @@ rgba(0,240,124,.06);
   cursor: pointer;
   font-size: 15px;
 }
+.info-box {
+  position: relative;
+  cursor: pointer;
+}
+
+.info-box::after {
+   content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: 130%;
+  transform: translateX(-50%);
+  width: 260px;
+  min-height: 55px;
+  padding: 14px 16px;
+  background: rgba(5, 20, 45, 0.98);
+  color: #ffffff;
+  border: 1px solid rgba(0, 240, 124, 0.55);
+  box-shadow: 0 0 18px rgba(0, 240, 124, 0.25);
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.info-box::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 108%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: rgba(0, 240, 124, 0.45) transparent transparent transparent;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.25s ease;
+  z-index: 51;
+}
+
+.info-box:hover::after,
+.info-box:hover::before {
+  opacity: 1;
+  visibility: visible;
+}
+
+body.light-mode .info-box::after {
+  background: #ffffff;
+  color: #20334a;
+  border: 1px solid rgba(0, 150, 90, 0.35);
+  box-shadow: 0 0 16px rgba(0, 120, 80, 0.16);
+}
