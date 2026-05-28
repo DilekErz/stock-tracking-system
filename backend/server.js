@@ -6,7 +6,8 @@ const cors = require("cors");
 const corsOptions = {
   origin: [
     "http://localhost:5173",
-    "https://dilekerz.github.io"
+    "https://dilekerz.github.io",
+     "https://dilekerz.github.io/stock-tracking-system"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
@@ -19,24 +20,30 @@ app.options(/.*/, cors(corsOptions));
 app.use(express.json());
 
 /*  RAİLWAY MYSQL BAĞLANTISI */
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: process.env.MYSQLHOST,
   user: process.env.MYSQLUSER,
   password: process.env.MYSQLPASSWORD,
   database: process.env.MYSQLDATABASE,
-  port: Number(process.env.MYSQLPORT)
+  port: Number(process.env.MYSQLPORT),
+
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 console.log("HOST:", process.env.MYSQLHOST);
 console.log("DB:", process.env.MYSQLDATABASE);
 console.log("PORT:", process.env.MYSQLPORT);
 
-db.connect((err) => {
+db.getConnection((err, connection) => {
   if (err) {
     console.log("MySQL bağlantı hatası:", err);
     return;
   }
 
   console.log("MySQL bağlantısı başarılı");
+
+  connection.release();
 });
 
 app.get("/", (req, res) => {
@@ -257,7 +264,13 @@ app.post("/api/reset-password", async (req, res) => {
     });
   }
 });
+process.on("uncaughtException", (err) => {
+  console.error("Yakalanmayan hata:", err);
+});
 
+process.on("unhandledRejection", (err) => {
+  console.error("Promise hatası:", err);
+});
 /* SERVER */
 // app.listen(3000, () => {
 //   console.log("Server çalışıyor: http://localhost:3000");
