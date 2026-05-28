@@ -83,13 +83,13 @@ app.post("/api/register", async (req, res) => {
       (err, result) => {
 
         if (err) {
+  console.log("REGISTER SQL HATASI:", err);
 
-          console.log(err);
-
-          return res.status(500).json({
-            message: "Kayıt başarısız"
-          });
-        }
+  return res.status(500).json({
+    message: "Kayıt başarısız",
+    error: err.message
+  });
+}
 
         res.json({
           message: "Kayıt başarılı "
@@ -118,12 +118,15 @@ app.post("/api/login", (req, res) => {
 
   const sql = "SELECT * FROM users WHERE username = ? OR email = ?";
 
-  db.query(sql, [emailOrUsername, emailOrUsername], async (err, results) => {
-    if (err) {
-      return res.status(500).json({
-        message: "Sunucu hatası"
-      });
-    }
+ db.query(sql, [emailOrUsername, emailOrUsername], async (err, results) => {
+  if (err) {
+    console.log("LOGIN SQL HATASI:", err);
+
+    return res.status(500).json({
+      message: "Sunucu hatası",
+      error: err.message
+    });
+  }
 
     if (results.length === 0) {
       return res.status(401).json({
