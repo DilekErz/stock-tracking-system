@@ -300,19 +300,21 @@ Iste sapiente incidunt magni e</p>
     </div>
   </div>
 
-  <!-- PREDICTION WINDOW -->
-  <div class="sidebar-section">
-    <h3> Prediction Window</h3>
+  <!-- MODEL INPUT WINDOW -->
+<div class="sidebar-section">
+  <h3> Model Input Window</h3>
 
-    <div class="prediction-window-grid">
-      <button>1 Day</button>
-      <button>3 Days</button>
-      <button class="active">5 Days <small>(Recommended)</small></button>
-      <button>7 Days</button>
-    </div>
-
-    <p class="sidebar-note">ⓘ Model trained with 5-day window</p>
+  <div class="prediction-window-grid model-window-grid">
+    <button class="active model-window-btn">
+      5-Day Window
+      <small>(Optimized)</small>
+    </button>
   </div>
+
+  <p class="sidebar-note">
+    ⓘ Model uses the last 5 market days to predict the next movement.
+  </p>
+</div>
 
   <!-- MARKET CATEGORIES -->
   <div class="sidebar-section">
@@ -558,8 +560,8 @@ Iste sapiente incidunt magni e</p>
 
     <div class="model-info-grid">
       <div class="model-info-box">
-        <span>Prediction Horizon:</span>
-        <strong>5 Days</strong>
+        <span>Prediction Target:</span>
+<strong>Next Day</strong>
       </div>
 
       <div class="model-info-box">
@@ -573,8 +575,8 @@ Iste sapiente incidunt magni e</p>
       </div>
 
       <div class="model-info-box">
-        <span>Window:</span>
-        <strong>Sliding Window</strong>
+        <span>Input Window:</span>
+<strong>5-Day Sliding</strong>
       </div>
     </div>
   </div>

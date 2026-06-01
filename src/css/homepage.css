@@ -1247,3 +1247,20 @@ body.light-mode .info-box::after {
   border: 1px solid rgba(0, 150, 90, 0.35);
   box-shadow: 0 0 16px rgba(0, 120, 80, 0.16);
 }
+.model-window-grid {
+  grid-template-columns: 1fr;
+}
+
+.model-window-btn {
+  min-height: 64px;
+  font-size: 15px;
+  cursor: default;
+}
+
+.model-window-btn:hover {
+  background: rgba(0, 240, 124, 0.08);
+}
+
+.model-window-btn small {
+  font-size: 11px;
+}
