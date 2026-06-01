@@ -49,6 +49,24 @@ db.getConnection((err, connection) => {
 app.get("/", (req, res) => {
   res.send("Backend çalışıyor");
 });
+app.get("/api/test-market", async (req, res) => {
+  const apiKey = process.env.TWELVE_DATA_API_KEY;
+
+  const url =
+    `https://api.twelvedata.com/time_series?symbol=USD/TRY&interval=1day&outputsize=5&apikey=${apiKey}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({
+      message: "Twelve Data API hatası",
+      error: error.message
+    });
+  }
+});
 
 const PORT = process.env.PORT || 3000;
 
