@@ -96,7 +96,7 @@ console.log("API KEY VAR MI:", !!apiKey);
 
 const rangeMap = {
   "1D": { interval: "1h", outputsize: 24 },
-  "1W": { interval: "1day", outputsize: 7 },
+  "1W": { interval: "1day", outputsize: 21 },
   "1M": { interval: "1day", outputsize: 30 },
   "3M": { interval: "1day", outputsize: 90 },
   "6M": { interval: "1day", outputsize: 180 },

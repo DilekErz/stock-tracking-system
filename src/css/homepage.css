@@ -675,7 +675,7 @@ body {
   }
 
   .big-chart {
-    min-height: 290px;
+    min-height: 320px;
   }
 }
 
@@ -1198,7 +1198,8 @@ rgba(0,240,124,.06);
 }
 
 .info-box::after {
-   content: attr(data-tooltip);
+  content: attr(data-tooltip-title) "\A\A" attr(data-tooltip);
+  white-space: pre-line;
   position: absolute;
   left: 50%;
   bottom: 130%;
@@ -1437,4 +1438,10 @@ body.light-mode .info-box::after {
 
 .change.negative {
   color: #ff5d5d;
+}
+
+#rsi-chart,
+#macd-chart {
+  width: 100%;
+  height: 230px;
 }

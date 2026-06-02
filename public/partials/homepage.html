@@ -119,10 +119,10 @@
       <!-- RSI -->
       <section class="chart-card medium-chart">
         <div class="chart-title">RSI(14)</div>
-        <div class="mini-chart">
-          <div class="rsi-band"></div>
+        <div class="mini-chart" id="rsi-chart">
+          <!-- <div class="rsi-band"></div> -->
 
-          <svg class="line-overlay" viewBox="0 0 1000 180" preserveAspectRatio="none">
+          <!-- <svg class="line-overlay" viewBox="0 0 1000 180" preserveAspectRatio="none">
             <path d="M0,90
                      C90,88 110,45 180,40
                      S300,120 380,110
@@ -133,9 +133,9 @@
                   fill="none"
                   stroke="#4eb6f4"
                   stroke-width="3"/>
-          </svg>
+          </svg> -->
 
-          <div class="time-labels">
+          <!-- <div class="time-labels">
             <span>10:00</span>
             <span>12:00</span>
             <span>14:00</span>
@@ -143,22 +143,22 @@
             <span>18:00</span>
             <span>20:00</span>
             <span>22:00</span>
-          </div>
+          </div> -->
 
-          <div class="indicator-values">
+          <!-- <div class="indicator-values">
             <span>80</span>
             <span>60</span>
             <span>40</span>
             <span>20</span>
-          </div>
+          </div> -->
         </div>
       </section>
 
       <!-- MACD -->
       <section class="chart-card medium-chart">
         <div class="chart-title">MACD(12,26,9)</div>
-        <div class="mini-chart macd-chart">
-          <div class="bars">
+        <div class="mini-chart macd-chart" id="macd-chart">
+          <!-- <div class="bars">
             <span class="bar green" style="height:40px;"></span>
             <span class="bar green" style="height:58px;"></span>
             <span class="bar green" style="height:72px;"></span>
@@ -205,9 +205,9 @@
             <span class="bar red" style="height:48px;"></span>
             <span class="bar red" style="height:80px;"></span>
             <span class="bar red" style="height:54px;"></span>
-          </div>
+          </div> -->
 
-          <svg class="line-overlay" viewBox="0 0 1000 180" preserveAspectRatio="none">
+          <!-- <svg class="line-overlay" viewBox="0 0 1000 180" preserveAspectRatio="none">
             <path d="M0,92
                      C70,85 110,55 170,80
                      S280,70 350,82
@@ -226,9 +226,9 @@
                   fill="none"
                   stroke="#36d6d0"
                   stroke-width="3"/>
-          </svg>
+          </svg> -->
 
-          <div class="time-labels">
+          <!-- <div class="time-labels">
             <span>10:00</span>
             <span>12:00</span>
             <span>14:00</span>
@@ -236,14 +236,14 @@
             <span>18:00</span>
             <span>20:00</span>
             <span>22:00</span>
-          </div>
+          </div> -->
 
-          <div class="indicator-values">
+          <!-- <div class="indicator-values">
             <span>1.5</span>
             <span>0.5</span>
             <span>0</span>
             <span>-0.5</span>
-          </div>
+          </div> -->
         </div>
       </section>
       </div>
@@ -256,11 +256,20 @@ Iste sapiente incidunt magni e</p>
 </div>
       <!-- INFO BOXES -->
       <section class="info-boxes">
-        <div class="info-box" data-tooltip="Shows the total trading volume for the selected asset and chart range."><span>VOLUME 1.2B</span>
+        <div class="info-box" data-tooltip-title="Volume" data-tooltip="Shows the total trading volume for the selected asset and chart range.">
+          <span id="volumeBox">Volume N/A</span>
         </div>
-        <div class="info-box" data-tooltip="Shows the highest and lowest price within the selected chart range."><span>HIGH / LOW</span></div>
-        <div class="info-box" data-tooltip="Displays the current price range between the highest and lowest values."><span>10,650.10 / 10,300.55</span></div>
-        <div class="info-box" data-tooltip="Shows how much the selected asset price fluctuates. Higher volatility means higher risk."><span>VOLATILITY</span></div>
+        <div class="info-box"   data-tooltip-title=" High / Low " data-tooltip="Shows the highest and lowest price within the selected chart range.">
+          <span id="highLowBox">High / Low </span>
+        </div>
+
+        <div class="info-box"  data-tooltip-title="Price Range" data-tooltip="Displays the current price range between the highest and lowest values.">
+          <span id="priceRangeBox">Price Range</span>
+        </div>
+
+        <div class="info-box" data-tooltip-title="Volatility" data-tooltip="Shows how much the selected asset price fluctuates. Higher volatility means higher risk.">
+          <span id="volatilityBox">Volatility</span>
+        </div>
       </section>
 
       <footer class="footer-note">

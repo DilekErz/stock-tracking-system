@@ -7,6 +7,8 @@ import Papa from 'papaparse';
 import ApexCharts from 'apexcharts';
 
 let priceChart = null;
+let rsiChart = null;
+let macdChart = null;
 
 export async function renderPriceChart(selectedAsset = "USD_TRY", selectedRange = "1M") {
  const requestId = ++latestRequestId;
@@ -128,6 +130,10 @@ const chartSeries = assetData
 
  console.log("chartSeries:", chartSeries);
     console.log("chartSeries uzunluğu:", chartSeries.length);
+    const visibleSeries =
+  selectedRange === "1W"
+    ? chartSeries.slice(-7)
+    : chartSeries;
     if (requestId !== latestRequestId) return;
 
     if (!chartSeries.length) {
@@ -146,7 +152,7 @@ const chartSeries = assetData
     const options = {
         series: [{
           name: selectedAsset,
-            data: chartSeries
+            data: visibleSeries
         }],
         chart: {
             type: 'line',
@@ -253,6 +259,9 @@ const chartSeries = assetData
 
 priceChart = new ApexCharts(chartElement, options);
 await priceChart.render();
+await renderRSIChart(chartSeries, selectedRange);
+await renderMACDChart(chartSeries);
+updateInfoBoxes(assetData, visibleSeries);
 
 
     // 6. Üstteki Statik Fiyatı Güncelle
@@ -260,7 +269,9 @@ await priceChart.render();
     //document.querySelector(".price").innerText = lastPrice.toLocaleString();
 
 
-const lastCandle = chartSeries[chartSeries.length - 1];
+// const lastCandle = chartSeries[chartSeries.length - 1];
+//rsı için chartSeries yerine visibleSeries kullanıldı(dilekerz)
+const lastCandle = visibleSeries[visibleSeries.length - 1];
 // const lastPrice = lastCandle ? lastCandle.y[3] : null;
 const lastPrice = lastCandle ? lastCandle.y : null;
 
@@ -270,7 +281,7 @@ const lastPrice = lastCandle ? lastCandle.y : null;
     if (priceElement && lastPrice !== null) {
   priceElement.innerText = Number(lastPrice).toLocaleString();
 }
-const firstCandle = chartSeries[0];
+const firstCandle = visibleSeries[0];
 const firstPrice = firstCandle ? firstCandle.y : null;
 
 const changeElement = document.querySelector(".change");
@@ -296,6 +307,292 @@ if (
   );
 }
 }
+function calculateRSI(data, period = 14) {
+  const result = [];
 
+  for (let i = period; i < data.length; i++) {
+    let gains = 0;
+    let losses = 0;
+
+    for (let j = i - period + 1; j <= i; j++) {
+      const change = data[j].y - data[j - 1].y;
+
+      if (change >= 0) {
+        gains += change;
+      } else {
+        losses += Math.abs(change);
+      }
+    }
+
+    const avgGain = gains / period;
+    const avgLoss = losses / period;
+
+    const rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
+    const rsi = 100 - 100 / (1 + rs);
+
+    result.push({
+      x: data[i].x,
+      y: Number(rsi.toFixed(2))
+    });
+  }
+
+  return result;
+}
+
+function calculateEMA(values, period) {
+  const multiplier = 2 / (period + 1);
+  const ema = [];
+
+  values.forEach((item, index) => {
+    if (index === 0) {
+      ema.push({ x: item.x, y: item.y });
+    } else {
+      const prevEma = ema[index - 1].y;
+      const newEma = (item.y - prevEma) * multiplier + prevEma;
+
+      ema.push({
+        x: item.x,
+        y: Number(newEma.toFixed(4))
+      });
+    }
+  });
+
+  return ema;
+}
+
+function calculateMACD(data) {
+  const ema12 = calculateEMA(data, 12);
+  const ema26 = calculateEMA(data, 26);
+
+  const macdLine = data.map((item, index) => ({
+    x: item.x,
+    y: Number((ema12[index].y - ema26[index].y).toFixed(4))
+  }));
+
+  const signalLine = calculateEMA(macdLine, 9);
+
+  const histogram = macdLine.map((item, index) => ({
+    x: item.x,
+    y: Number((item.y - signalLine[index].y).toFixed(4))
+  }));
+  //hesaplıyor mu öğrenmek için ekledim (dilekerz)
+// console.log("MACD:", macdLine);
+// console.log("Signal:", signalLine);
+// console.log("Histogram:", histogram);
+  return {
+    macdLine,
+    signalLine,
+    histogram
+  };
+}
+async function renderRSIChart(chartSeries, selectedRange) {
+  const rsiElement = document.querySelector("#rsi-chart");
+  if (!rsiElement) return;
+
+  const rsiData = calculateRSI(chartSeries, 14);
+
+const visibleRsiData =
+  selectedRange === "1W"
+    ? rsiData.slice(-7)
+    : rsiData;
+
+  if (rsiChart) {
+    rsiChart.destroy();
+  }
+
+  const options = {
+    series: [
+      {
+        name: "RSI",
+        data: visibleRsiData
+      }
+    ],
+    chart: {
+      type: "area",
+      height: "100%",
+      background: "transparent",
+      toolbar: { show: false },
+      parentHeightOffset: 0
+    },
+     dataLabels: {
+    enabled: false
+  },
+    stroke: {
+      curve: "smooth",
+      width: 3
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        opacityFrom: 0.6,
+        opacityTo: 0.05
+      }
+    },
+    theme: { mode: "dark" },
+    xaxis: {
+      type: "datetime",
+      labels: {
+        style: { colors: "#8e8da4" }
+      }
+    },
+    yaxis: {
+      min: 0,
+      max: 100,
+      tickAmount: 4,
+      labels: {
+        style: { colors: "#8e8da4" }
+      }
+    },
+    grid: {
+      borderColor: "#1e2b45",
+      padding: {
+        left: 20,
+        right: 25,
+        top: 10,
+        bottom: 20
+      }
+    },
+    annotations: {
+      yaxis: [
+        {
+          y: 70,
+          borderColor: "#666"
+        },
+        {
+          y: 30,
+          borderColor: "#666"
+        }
+      ]
+    }
+  };
+
+  rsiChart = new ApexCharts(rsiElement, options);
+  await rsiChart.render();
+}
+async function renderMACDChart(chartSeries) {
+  const macdElement = document.querySelector("#macd-chart");
+  if (!macdElement) return;
+
+  const macdData = calculateMACD(chartSeries);
+
+  if (macdChart) {
+    macdChart.destroy();
+  }
+
+  const options = {
+    series: [
+      {
+        name: "Histogram",
+       type: "bar",
+        data: macdData.histogram.map(point => ({
+         x: point.x,
+        y: point.y,
+         fillColor: point.y >= 0 ? "#22c55e" : "#ef4444"
+  }))
+      },
+      {
+        name: "MACD",
+        type: "line",
+        data: macdData.macdLine
+      },
+      {
+        name: "Signal",
+        type: "line",
+        data: macdData.signalLine
+      }
+    ],
+    chart: {
+      height: "100%",
+      type: "line",
+      background: "transparent",
+      toolbar: { show: false },
+      parentHeightOffset: 0
+    },
+    stroke: {
+      width: [0, 3, 3],
+      curve: "smooth"
+    },
+    plotOptions: {
+  bar: {
+    columnWidth: "45%",
+    distributed: false
+  }
+},
+    theme: { mode: "dark" },
+    xaxis: {
+      type: "datetime",
+      labels: {
+        style: { colors: "#8e8da4" }
+      }
+    },
+    yaxis: {
+      labels: {
+        style: { colors: "#8e8da4" }
+      }
+    },
+    grid: {
+      borderColor: "#1e2b45",
+      padding: {
+        left: 20,
+        right: 25,
+        top: 10,
+        bottom: 20
+      }
+    },
+    legend: {
+      show: false
+    }
+  };
+
+  macdChart = new ApexCharts(macdElement, options);
+  await macdChart.render();
+}
+function updateInfoBoxes(assetData, visibleSeries) {
+  const volumeBox = document.querySelector("#volumeBox");
+  const highLowBox = document.querySelector("#highLowBox");
+  const priceRangeBox = document.querySelector("#priceRangeBox");
+  const volatilityBox = document.querySelector("#volatilityBox");
+
+  if (!visibleSeries.length) return;
+
+  const prices = visibleSeries.map(point => point.y);
+
+  const high = Math.max(...prices);
+  const low = Math.min(...prices);
+  const range = high - low;
+
+  const avgPrice =
+    prices.reduce((sum, price) => sum + price, 0) / prices.length;
+
+  const volatility =
+    avgPrice !== 0 ? (range / avgPrice) * 100 : 0;
+
+  const totalVolume = assetData.reduce((sum, row) => {
+    const volume = Number(row.volume);
+    return sum + (isNaN(volume) ? 0 : volume);
+  }, 0);
+
+  if (volumeBox) {
+    volumeBox.textContent =
+      totalVolume > 0
+        ? `Volume ${totalVolume.toLocaleString()}`
+        : "Volume N/A";
+  }
+
+  if (highLowBox) {
+    highLowBox.textContent =
+      `High / Low ${high.toFixed(3)} / ${low.toFixed(3)}`;
+  }
+
+  if (priceRangeBox) {
+    priceRangeBox.textContent =
+      `Range ${range.toFixed(3)}`;
+  }
+
+  if (volatilityBox) {
+    volatilityBox.textContent =
+      `Volatility ${volatility.toFixed(2)}%`;
+  }
+}
 // Sayfa yüklendiğinde çalıştır
 //renderPriceChart();
