@@ -90,7 +90,7 @@ console.log("Twelve Data'ya giden symbol:", apiSymbol);
 
   const apiKey =
     process.env.TWELVE_DATA_API_KEY;
-
+console.log("API KEY VAR MI:", !!apiKey);
 
     const selectedRange = req.query.range || "1M";
 
