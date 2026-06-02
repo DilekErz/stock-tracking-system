@@ -1431,3 +1431,10 @@ body.light-mode .info-box::after {
   top: 48px !important;
   z-index: 999999 !important;
 }
+.change.positive {
+  color: #00f07c;
+}
+
+.change.negative {
+  color: #ff5d5d;
+}
