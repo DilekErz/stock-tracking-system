@@ -49,22 +49,79 @@ db.getConnection((err, connection) => {
 app.get("/", (req, res) => {
   res.send("Backend çalışıyor");
 });
+// app.get("/api/test-market", async (req, res) => {
+//   const apiKey = process.env.TWELVE_DATA_API_KEY;
+
+//   const url =
+//     `https://api.twelvedata.com/time_series?symbol=USD/TRY&interval=1day&outputsize=5&apikey=${apiKey}`;
+
+//   try {
+//     const response = await fetch(url);
+//     const data = await response.json();
+
+//     res.json(data);
+//   } catch (error) {
+//     res.status(500).json({
+//       message: "Twelve Data API hatası",
+//       error: error.message
+//     });
+//   }
+// });
+const symbolMap = {
+  USD_TRY: "USD/TRY",
+  EUR_TRY: "EUR/TRY",
+  GBP_TRY: "GBP/TRY",
+  JPY_TRY: "JPY/TRY",
+  HKD_TRY: "HKD/TRY",
+  EUR_USD: "EUR/USD",
+
+  Gold: "XAU/USD",
+  Silver: "XAG/USD"
+};
+
 app.get("/api/test-market", async (req, res) => {
-  const apiKey = process.env.TWELVE_DATA_API_KEY;
+
+  const selectedSymbol = req.query.symbol || "USD_TRY";
+
+  const apiSymbol =
+    symbolMap[selectedSymbol] || "USD/TRY";
+    console.log("Frontend'den gelen symbol:", selectedSymbol);
+console.log("Twelve Data'ya giden symbol:", apiSymbol);
+
+  const apiKey =
+    process.env.TWELVE_DATA_API_KEY;
+
+
+    const selectedRange = req.query.range || "1M";
+
+const rangeMap = {
+  "1D": { interval: "1h", outputsize: 24 },
+  "1W": { interval: "1day", outputsize: 7 },
+  "1M": { interval: "1day", outputsize: 30 },
+  "3M": { interval: "1day", outputsize: 90 },
+  "6M": { interval: "1day", outputsize: 180 },
+  "1Y": { interval: "1day", outputsize: 365 }
+};
+
+const rangeConfig = rangeMap[selectedRange] || rangeMap["1M"];
 
   const url =
-    `https://api.twelvedata.com/time_series?symbol=USD/TRY&interval=1day&outputsize=5&apikey=${apiKey}`;
+  `https://api.twelvedata.com/time_series?symbol=${encodeURIComponent(apiSymbol)}&interval=${rangeConfig.interval}&outputsize=${rangeConfig.outputsize}&apikey=${apiKey}`;
 
   try {
+
     const response = await fetch(url);
     const data = await response.json();
 
     res.json(data);
+
   } catch (error) {
+
     res.status(500).json({
       message: "Twelve Data API hatası",
       error: error.message
     });
+
   }
 });
 

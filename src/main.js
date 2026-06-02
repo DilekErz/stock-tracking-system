@@ -3,7 +3,9 @@
  import { renderPriceChart } from './charts.js';
 //  const API_URL = "https://stock-tracking-system-production.up.railway.app"; RAİLWAY ÇALIŞMAZSA ALTTAKİ LOCALHOST ÇALIŞTIR
 const API_URL =
-  "https://stock-tracking-system-3myv.onrender.com";
+  window.location.hostname === "localhost"
+    ? "http://localhost:3000"
+    : "https://stock-tracking-system-3myv.onrender.com";
 
 async function loadPartial(path) {
   const response = await fetch(path);
@@ -70,6 +72,7 @@ console.log("overlay string var mı:", homepageHtml.includes('id="overlay"'));
     updateHomepageLogo();
     loadSavedProfileImage();
     loadUserProfile();
+    addAssetCurrencyMenus();
     setupSidebarSelections();
     applyPreferencesToHomepage();
 
@@ -214,14 +217,15 @@ function applyPreferencesToHomepage() {
 
   if (assetName) assetName.textContent = selectedAsset;
   if (currency) {
-  const viewValue = displayMode === "Local Value" ? "local" : "original";
+  // const viewValue = displayMode === "Local Value" ? "local" : "original";
 
-  currency.textContent =
-    selectedAsset.includes("_")
-      ? getOriginalCurrency(selectedAsset)
-      : viewValue === "local"
-        ? portfolioCurrency
-        : getOriginalCurrency(selectedAsset);
+  // currency.textContent =
+  //   selectedAsset.includes("_")
+  //     ? getOriginalCurrency(selectedAsset)
+  //     : viewValue === "local"
+  //       ? portfolioCurrency
+  //       : getOriginalCurrency(selectedAsset);
+  currency.textContent = getOriginalCurrency(selectedAsset);
 }
 
   if (predictionTitle) {
@@ -395,19 +399,116 @@ if (event.target.id === "openPhotoModal") {
   }
 });
 
+function addAssetCurrencyMenus() {
+  const allowedSections = [
+    "Stock Indexes (BIST & Global)",
+    "Precious Metals & Commodities"
+  ];
+
+  document.querySelectorAll(".market-accordion").forEach(accordion => {
+    const summary = accordion.querySelector("summary");
+    const titleSpan = summary?.querySelector("span:first-child");
+
+    const categoryTitle = titleSpan?.textContent.trim();
+
+    if (!allowedSections.includes(categoryTitle)) return;
+
+    if (summary.querySelector(".category-currency-menu-btn")) return;
+
+    const menuBtn = document.createElement("button");
+    menuBtn.type = "button";
+    menuBtn.className = "category-currency-menu-btn";
+    menuBtn.textContent = "⋮";
+
+    const menu = document.createElement("div");
+    menu.className = "category-currency-menu";
+    menu.innerHTML = `
+      <p>View all as</p>
+      <button type="button" data-currency="TRY">TRY ₺</button>
+      <button type="button" data-currency="USD">USD $</button>
+      <button type="button" data-currency="EUR">EUR €</button>
+    `;
+
+    summary.appendChild(menuBtn);
+    summary.appendChild(menu);
+  });
+}
+
+
 function setupSidebarSelections() {
   document.addEventListener("click", function (event) {
 
-    const currency = event.target.closest(".currency-option");
-    if (currency) {
-      document.querySelectorAll(".currency-option").forEach(item => {
-        item.classList.remove("active");
-      });
+  const categoryCurrencyBtn = event.target.closest(".category-currency-menu-btn");
 
-      currency.classList.add("active");
-      currency.querySelector("input").checked = true;
-      updateDashboardFromSidebar();
+if (categoryCurrencyBtn) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  const menu = categoryCurrencyBtn.nextElementSibling;
+
+  document.querySelectorAll(".category-currency-menu").forEach(item => {
+    if (item !== menu) item.classList.remove("active");
+  });
+
+  menu.classList.toggle("active");
+  return;
+}
+
+const categoryCurrencyOption = event.target.closest(".category-currency-menu button");
+
+if (categoryCurrencyOption) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  const selectedCurrency = categoryCurrencyOption.dataset.currency;
+  const accordion = categoryCurrencyOption.closest(".market-accordion");
+  const categoryTitle =
+    accordion.querySelector("summary span:first-child")?.textContent.trim();
+
+  if (categoryTitle.includes("Stock Indexes")) {
+    localStorage.setItem("stockIndexesViewCurrency", selectedCurrency);
+  }
+
+  if (categoryTitle.includes("Precious Metals")) {
+    localStorage.setItem("commoditiesViewCurrency", selectedCurrency);
+  }
+
+  const selectedAsset =
+    document.querySelector('input[name="selectedAsset"]:checked')?.value;
+
+  if (selectedAsset) {
+    const selectedAccordion =
+      document.querySelector('input[name="selectedAsset"]:checked')
+        ?.closest(".market-accordion");
+
+    const selectedCategory =
+      selectedAccordion?.querySelector("summary span:first-child")
+        ?.textContent.trim();
+
+    if (
+      selectedCategory === categoryTitle
+    ) {
+      const currencyText = document.querySelector(".currency");
+      if (currencyText) currencyText.textContent = selectedCurrency;
     }
+  }
+
+  categoryCurrencyOption.closest(".category-currency-menu").classList.remove("active");
+
+  console.log(`${categoryTitle} artık ${selectedCurrency} olarak gösterilecek`);
+
+  return;
+}
+    // const currency = event.target.closest(".currency-option");
+    // if (currency) {
+    //   document.querySelectorAll(".currency-option").forEach(item => {
+    //     item.classList.remove("active");
+    //   });
+
+    //   currency.classList.add("active");
+    //   currency.querySelector("input").checked = true;
+    //   updateDashboardFromSidebar();
+    // }
 
     const market = event.target.closest(".market-item");
     if (market) {
@@ -494,6 +595,8 @@ function setupSidebarSelections() {
       document.getElementById("sidebarInfoBox").classList.remove("active");
     }
   });
+
+  
 }
 
 
@@ -534,12 +637,13 @@ function updateDashboardFromSidebar() {
   const isCurrencyPair = selectedAsset.includes("_");
 
 if (currencyText) {
-  currencyText.textContent =
-    isCurrencyPair
-      ? getOriginalCurrency(selectedAsset)
-      : selectedView === "local"
-        ? selectedCurrency
-        : getOriginalCurrency(selectedAsset);
+  // currencyText.textContent =
+  //   isCurrencyPair
+  //     ? getOriginalCurrency(selectedAsset)
+  //     : selectedView === "local"
+  //       ? selectedCurrency
+  //       : getOriginalCurrency(selectedAsset);
+  currencyText.textContent = getOriginalCurrency(selectedAsset);
 }
 
   if (predictionPrice) {
@@ -561,7 +665,7 @@ predictionPrice.textContent =
     : `Viewing in original market currency: ${getOriginalCurrency(selectedAsset)}`;
   }
 
-  renderPriceChart(selectedAsset);
+  renderPriceChart(selectedAsset, selectedRange);
 
   localStorage.setItem("selectedAsset", selectedAsset);
 localStorage.setItem("portfolioCurrency", selectedCurrency);
@@ -757,7 +861,7 @@ localStorage.getItem("selectedAsset")
 ||
 "BIST100";
 
-renderPriceChart(selectedAsset);
+renderPriceChart(selectedAsset, "1M");
       applyPreferencesToHomepage();
 
     } catch (error) {
