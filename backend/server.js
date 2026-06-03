@@ -3,6 +3,9 @@ const express = require("express");
 const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
 const cors = require("cors");
+const YahooFinance = require("yahoo-finance2").default;
+const yahooFinance = new YahooFinance();
+
 const corsOptions = {
   origin: [
     "http://localhost:5173",
@@ -68,6 +71,7 @@ app.get("/", (req, res) => {
 //   }
 // });
 const symbolMap = {
+  // Currency Pairs twelve data
   USD_TRY: "USD/TRY",
   EUR_TRY: "EUR/TRY",
   GBP_TRY: "GBP/TRY",
@@ -75,16 +79,63 @@ const symbolMap = {
   HKD_TRY: "HKD/TRY",
   EUR_USD: "EUR/USD",
 
+   // Precious Metals & Commodities twelve data
   Gold: "XAU/USD",
-  Silver: "XAG/USD"
+  Silver: "XAG/USD",
+  Brent: "XBR/USD",
+  // NaturalGas: "null",
+  Copper: "HG1",
+
+   // Stock Indexes twelve data
+  BIST100: "XU100",
+  BIST30: "XU030",
+  SP500: "SPX",
+  NASDAQ100: "NDX",
+  DJI: "DJI",
+  DOW: "DJI",
+  DAX: "DAX",
+  CAC40: "CAC40",
+  FTSE100: "FTSE",
+  NIKKEI225: "NIKKEI225",
+  HSI: "HSI",
+
+  // Government Bonds / Interest Rates twelve data
+  TR10YT: "TR10YT",
+  US10YT: "US10Y"
+};
+const yahooSymbolMap = {//api2için veriadları
+  BIST100: "XU100.IS",
+  BIST30: "XU030.IS",
+  SP500: "^GSPC",
+  NASDAQ100: "^NDX",
+  DJI: "^DJI",
+  DOW: "^DJI",
+  DAX: "^GDAXI",
+  CAC40: "^FCHI",
+  FTSE100: "^FTSE",
+  NIKKEI225: "^N225",
+  HSI: "^HSI",
+  US10YT: "^TNX",
+
+  Silver: "SI=F",
+  Brent: "BZ=F",
+  NaturalGas: "NG=F",
+  Copper: "HG=F"
+  
 };
 
 app.get("/api/test-market", async (req, res) => {
 
   const selectedSymbol = req.query.symbol || "USD_TRY";
 
-  const apiSymbol =
-    symbolMap[selectedSymbol] || "USD/TRY";
+  const apiSymbol = symbolMap[selectedSymbol];
+
+if (!apiSymbol) {
+  return res.status(400).json({
+    status: "error",
+    message: `Symbol map içinde bulunamadı: ${selectedSymbol}`
+  });
+}
     console.log("Frontend'den gelen symbol:", selectedSymbol);
 console.log("Twelve Data'ya giden symbol:", apiSymbol);
 
@@ -124,6 +175,127 @@ const rangeConfig = rangeMap[selectedRange] || rangeMap["1M"];
 
   }
 });
+
+app.get("/api/hkd-try", async (req, res) => {
+  const selectedRange = req.query.range || "1M";
+
+  const daysMap = {
+    "1D": 2,
+    "1W": 45,
+    "1M": 30,
+    "3M": 90,
+    "6M": 180,
+    "1Y": 365
+  };
+
+  const days = daysMap[selectedRange] || 30;
+
+  const endDate = new Date();
+  const startDate = new Date();
+  startDate.setDate(endDate.getDate() - days);
+
+  const formatDate = (date) => date.toISOString().slice(0, 10);
+
+  const url =
+    `https://api.frankfurter.dev/v1/${formatDate(startDate)}..${formatDate(endDate)}?base=HKD&symbols=TRY`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const values = Object.entries(data.rates).map(([date, rate]) => ({
+      datetime: date,
+      close: rate.TRY,
+      volume: 0
+    }));
+
+    res.json({
+      meta: {
+        symbol: "HKD_TRY",
+        source: "Frankfurter",
+        interval: "1day"
+      },
+      values
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "HKD/TRY geçmiş verisi alınamadı",
+      error: error.message
+    });
+  }
+});
+
+app.get("/api/yahoo-market", async (req, res) => {
+  const selectedSymbol = req.query.symbol;
+  const selectedRange = req.query.range || "1M";
+
+  const yahooSymbol = yahooSymbolMap[selectedSymbol];
+
+  if (!yahooSymbol) {
+    return res.status(400).json({
+      status: "error",
+      message: `Yahoo symbol bulunamadı: ${selectedSymbol}`
+    });
+  }
+
+  const rangeMap = {
+    "1D": { period1: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), interval: "1h" },
+    "1W": { period1: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000), interval: "1d" },
+    "1M": { period1: new Date(Date.now() - 35 * 24 * 60 * 60 * 1000), interval: "1d" },
+    "3M": { period1: new Date(Date.now() - 100 * 24 * 60 * 60 * 1000), interval: "1d" },
+    "6M": { period1: new Date(Date.now() - 190 * 24 * 60 * 60 * 1000), interval: "1d" },
+    "1Y": { period1: new Date(Date.now() - 370 * 24 * 60 * 60 * 1000), interval: "1d" }
+  };
+
+  const config = rangeMap[selectedRange] || rangeMap["1M"];
+
+  try {
+    const result = await yahooFinance.chart(yahooSymbol, {
+      period1: config.period1,
+      interval: config.interval
+    });
+
+    const values = result.quotes
+      .filter(item => item.close !== null && item.close !== undefined)
+      .map(item => ({
+        datetime: item.date.toISOString().slice(0, 19).replace("T", " "),
+        open: item.open,
+        high: item.high,
+        low: item.low,
+        close: item.close,
+        volume: item.volume ?? 0
+      }));
+
+    res.json({
+      meta: {
+        symbol: yahooSymbol,
+        source: "Yahoo Finance",
+        interval: config.interval
+      },
+      values
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Yahoo Finance veri çekme hatası",
+      error: error.message
+    });
+  }
+});
+app.get("/test-yahoo", async (req, res) => {
+  try {
+    const result = await yahooFinance.search("AAPL");
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      error: error.message
+    });
+  }
+}); //TEST İÇİİN EKLENDİ(dilekerz)
 
 const PORT = process.env.PORT || 3000;
 

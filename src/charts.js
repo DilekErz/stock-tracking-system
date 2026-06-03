@@ -9,6 +9,8 @@ import ApexCharts from 'apexcharts';
 let priceChart = null;
 let rsiChart = null;
 let macdChart = null;
+const marketDataCache = new Map();// apı key e tekrar aynı veri için istek atmasın(dilekerz)
+const pendingRequests = new Map();
 
 export async function renderPriceChart(selectedAsset = "USD_TRY", selectedRange = "1M") {
  const requestId = ++latestRequestId;
@@ -23,8 +25,69 @@ export async function renderPriceChart(selectedAsset = "USD_TRY", selectedRange 
     // 1. CSV Dosyasını Oku
     //Dosya bulunuyor mu,CSV boş mu,gerçekten veri geliyor mu
 
-const response = await fetch(`${API_URL}/api/test-market?symbol=${selectedAsset}&range=${selectedRange}`);
-const data = await response.json();
+// const response = await fetch(`${API_URL}/api/test-market?symbol=${selectedAsset}&range=${selectedRange}`);
+// const data = await response.json();
+const cacheKey = `${selectedAsset}-${selectedRange}`;
+
+const yahooAssets = [
+  "BIST100",
+  "BIST30",
+  "SP500",
+  "NASDAQ100",
+  "DJI",
+  "DOW",
+  "DAX",
+  "CAC40",
+  "FTSE100",
+  "NIKKEI225",
+  "HSI",
+  "US10YT",
+  "TR10YT",
+  "Silver",
+  "Brent",
+"NaturalGas",
+"Copper"
+
+];
+
+let endpoint;
+
+if (selectedAsset === "HKD_TRY") {
+  endpoint = "/api/hkd-try";
+} else if (yahooAssets.includes(selectedAsset)) {
+  endpoint = "/api/yahoo-market";
+} else {
+  endpoint = "/api/test-market";
+}
+  let data;
+
+if (marketDataCache.has(cacheKey)) {
+  console.log("Cache kullanıldı:", cacheKey);
+  data = marketDataCache.get(cacheKey);
+} else if (pendingRequests.has(cacheKey)) {
+  console.log("Devam eden istek bekleniyor:", cacheKey);
+  data = await pendingRequests.get(cacheKey);
+} else {
+  console.log("Kullanılan endpoint:", endpoint);
+  console.log("API isteği atıldı:", cacheKey);
+
+ const requestPromise = fetch(
+  `${API_URL}${endpoint}?symbol=${selectedAsset}&range=${selectedRange}`
+)
+    .then(response => response.json())
+    .finally(() => {
+      pendingRequests.delete(cacheKey);
+    });
+
+  pendingRequests.set(cacheKey, requestPromise);
+
+  data = await requestPromise;
+
+  if (data.status !== "error" && data.values) {
+    marketDataCache.set(cacheKey, data);
+  }
+}
+
 if (requestId !== latestRequestId) return;
 
 console.log("Seçilen asset:", selectedAsset);
@@ -130,10 +193,25 @@ const chartSeries = assetData
 
  console.log("chartSeries:", chartSeries);
     console.log("chartSeries uzunluğu:", chartSeries.length);
-    const visibleSeries =
-  selectedRange === "1W"
-    ? chartSeries.slice(-7)
+
+  //   const visibleSeries =
+  // selectedRange === "1W"
+  //   ? chartSeries.slice(-7)
+  //   : chartSeries;
+  const visibleCountMap = {
+  "1D": 24,
+  "1W": 7,
+  "1M": 30,
+  "3M": 90,
+  "6M": 180,
+  "1Y": 365
+};
+
+const visibleSeries =
+  selectedRange in visibleCountMap
+    ? chartSeries.slice(-visibleCountMap[selectedRange])
     : chartSeries;
+
     if (requestId !== latestRequestId) return;
 
     if (!chartSeries.length) {
@@ -173,6 +251,7 @@ const chartSeries = assetData
 
         xaxis: {
     type: "datetime",
+
     labels: {
       offsetY: 0,
       show: true,
@@ -391,10 +470,14 @@ async function renderRSIChart(chartSeries, selectedRange) {
 
   const rsiData = calculateRSI(chartSeries, 14);
 
-const visibleRsiData =
-  selectedRange === "1W"
-    ? rsiData.slice(-7)
-    : rsiData;
+  const visibleRsiData =
+    selectedRange === "1W"
+      ? rsiData.slice(-7)
+      : rsiData;
+
+       console.log("RSI Length:", rsiData.length);
+  console.log("Visible RSI Length:", visibleRsiData.length);
+  console.log("Range:", selectedRange); //kontrol verileri(rsı(1w)=rsı(1m) aynı mı geliyor(dilekerz))
 
   if (rsiChart) {
     rsiChart.destroy();
