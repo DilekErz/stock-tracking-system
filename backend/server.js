@@ -285,6 +285,27 @@ app.get("/api/yahoo-market", async (req, res) => {
     });
   }
 });
+app.get("/api/prediction", async (req, res) => {
+  const { symbol } = req.query;
+
+  if (!symbol) {
+    return res.status(400).json({ message: "Tahmin için sembol gerekli" });
+  }
+
+  try {
+    const pythonServiceUrl = `http://localhost:5000/predict?symbol=${symbol}`;
+    
+    const response = await fetch(pythonServiceUrl);
+    const data = await response.json();
+
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({
+      message: "Python model servisine ulaşılamadı",
+      error: error.message
+    });
+  }
+});
 app.get("/test-yahoo", async (req, res) => {
   try {
     const result = await yahooFinance.search("AAPL");

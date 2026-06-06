@@ -1045,4 +1045,67 @@ function setupForgotPasswordSubmit() {
   });
 }
 
+document.body.addEventListener('click', (event) => {
+    // Tıklanan element bizim butonumuz mu kontrol et
+    if (event.target && event.target.classList.contains('predict-action-btn')) {
+        
+        // Sol menüdeki seçili sembolü al
+        const selectedAssetNode = document.querySelector('input[name="selectedAsset"]:checked');
+        
+        if (!selectedAssetNode) {
+            console.error("Hata: Seçili bir sembol bulunamadı veya input 'name' değeri uyuşmuyor.");
+            return;
+        }
+        
+        // Tahmin fonksiyonunu tetikle
+        fetchAIPrediction(selectedAssetNode.value);
+    }
+});
+
+async function fetchAIPrediction(symbol) {
+    const predPriceEl = document.getElementById('pred-price');
+    const realPriceEl = document.getElementById('real-price');
+    const diffEl = document.getElementById('price-diff');
+    const errorRateEl = document.getElementById('error-rate');
+
+    // İstek atılırken ekranda görünecek yükleme durumu
+    predPriceEl.textContent = "Hesaplanıyor...";
+    realPriceEl.textContent = "-";
+    diffEl.textContent = "-";
+    errorRateEl.textContent = "-";
+
+    try {
+        // Node.js backend'imize (3000 portu) istek atıyoruz
+        const response = await fetch(`http://localhost:3000/api/prediction?symbol=${symbol}`);
+        const data = await response.json();
+
+        if(data.error) {
+            predPriceEl.textContent = "Hata oluştu";
+            console.error("Backend Hatası:", data.error);
+            return;
+        }
+
+        const predictedValue = data.predicted_price;
+        const realValue = data.real_price;
+        
+        // Fark ve hata payı hesaplamaları
+        const difference = predictedValue - realValue;
+        const errorPercentage = Math.abs(difference / realValue) * 100;
+
+        // Verileri arayüze basıyoruz
+        predPriceEl.textContent = `${predictedValue.toFixed(2)}`;
+        realPriceEl.textContent = `${realValue.toFixed(2)}`;
+        
+        diffEl.textContent = difference > 0 ? `+${difference.toFixed(2)}` : difference.toFixed(2);
+        diffEl.style.color = difference > 0 ? "#00ff00" : "#ff4444"; 
+        
+        errorRateEl.textContent = `%${errorPercentage.toFixed(2)}`;
+
+    } catch (error) {
+        console.error("Fetch Hatası:", error);
+        predPriceEl.textContent = "Bağlantı Hatası!";
+    }
+}
+
+
 initApp();
