@@ -1057,26 +1057,32 @@ document.body.addEventListener('click', (event) => {
             return;
         }
         
+        // Zaman penceresini al (1M, 1W vb.)
+        const selectedRange = document.querySelector(".chart-range-grid button.active")?.innerText || "1M";
+        
         // Tahmin fonksiyonunu tetikle
-        fetchAIPrediction(selectedAssetNode.value);
+        fetchAIPrediction(selectedAssetNode.value, selectedRange);
     }
 });
 
-async function fetchAIPrediction(symbol) {
+async function fetchAIPrediction(symbol, range = "1M") {
     const predPriceEl = document.getElementById('pred-price');
     const realPriceEl = document.getElementById('real-price');
     const diffEl = document.getElementById('price-diff');
     const errorRateEl = document.getElementById('error-rate');
+    const xgbProbEl = document.getElementById('xgb-probability');
+    const xgbProbContainerEl = document.getElementById('xgb-prob-container');
 
     // İstek atılırken ekranda görünecek yükleme durumu
     predPriceEl.textContent = "Hesaplanıyor...";
     realPriceEl.textContent = "-";
     diffEl.textContent = "-";
     errorRateEl.textContent = "-";
+    if (xgbProbContainerEl) xgbProbContainerEl.style.display = "none";
 
     try {
-        // Node.js backend'imize (3000 portu) istek atıyoruz
-        const response = await fetch(`http://localhost:3000/api/prediction?symbol=${symbol}`);
+        // Node.js backend'imize (3000 portu) istek atıyoruz, zaman penceresini de gönderiyoruz
+        const response = await fetch(`http://localhost:3000/api/prediction?symbol=${symbol}&range=${range}`);
         const data = await response.json();
 
         if(data.error) {
@@ -1100,6 +1106,13 @@ async function fetchAIPrediction(symbol) {
         diffEl.style.color = difference > 0 ? "#00ff00" : "#ff4444"; 
         
         errorRateEl.textContent = `%${errorPercentage.toFixed(2)}`;
+
+        // XGBoost probability varsa göster
+        if (data.xgb_up_probability !== undefined && data.xgb_up_probability !== null) {
+            const probabilityPercent = (data.xgb_up_probability * 100).toFixed(2);
+            xgbProbEl.textContent = `${probabilityPercent}%`;
+            if (xgbProbContainerEl) xgbProbContainerEl.style.display = "block";
+        }
 
     } catch (error) {
         console.error("Fetch Hatası:", error);
