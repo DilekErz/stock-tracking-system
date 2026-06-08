@@ -3,6 +3,43 @@ const API_URL =
   window.location.hostname === "localhost"
     ? "http://localhost:3000"
     : "https://stock-tracking-system-3myv.onrender.com";
+
+async function getLLMAnalysis(data) {
+  const llmElement = document.getElementById("llmAnalysis");
+
+  if (llmElement) {
+    llmElement.textContent = "AI analysis is loading...";
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/api/llm/analyze`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "LLM request failed");
+    }
+
+    if (llmElement) {
+      llmElement.textContent = result.analysis;
+    }
+
+  } catch (error) {
+    console.error("LLM analysis error:", error);
+
+    if (llmElement) {
+      llmElement.textContent =
+        "AI analysis is temporarily unavailable. Market data and technical indicators are still displayed.";
+    }
+  }
+}
+
 import Papa from 'papaparse';
 import ApexCharts from 'apexcharts';
 
@@ -362,6 +399,37 @@ const lastPrice = lastCandle ? lastCandle.y : null;
 }
 const firstCandle = visibleSeries[0];
 const firstPrice = firstCandle ? firstCandle.y : null;
+
+//LLM İÇİN EKLENDİ
+const rsiData = calculateRSI(chartSeries, 14);
+const latestRsi =
+  rsiData.length > 0
+    ? rsiData[rsiData.length - 1].y
+    : null;
+
+const macdData =
+  calculateMACD(chartSeries);
+
+const latestMacd =
+  macdData.macdLine.length > 0
+    ? macdData.macdLine[
+        macdData.macdLine.length - 1
+      ].y
+    : null;
+
+await getLLMAnalysis({
+  symbol: selectedAsset,
+  lowPrice: Math.min(
+    ...visibleSeries.map(x => x.y)
+  ),
+  highPrice: Math.max(
+    ...visibleSeries.map(x => x.y)
+  ),
+  lastPrice,
+  rsi14: latestRsi,
+  macd: latestMacd,
+  prediction: null
+});
 
 const changeElement = document.querySelector(".change");
 
