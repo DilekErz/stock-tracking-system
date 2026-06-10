@@ -98,7 +98,22 @@ const translations = {
     highLow: "En Yüksek / En Düşük",
     priceRange: "Fiyat Aralığı",
     volatility: "Volatilite",
-    menu: "MENÜ"
+    menu: "MENÜ",
+    modelInputWindow: "Model Girdi Penceresi",
+  marketCategories: "Piyasa Kategorileri",
+  graphSettings: "Grafik Ayarları",
+  chartRange: "Grafik Aralığı",
+  indicators: "Göstergeler",
+  predictionModel: "Tahmin Modeli",
+   originalMarketCurrency: "Orijinal Piyasa Para Birimi",
+  portfolioCurrencyView: "Portföy Para Birimi Görünümü",
+  displayMode: "Görüntüleme Modu:",
+  movingAverage: "Hareketli Ortalama",
+  predictionTarget: "Tahmin Hedefi:",
+  nextDay: "Sonraki Gün",
+  accuracy: "Doğruluk:",
+  inputWindow: "Girdi Penceresi:",
+  predictShowChart: "TAHMİN ET VE GRAFİĞİ GÖSTER"
   },
   en: {
     priceTimeSeries: "Price Time Series",
@@ -110,7 +125,13 @@ const translations = {
     highLow: "High / Low",
     priceRange: "Price Range",
     volatility: "Volatility",
-    menu: "MENU"
+    menu: "MENU",
+      modelInputWindow: "Model Input Window",
+  marketCategories: "Market Categories",
+  graphSettings: "Graph Settings",
+  chartRange: "Chart Range",
+  indicators: "Indicators",
+  predictionModel: "Prediction Model"
   }
 };
 
@@ -141,6 +162,14 @@ function setupLanguageSwitcher() {
 }
 function applyLanguage(lang) {
   const t = translations[lang];
+
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+  const key = el.dataset.i18n;
+
+  if (t[key]) {
+    el.textContent = t[key];
+  }
+});
 
   const chartTitle = document.querySelector(".big-chart .chart-title");
   if (chartTitle) chartTitle.textContent = t.priceTimeSeries;
@@ -769,8 +798,12 @@ if (currencyText) {
   if (predictionPrice) {
     // predictionPrice.textContent =
     //   `${selectedPrediction.replace("(Recommended)", "").trim()} Prediction`;
+const lang = localStorage.getItem("language") || "tr";
+
 predictionPrice.textContent =
-`${localStorage.getItem("predictionWindow") || selectedPrediction} Prediction`;
+  lang === "tr"
+    ? "5 Günlük Pencere (Optimize) Tahmini"
+    : "5-Day Window (Optimized) Prediction";
 
   }
   if (changeText) {
