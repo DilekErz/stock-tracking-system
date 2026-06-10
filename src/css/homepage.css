@@ -212,7 +212,39 @@ body {
   color: #a8b5ca;
   font-size: 11px;
 }
+.language-switch {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
 
+.lang-btn {
+  border: none;
+  outline: none;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: transparent;
+  color: #9ca3af;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.lang-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.lang-btn.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+}
 /* PREDICTION CARD */
 .prediction-card {
   min-height: 320px;
@@ -692,6 +724,12 @@ body {
 
   .big-chart {
     min-height: 320px;
+  }
+  .medium-chart {
+    min-height: 320px;
+  }
+  .prediction-card-two {
+    min-height: 240px;
   }
 }
 

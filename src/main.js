@@ -75,11 +75,131 @@ console.log("overlay string var mı:", homepageHtml.includes('id="overlay"'));
     addAssetCurrencyMenus();
     setupSidebarSelections();
     applyPreferencesToHomepage();
+    setupLanguageSwitcher();
+
+    setTimeout(() => {
+  const currentLanguage = localStorage.getItem("language") || "tr";
+  applyLanguage(currentLanguage);
+}, 500);
 
   } catch (error) {
     console.error("Yükleme hatası:", error);
     app.innerHTML = `<p style="color:white;">İçerik yüklenemedi.</p>`;
   }
+}
+const translations = {
+  tr: {
+    priceTimeSeries: "Fiyat Zaman Serisi",
+    aiPrediction: "Yapay Zeka Tahmini",
+    realValue: "Gerçek Değer:",
+    difference: "Fark:",
+    errorRate: "Hata Oranı:",
+    volume: "Hacim",
+    highLow: "En Yüksek / En Düşük",
+    priceRange: "Fiyat Aralığı",
+    volatility: "Volatilite",
+    menu: "MENÜ"
+  },
+  en: {
+    priceTimeSeries: "Price Time Series",
+    aiPrediction: "AI Prediction",
+    realValue: "Real Value:",
+    difference: "Difference:",
+    errorRate: "Error Rate:",
+    volume: "Volume",
+    highLow: "High / Low",
+    priceRange: "Price Range",
+    volatility: "Volatility",
+    menu: "MENU"
+  }
+};
+
+function setupLanguageSwitcher() {
+  const trBtn = document.getElementById("trBtn");
+  const enBtn = document.getElementById("enBtn");
+
+  if (!trBtn || !enBtn) return;
+
+  let selectedLanguage =
+    localStorage.getItem("language") || "tr";
+
+  function setLanguage(lang) {
+    localStorage.setItem("language", lang);
+
+    trBtn.classList.toggle("active", lang === "tr");
+    enBtn.classList.toggle("active", lang === "en");
+
+    console.log("Dil:", lang);
+
+    applyLanguage(lang);
+  }
+
+  trBtn.addEventListener("click", () => setLanguage("tr"));
+  enBtn.addEventListener("click", () => setLanguage("en"));
+
+  setLanguage(selectedLanguage);
+}
+function applyLanguage(lang) {
+  const t = translations[lang];
+
+  const chartTitle = document.querySelector(".big-chart .chart-title");
+  if (chartTitle) chartTitle.textContent = t.priceTimeSeries;
+
+  const predictionTitle = document.querySelector(".prediction-card h3");
+  if (predictionTitle) predictionTitle.innerHTML = `<span>AI</span> ${lang === "tr" ? "TAHMİN" : "PREDICTION"}`;
+
+  const details = document.querySelectorAll(".prediction-details div");
+  if (details[0]) details[0].childNodes[0].textContent = t.realValue + " ";
+  if (details[1]) details[1].childNodes[0].textContent = t.difference + " ";
+  if (details[2]) details[2].childNodes[0].textContent = t.errorRate + " ";
+
+  const volumeBox = document.getElementById("volumeBox");
+  
+
+  const highLowBox = document.getElementById("highLowBox");
+  
+
+  const priceRangeBox = document.getElementById("priceRangeBox");
+  
+
+  const volatilityBox = document.getElementById("volatilityBox");
+  
+
+  const menuTitle = document.querySelector(".sidebar-header h2");
+  if (menuTitle) menuTitle.textContent = t.menu;
+
+  replaceLabelKeepValue(volumeBox, ["Volume", "Hacim"], t.volume);
+
+replaceLabelKeepValue(
+  highLowBox,
+  ["High / Low", "En Yüksek / En Düşük"],
+  t.highLow
+);
+
+replaceLabelKeepValue(
+  priceRangeBox,
+  ["Range", "Price Range", "Fiyat Aralığı"],
+  t.priceRange
+);
+
+replaceLabelKeepValue(
+  volatilityBox,
+  ["Volatility", "Volatilite"],
+  t.volatility
+);
+}
+function replaceLabelKeepValue(element, oldLabels, newLabel) {
+  if (!element) return;
+
+  let text = element.textContent.trim();
+
+  oldLabels.forEach(label => {
+    if (text.startsWith(label)) {
+      text = text.replace(label, "").trim();
+    }
+  });
+
+  element.textContent = `${newLabel} ${text}`.trim();
 }
 
 function updateHomepageLogo() {
@@ -665,7 +785,10 @@ predictionPrice.textContent =
     : `Viewing in original market currency: ${getOriginalCurrency(selectedAsset)}`;
   }
 
-  renderPriceChart(selectedAsset, selectedRange);
+  renderPriceChart(selectedAsset, selectedRange).then(() => {
+  const currentLanguage = localStorage.getItem("language") || "tr";
+  applyLanguage(currentLanguage);
+});
 
   localStorage.setItem("selectedAsset", selectedAsset);
 localStorage.setItem("portfolioCurrency", selectedCurrency);
@@ -682,6 +805,9 @@ localStorage.setItem(
   selectedPrediction
 );
 applyPreferencesToHomepage();
+
+const currentLanguage = localStorage.getItem("language") || "tr";
+applyLanguage(currentLanguage);
 }
 
 function getOriginalCurrency(asset) {
@@ -861,8 +987,12 @@ localStorage.getItem("selectedAsset")
 ||
 "BIST100";
 
-renderPriceChart(selectedAsset, "1M");
-      applyPreferencesToHomepage();
+Promise.resolve(renderPriceChart(selectedAsset, "1M")).then(() => {
+  const currentLanguage = localStorage.getItem("language") || "tr";
+  applyLanguage(currentLanguage);
+});
+
+applyPreferencesToHomepage();
 
     } catch (error) {
       console.log(error);

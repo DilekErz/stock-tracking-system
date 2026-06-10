@@ -723,27 +723,70 @@ function updateInfoBoxes(assetData, visibleSeries) {
     return sum + (isNaN(volume) ? 0 : volume);
   }, 0);
 
-  if (volumeBox) {
-    volumeBox.textContent =
-      totalVolume > 0
-        ? `Volume ${totalVolume.toLocaleString()}`
-        : "Volume N/A";
-  }
+  // if (volumeBox) {
+  //   volumeBox.textContent =
+  //     totalVolume > 0
+  //       ? `Volume ${totalVolume.toLocaleString()}`
+  //       : "Volume N/A";
+  // }
 
-  if (highLowBox) {
-    highLowBox.textContent =
-      `High / Low ${high.toFixed(3)} / ${low.toFixed(3)}`;
-  }
+  // if (highLowBox) {
+  //   highLowBox.textContent =
+  //     `High / Low ${high.toFixed(3)} / ${low.toFixed(3)}`;
+  // }
 
-  if (priceRangeBox) {
-    priceRangeBox.textContent =
-      `Range ${range.toFixed(3)}`;
-  }
+  // if (priceRangeBox) {
+  //   priceRangeBox.textContent =
+  //     `Range ${range.toFixed(3)}`;
+  // }
 
-  if (volatilityBox) {
-    volatilityBox.textContent =
-      `Volatility ${volatility.toFixed(2)}%`;
+  // if (volatilityBox) {
+  //   volatilityBox.textContent =
+  //     `Volatility ${volatility.toFixed(2)}%`;
+  // }
+
+  const lang = localStorage.getItem("language") || "tr";
+
+const labels = {
+  tr: {
+    volume: "Hacim",
+    volumeNA: "Hacim N/A",
+    highLow: "En Yüksek / En Düşük",
+    range: "Fiyat Aralığı",
+    volatility: "Volatilite"
+  },
+  en: {
+    volume: "Volume",
+    volumeNA: "Volume N/A",
+    highLow: "High / Low",
+    range: "Range",
+    volatility: "Volatility"
   }
+};
+
+const t = labels[lang];
+
+if (volumeBox) {
+  volumeBox.textContent =
+    totalVolume > 0
+      ? `${t.volume} ${totalVolume.toLocaleString()}`
+      : t.volumeNA;
+}
+
+if (highLowBox) {
+  highLowBox.textContent =
+    `${t.highLow} ${high.toFixed(3)} / ${low.toFixed(3)}`;
+}
+
+if (priceRangeBox) {
+  priceRangeBox.textContent =
+    `${t.range} ${range.toFixed(3)}`;
+}
+
+if (volatilityBox) {
+  volatilityBox.textContent =
+    `${t.volatility} ${volatility.toFixed(2)}%`;
+}
 }
 // Sayfa yüklendiğinde çalıştır
 //renderPriceChart();
