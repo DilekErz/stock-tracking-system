@@ -290,15 +290,17 @@ app.get("/api/yahoo-market", async (req, res) => {
   }
 });
 app.get("/api/prediction", async (req, res) => {
-  const { symbol } = req.query;
+  const { symbol, model } = req.query;
 
   if (!symbol) {
     return res.status(400).json({ message: "Tahmin için sembol gerekli" });
   }
 
+  const modelType = model === "hybrid" ? "hybrid" : "lstm";
+
   try {
-    const pythonServiceUrl = `http://localhost:5000/predict?symbol=${symbol}`;
-    
+    const pythonServiceUrl = `http://127.0.0.1:5001/predict?symbol=${symbol}&model=${modelType}`;
+
     const response = await fetch(pythonServiceUrl);
     const data = await response.json();
 

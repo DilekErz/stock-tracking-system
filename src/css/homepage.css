@@ -290,6 +290,23 @@ body {
   font-weight: 600;
 }
 
+.prediction-value-box {
+  width: 100%;
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 255, 140, 0.25);
+  font-size: 0.9em;
+  text-align: center;
+}
+
+.prediction-value-box div {
+  margin: 4px 0;
+}
+
+.prediction-value-box strong {
+  color: #00f07c;
+}
+
 /* MEDIUM CHART */
 .medium-chart {
   margin-bottom: 18px;
@@ -1095,17 +1112,23 @@ body.light-mode .range-buttons button{
 
 /* MODEL */
 .model-select {
+  width: 100%;
   min-height: 52px;
   border-radius: 14px;
   border: 1px solid rgba(140, 160, 200, 0.16);
   background: rgba(87, 106, 138, 0.16);
   color: #dbe3f0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 0 14px;
   margin-bottom: 12px;
   font-size: 14px;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.model-select option {
+  background: #0f1c33;
+  color: #dbe3f0;
 }
 
 .model-info-grid {
