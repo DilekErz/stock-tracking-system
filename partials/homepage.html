@@ -117,9 +117,14 @@
   <div class="prediction-price" id="pred-price">Tahmin Bekleniyor...</div>
   
   <div class="prediction-details" style="margin-top: 10px; font-size: 0.9em;">
-    <div>Real Value: <strong id="real-price">-</strong></div>
-    <div>Difference: <strong id="price-diff">-</strong></div>
-    <div>Error Rate: <strong id="error-rate">-</strong></div>
+    <div>Güncel Değer: <strong id="real-price">-</strong></div>
+    <div>Yükseliş Olasılığı: <strong id="price-diff">-</strong></div>
+  </div>
+
+  <div class="prediction-value-box" id="prediction-value-box" style="display:none;">
+    <div>Tahmini Değer (Yarın): <strong id="predicted-price">-</strong></div>
+    <div>Olası Aralık: <strong id="price-band">-</strong></div>
+    <div>Model Güvenilirlik Skoru: <strong id="model-reliability">-</strong></div>
   </div>
 </div>
       </section>
@@ -572,10 +577,10 @@
   <div class="sidebar-section">
     <h3 data-i18n="predictionModel"> Prediction Model</h3>
 
-    <div class="model-select">
-      <span>LSTM + XGBoost Hybrid</span>
-      <span>⌄</span>
-    </div>
+    <select class="model-select" id="modelSelect">
+      <option value="hybrid">LSTM + XGBoost Hybrid</option>
+      <option value="lstm">LSTM Only</option>
+    </select>
 
     <div class="model-info-grid">
       <div class="model-info-box">
