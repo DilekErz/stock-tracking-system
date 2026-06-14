@@ -3,6 +3,43 @@ const API_URL =
   window.location.hostname === "localhost"
     ? "http://localhost:3000"
     : "https://stock-tracking-system-3myv.onrender.com";
+
+async function getLLMAnalysis(data) {
+  const llmElement = document.getElementById("llmAnalysis");
+
+  if (llmElement) {
+    llmElement.textContent = "AI analysis is loading...";
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/api/llm/analyze`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "LLM request failed");
+    }
+
+    if (llmElement) {
+      llmElement.textContent = result.analysis;
+    }
+
+  } catch (error) {
+    console.error("LLM analysis error:", error);
+
+    if (llmElement) {
+      llmElement.textContent =
+        "AI analysis is temporarily unavailable. Market data and technical indicators are still displayed.";
+    }
+  }
+}
+
 import Papa from 'papaparse';
 import ApexCharts from 'apexcharts';
 
@@ -363,6 +400,37 @@ const lastPrice = lastCandle ? lastCandle.y : null;
 const firstCandle = visibleSeries[0];
 const firstPrice = firstCandle ? firstCandle.y : null;
 
+//LLM İÇİN EKLENDİ
+const rsiData = calculateRSI(chartSeries, 14);
+const latestRsi =
+  rsiData.length > 0
+    ? rsiData[rsiData.length - 1].y
+    : null;
+
+const macdData =
+  calculateMACD(chartSeries);
+
+const latestMacd =
+  macdData.macdLine.length > 0
+    ? macdData.macdLine[
+        macdData.macdLine.length - 1
+      ].y
+    : null;
+
+await getLLMAnalysis({
+  symbol: selectedAsset,
+  lowPrice: Math.min(
+    ...visibleSeries.map(x => x.y)
+  ),
+  highPrice: Math.max(
+    ...visibleSeries.map(x => x.y)
+  ),
+  lastPrice,
+  rsi14: latestRsi,
+  macd: latestMacd,
+  prediction: null
+});
+
 const changeElement = document.querySelector(".change");
 
 if (
@@ -655,27 +723,70 @@ function updateInfoBoxes(assetData, visibleSeries) {
     return sum + (isNaN(volume) ? 0 : volume);
   }, 0);
 
-  if (volumeBox) {
-    volumeBox.textContent =
-      totalVolume > 0
-        ? `Volume ${totalVolume.toLocaleString()}`
-        : "Volume N/A";
-  }
+  // if (volumeBox) {
+  //   volumeBox.textContent =
+  //     totalVolume > 0
+  //       ? `Volume ${totalVolume.toLocaleString()}`
+  //       : "Volume N/A";
+  // }
 
-  if (highLowBox) {
-    highLowBox.textContent =
-      `High / Low ${high.toFixed(3)} / ${low.toFixed(3)}`;
-  }
+  // if (highLowBox) {
+  //   highLowBox.textContent =
+  //     `High / Low ${high.toFixed(3)} / ${low.toFixed(3)}`;
+  // }
 
-  if (priceRangeBox) {
-    priceRangeBox.textContent =
-      `Range ${range.toFixed(3)}`;
-  }
+  // if (priceRangeBox) {
+  //   priceRangeBox.textContent =
+  //     `Range ${range.toFixed(3)}`;
+  // }
 
-  if (volatilityBox) {
-    volatilityBox.textContent =
-      `Volatility ${volatility.toFixed(2)}%`;
+  // if (volatilityBox) {
+  //   volatilityBox.textContent =
+  //     `Volatility ${volatility.toFixed(2)}%`;
+  // }
+
+  const lang = localStorage.getItem("language") || "tr";
+
+const labels = {
+  tr: {
+    volume: "Hacim",
+    volumeNA: "Hacim N/A",
+    highLow: "En Yüksek / En Düşük",
+    range: "Fiyat Aralığı",
+    volatility: "Volatilite"
+  },
+  en: {
+    volume: "Volume",
+    volumeNA: "Volume N/A",
+    highLow: "High / Low",
+    range: "Range",
+    volatility: "Volatility"
   }
+};
+
+const t = labels[lang];
+
+if (volumeBox) {
+  volumeBox.textContent =
+    totalVolume > 0
+      ? `${t.volume} ${totalVolume.toLocaleString()}`
+      : t.volumeNA;
+}
+
+if (highLowBox) {
+  highLowBox.textContent =
+    `${t.highLow} ${high.toFixed(3)} / ${low.toFixed(3)}`;
+}
+
+if (priceRangeBox) {
+  priceRangeBox.textContent =
+    `${t.range} ${range.toFixed(3)}`;
+}
+
+if (volatilityBox) {
+  volatilityBox.textContent =
+    `${t.volatility} ${volatility.toFixed(2)}%`;
+}
 }
 // Sayfa yüklendiğinde çalıştır
 //renderPriceChart();

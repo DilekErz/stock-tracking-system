@@ -19,6 +19,12 @@
 
       <div class="topbar-actions">
 
+        <div class="language-switch">
+    <button class="lang-btn active" id="trBtn">TR</button>
+    <button class="lang-btn" id="enBtn">EN</button>
+  </div>
+
+
         <button class="theme-btn" id="themeToggle" aria-label="Tema değiştir">
     🌙
   </button>
@@ -111,10 +117,21 @@
   <div class="prediction-price" id="pred-price">Tahmin Bekleniyor...</div>
   
   <div class="prediction-details" style="margin-top: 10px; font-size: 0.9em;">
+
     <div>Real Value: <strong id="real-price">-</strong></div>
     <div>Difference: <strong id="price-diff">-</strong></div>
     <div>Error Rate: <strong id="error-rate">-</strong></div>
     <div id="xgb-prob-container" style="display: none;">Direction Probability: <strong id="xgb-probability">-</strong></div>
+
+    <div>Güncel Değer: <strong id="real-price">-</strong></div>
+    <div>Yükseliş Olasılığı: <strong id="price-diff">-</strong></div>
+  </div>
+
+  <div class="prediction-value-box" id="prediction-value-box" style="display:none;">
+    <div>Tahmini Değer (Yarın): <strong id="predicted-price">-</strong></div>
+    <div>Olası Aralık: <strong id="price-band">-</strong></div>
+    <div>Model Güvenilirlik Skoru: <strong id="model-reliability">-</strong></div>
+>>>>>>> c15bd8424e0c65c82da726111810d3b97fad0c6b
   </div>
 </div>
       </section>
@@ -254,10 +271,10 @@
       </div>
 
       <div class="prediction-card-two">
-<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsa voluptates quas amet suscipit sunt libero consequuntur recusandae, aliquid est qui facilis et similique enim asperiores doloremque illo omnis, ducimus ab.
-Quae voluptates tempore dolore illo dignissimos nihil praesentium fuga nam laudantium mollitia ipsum vero consequatur, perferendis ipsam animi unde ipsa quis et reprehenderit placeat consectetur nobis dolor! Suscipit, incidunt sint.
-Iste sapiente incidunt magni e</p>
-      </div>
+  <p id="llmAnalysis">
+    AI analysis is loading...
+  </p>
+</div>
 </div>
       <!-- INFO BOXES -->
       <section class="info-boxes">
@@ -316,7 +333,7 @@ Iste sapiente incidunt magni e</p>
 
   <!-- MODEL INPUT WINDOW -->
 <div class="sidebar-section">
-  <h3> Model Input Window</h3>
+  <h3 data-i18n="modelInputWindow"> Model Input Window</h3>
 
   <div class="prediction-window-grid model-window-grid">
     <button class="active model-window-btn">
@@ -332,7 +349,7 @@ Iste sapiente incidunt magni e</p>
 
   <!-- MARKET CATEGORIES -->
   <div class="sidebar-section">
-    <h3> Market Categories</h3>
+    <h3 data-i18n="marketCategories"> Market Categories</h3>
 
     <details class="market-accordion">
       <summary>
@@ -494,12 +511,12 @@ Iste sapiente incidunt magni e</p>
 
   <!-- GRAPH SETTINGS -->
   <div class="sidebar-section">
-    <h3> Graph Settings</h3>
+    <h3 data-i18n="graphSettings"> Graph Settings</h3>
     <p class="setting-label">Display Mode:</p>
 
     <label class="view-mode active">
       <input type="radio" name="currencyView" value="original" checked />
-      <span>Original Market Currency</span>
+      <span  data-i18n="originalMarketCurrency">Original Market Currency</span>
     </label>
 
     <label class="view-mode">
@@ -510,7 +527,7 @@ Iste sapiente incidunt magni e</p>
 
   <!-- CHART RANGE -->
   <div class="sidebar-section">
-    <h3>Chart Range</h3>
+    <h3 data-i18n="chartRange">Chart Range</h3>
 
     <div class="chart-range-grid">
       <button data-range="1D">1D</button>
@@ -527,7 +544,7 @@ Iste sapiente incidunt magni e</p>
 
   <!-- INDICATORS -->
   <div class="sidebar-section">
-    <h3>Indicators</h3>
+    <h3 data-i18n="indicators">Indicators</h3>
 
     <div class="indicator-item">
       <div class="left">
@@ -565,12 +582,12 @@ Iste sapiente incidunt magni e</p>
 
   <!-- MODEL -->
   <div class="sidebar-section">
-    <h3> Prediction Model</h3>
+    <h3 data-i18n="predictionModel"> Prediction Model</h3>
 
-    <div class="model-select">
-      <span>LSTM + XGBoost Hybrid</span>
-      <span>⌄</span>
-    </div>
+    <select class="model-select" id="modelSelect">
+      <option value="hybrid">LSTM + XGBoost Hybrid</option>
+      <option value="lstm">LSTM Only</option>
+    </select>
 
     <div class="model-info-grid">
       <div class="model-info-box">

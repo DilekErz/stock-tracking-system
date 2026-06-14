@@ -1,10 +1,14 @@
 require("dotenv").config();
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 const express = require("express");
 const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
 const cors = require("cors");
 const YahooFinance = require("yahoo-finance2").default;
 const yahooFinance = new YahooFinance();
+const genAI = new GoogleGenerativeAI(
+  process.env.GEMINI_API_KEY
+);
 
 const corsOptions = {
   origin: [
@@ -286,15 +290,26 @@ app.get("/api/yahoo-market", async (req, res) => {
   }
 });
 app.get("/api/prediction", async (req, res) => {
+
   const { symbol, range } = req.query;
+
+  const { symbol, model } = req.query;
+
 
   if (!symbol) {
     return res.status(400).json({ message: "Tahmin için sembol gerekli" });
   }
 
+  const modelType = model === "hybrid" ? "hybrid" : "lstm";
+
   try {
+
     const pythonServiceUrl = `http://localhost:5000/predict?symbol=${symbol}&range=${range || '1M'}`;
     
+
+    const pythonServiceUrl = `http://127.0.0.1:5001/predict?symbol=${symbol}&model=${modelType}`;
+
+
     const response = await fetch(pythonServiceUrl);
     const data = await response.json();
 
@@ -535,6 +550,107 @@ app.post("/api/reset-password", async (req, res) => {
     });
   }
 });
+//  LLM İÇİN EKLENDİ
+app.post("/api/llm/analyze", async (req, res) => {
+  try {
+
+    const {
+      symbol,
+      lowPrice,
+      highPrice,
+      lastPrice,
+      rsi14,
+      macd,
+      prediction
+    } = req.body;
+
+   const model = genAI.getGenerativeModel({
+  model: "gemini-2.5-flash"
+});
+
+    const prompt = `
+You are a financial market analysis assistant.
+
+Do not provide investment advice.
+Do not tell users to buy or sell.
+
+Asset: ${symbol}
+
+Price Range:
+Low Price: ${lowPrice}
+High Price: ${highPrice}
+Last Price: ${lastPrice}
+
+RSI(14):
+${rsi14 ?? "RSI data unavailable"}
+
+MACD:
+${macd ? JSON.stringify(macd) : "MACD data unavailable"}
+
+AI Prediction:
+${prediction ? JSON.stringify(prediction) : "AI prediction not available"}
+
+Generate:
+
+1. Price Range Analysis
+2. RSI Analysis
+3. MACD Analysis
+4. AI Prediction Analysis
+5. Overall Market Outlook
+
+Keep response short.
+`;
+
+    // const result =
+    //   await model.generateContent(prompt); yerine: 
+let result;
+
+for (let i = 0; i < 3; i++) {
+
+  try {
+
+    result = await model.generateContent(prompt);
+
+    break;
+
+  } catch (err) {
+
+    if (err.status === 503) {
+
+      console.log("Gemini yoğun, tekrar deneniyor...");
+
+      await new Promise(resolve =>
+        setTimeout(resolve, 3000)
+      );
+
+      continue;
+    }
+
+    throw err;
+  }
+}
+
+
+
+
+    const analysis =
+      result.response.text();
+
+    res.json({
+      analysis
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      error: "LLM analysis failed"
+    });
+
+  }
+});
+
 process.on("uncaughtException", (err) => {
   console.error("Yakalanmayan hata:", err);
 });

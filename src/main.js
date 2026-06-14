@@ -75,11 +75,178 @@ console.log("overlay string var mı:", homepageHtml.includes('id="overlay"'));
     addAssetCurrencyMenus();
     setupSidebarSelections();
     applyPreferencesToHomepage();
+    setupLanguageSwitcher();
+
+    setTimeout(() => {
+  const currentLanguage = localStorage.getItem("language") || "tr";
+  applyLanguage(currentLanguage);
+}, 500);
 
   } catch (error) {
     console.error("Yükleme hatası:", error);
     app.innerHTML = `<p style="color:white;">İçerik yüklenemedi.</p>`;
   }
+}
+const translations = {
+  tr: {
+    priceTimeSeries: "Fiyat Zaman Serisi",
+    aiPrediction: "Yapay Zeka Tahmini",
+    realValue: "Güncel Değer:",
+    difference: "Yükseliş Olasılığı:",
+    volume: "Hacim",
+    highLow: "En Yüksek / En Düşük",
+    priceRange: "Fiyat Aralığı",
+    volatility: "Volatilite",
+    menu: "MENÜ",
+    modelInputWindow: "Model Girdi Penceresi",
+  marketCategories: "Piyasa Kategorileri",
+  graphSettings: "Grafik Ayarları",
+  chartRange: "Grafik Aralığı",
+  indicators: "Göstergeler",
+  predictionModel: "Tahmin Modeli",
+   originalMarketCurrency: "Orijinal Piyasa Para Birimi",
+  portfolioCurrencyView: "Portföy Para Birimi Görünümü",
+  displayMode: "Görüntüleme Modu:",
+  movingAverage: "Hareketli Ortalama",
+  predictionTarget: "Tahmin Hedefi:",
+  nextDay: "Sonraki Gün",
+  accuracy: "Doğruluk:",
+  inputWindow: "Girdi Penceresi:",
+  predictShowChart: "TAHMİN ET VE GRAFİĞİ GÖSTER",
+  modelHybrid: "LSTM + XGBoost (Hibrit)",
+  modelLstm: "Sadece LSTM (Yön Tahmini)",
+  predictedValue: "Tahmini Değer (Yarın):",
+  priceBand: "Olası Aralık:",
+  modelReliability: "Model Güvenilirlik Skoru:"
+  },
+  en: {
+    priceTimeSeries: "Price Time Series",
+    aiPrediction: "AI Prediction",
+    realValue: "Current Value:",
+    difference: "Probability of Increase:",
+    volume: "Volume",
+    highLow: "High / Low",
+    priceRange: "Price Range",
+    volatility: "Volatility",
+    menu: "MENU",
+      modelInputWindow: "Model Input Window",
+  marketCategories: "Market Categories",
+  graphSettings: "Graph Settings",
+  chartRange: "Chart Range",
+  indicators: "Indicators",
+  predictionModel: "Prediction Model",
+  modelHybrid: "LSTM + XGBoost (Hybrid)",
+  modelLstm: "LSTM Only (Direction)",
+  predictedValue: "Predicted Value (Tomorrow):",
+  priceBand: "Likely Range:",
+  modelReliability: "Model Reliability Score:"
+  }
+};
+
+function setupLanguageSwitcher() {
+  const trBtn = document.getElementById("trBtn");
+  const enBtn = document.getElementById("enBtn");
+
+  if (!trBtn || !enBtn) return;
+
+  let selectedLanguage =
+    localStorage.getItem("language") || "tr";
+
+  function setLanguage(lang) {
+    localStorage.setItem("language", lang);
+
+    trBtn.classList.toggle("active", lang === "tr");
+    enBtn.classList.toggle("active", lang === "en");
+
+    console.log("Dil:", lang);
+
+    applyLanguage(lang);
+  }
+
+  trBtn.addEventListener("click", () => setLanguage("tr"));
+  enBtn.addEventListener("click", () => setLanguage("en"));
+
+  setLanguage(selectedLanguage);
+}
+function applyLanguage(lang) {
+  const t = translations[lang];
+
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+  const key = el.dataset.i18n;
+
+  if (t[key]) {
+    el.textContent = t[key];
+  }
+});
+
+  const chartTitle = document.querySelector(".big-chart .chart-title");
+  if (chartTitle) chartTitle.textContent = t.priceTimeSeries;
+
+  const predictionTitle = document.querySelector(".prediction-card h3");
+  if (predictionTitle) predictionTitle.innerHTML = `<span>AI</span> ${lang === "tr" ? "TAHMİN" : "PREDICTION"}`;
+
+  const modelSelect = document.getElementById("modelSelect");
+  if (modelSelect) {
+    modelSelect.options[0].textContent = t.modelHybrid;
+    modelSelect.options[1].textContent = t.modelLstm;
+  }
+
+  const details = document.querySelectorAll(".prediction-details div");
+  if (details[0]) details[0].childNodes[0].textContent = t.realValue + " ";
+  if (details[1]) details[1].childNodes[0].textContent = t.difference + " ";
+
+  const valueBoxDetails = document.querySelectorAll(".prediction-value-box div");
+  if (valueBoxDetails[0]) valueBoxDetails[0].childNodes[0].textContent = t.predictedValue + " ";
+  if (valueBoxDetails[1]) valueBoxDetails[1].childNodes[0].textContent = t.priceBand + " ";
+  if (valueBoxDetails[2]) valueBoxDetails[2].childNodes[0].textContent = t.modelReliability + " ";
+
+  const volumeBox = document.getElementById("volumeBox");
+  
+
+  const highLowBox = document.getElementById("highLowBox");
+  
+
+  const priceRangeBox = document.getElementById("priceRangeBox");
+  
+
+  const volatilityBox = document.getElementById("volatilityBox");
+  
+
+  const menuTitle = document.querySelector(".sidebar-header h2");
+  if (menuTitle) menuTitle.textContent = t.menu;
+
+  replaceLabelKeepValue(volumeBox, ["Volume", "Hacim"], t.volume);
+
+replaceLabelKeepValue(
+  highLowBox,
+  ["High / Low", "En Yüksek / En Düşük"],
+  t.highLow
+);
+
+replaceLabelKeepValue(
+  priceRangeBox,
+  ["Range", "Price Range", "Fiyat Aralığı"],
+  t.priceRange
+);
+
+replaceLabelKeepValue(
+  volatilityBox,
+  ["Volatility", "Volatilite"],
+  t.volatility
+);
+}
+function replaceLabelKeepValue(element, oldLabels, newLabel) {
+  if (!element) return;
+
+  let text = element.textContent.trim();
+
+  oldLabels.forEach(label => {
+    if (text.startsWith(label)) {
+      text = text.replace(label, "").trim();
+    }
+  });
+
+  element.textContent = `${newLabel} ${text}`.trim();
 }
 
 function updateHomepageLogo() {
@@ -649,8 +816,12 @@ if (currencyText) {
   if (predictionPrice) {
     // predictionPrice.textContent =
     //   `${selectedPrediction.replace("(Recommended)", "").trim()} Prediction`;
+const lang = localStorage.getItem("language") || "tr";
+
 predictionPrice.textContent =
-`${localStorage.getItem("predictionWindow") || selectedPrediction} Prediction`;
+  lang === "tr"
+    ? "5 Günlük Pencere (Optimize) Tahmini"
+    : "5-Day Window (Optimized) Prediction";
 
   }
   if (changeText) {
@@ -665,7 +836,10 @@ predictionPrice.textContent =
     : `Viewing in original market currency: ${getOriginalCurrency(selectedAsset)}`;
   }
 
-  renderPriceChart(selectedAsset, selectedRange);
+  renderPriceChart(selectedAsset, selectedRange).then(() => {
+  const currentLanguage = localStorage.getItem("language") || "tr";
+  applyLanguage(currentLanguage);
+});
 
   localStorage.setItem("selectedAsset", selectedAsset);
 localStorage.setItem("portfolioCurrency", selectedCurrency);
@@ -682,6 +856,9 @@ localStorage.setItem(
   selectedPrediction
 );
 applyPreferencesToHomepage();
+
+const currentLanguage = localStorage.getItem("language") || "tr";
+applyLanguage(currentLanguage);
 }
 
 function getOriginalCurrency(asset) {
@@ -861,8 +1038,12 @@ localStorage.getItem("selectedAsset")
 ||
 "BIST100";
 
-renderPriceChart(selectedAsset, "1M");
-      applyPreferencesToHomepage();
+Promise.resolve(renderPriceChart(selectedAsset, "1M")).then(() => {
+  const currentLanguage = localStorage.getItem("language") || "tr";
+  applyLanguage(currentLanguage);
+});
+
+applyPreferencesToHomepage();
 
     } catch (error) {
       console.log(error);
@@ -1070,19 +1251,17 @@ async function fetchAIPrediction(symbol, range = "1M") {
     const realPriceEl = document.getElementById('real-price');
     const diffEl = document.getElementById('price-diff');
     const errorRateEl = document.getElementById('error-rate');
-    const xgbProbEl = document.getElementById('xgb-probability');
-    const xgbProbContainerEl = document.getElementById('xgb-prob-container');
 
     // İstek atılırken ekranda görünecek yükleme durumu
     predPriceEl.textContent = "Hesaplanıyor...";
+    predPriceEl.style.color = "";
     realPriceEl.textContent = "-";
     diffEl.textContent = "-";
     errorRateEl.textContent = "-";
-    if (xgbProbContainerEl) xgbProbContainerEl.style.display = "none";
 
     try {
-        // Node.js backend'imize (3000 portu) istek atıyoruz, zaman penceresini de gönderiyoruz
-        const response = await fetch(`http://localhost:3000/api/prediction?symbol=${symbol}&range=${range}`);
+        // Node.js backend'imize (3000 portu) istek atıyoruz
+        const response = await fetch(`http://localhost:3000/api/prediction?symbol=${symbol}`);
         const data = await response.json();
 
         if(data.error) {
@@ -1091,21 +1270,25 @@ async function fetchAIPrediction(symbol, range = "1M") {
             return;
         }
 
-        const predictedValue = data.predicted_price;
+        const direction = data.direction;
         const realValue = data.real_price;
-        
-        // Fark ve hata payı hesaplamaları
-        const difference = predictedValue - realValue;
-        const errorPercentage = Math.abs(difference / realValue) * 100;
+        const probability = data.probability;
 
         // Verileri arayüze basıyoruz
-        predPriceEl.textContent = `${predictedValue.toFixed(2)}`;
+        predPriceEl.textContent = direction;
+        predPriceEl.style.color = direction === "Yükseliş" ? "#00ff00" : "#ff4444";
+
         realPriceEl.textContent = `${realValue.toFixed(2)}`;
-        
-        diffEl.textContent = difference > 0 ? `+${difference.toFixed(2)}` : difference.toFixed(2);
-        diffEl.style.color = difference > 0 ? "#00ff00" : "#ff4444"; 
-        
-        errorRateEl.textContent = `%${errorPercentage.toFixed(2)}`;
+        probEl.textContent = `%${probability.toFixed(2)}`;
+
+        // Bazı semboller için (yön doğruluğu yeterli bulunanlar) backend ayrıca
+        // bir "Tahmini Değer" üretir. Bu alanlar yoksa kutu gizli kalır.
+        if (data.predicted_price !== undefined) {
+            predictedPriceEl.textContent = `${data.predicted_price.toFixed(2)}`;
+            priceBandEl.textContent = `${data.price_band_low.toFixed(2)} - ${data.price_band_high.toFixed(2)}`;
+            reliabilityEl.textContent = `%${(100 - data.model_mae).toFixed(2)}`;
+            valueBoxEl.style.display = "block";
+        }
 
         // XGBoost probability varsa göster
         if (data.xgb_up_probability !== undefined && data.xgb_up_probability !== null) {
