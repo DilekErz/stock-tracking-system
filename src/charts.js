@@ -8,7 +8,7 @@ function typeWriterEffect(element, text, speed = 18) {
     clearInterval(typeWriterTimer);
   }
 
-  element.textContent = "";
+ element.innerHTML = "";
   const cursor = document.createElement("span");
   cursor.className = "cursor";
   cursor.textContent = "|";
@@ -30,9 +30,10 @@ function typeWriterEffect(element, text, speed = 18) {
     index++;
 
     if (index >= text.length) {
-      clearInterval(typeWriterTimer);
-      typeWriterTimer = null;
-    }
+  clearInterval(typeWriterTimer);
+  typeWriterTimer = null;
+  cursor.remove();
+}
   }, speed);
 }
 const API_URL =
@@ -64,17 +65,22 @@ async function getLLMAnalysis(data) {
 
     const result = await response.json();
 
+    console.log("GELEN ANALİZ:");
+console.log(result.analysis);
+
+
     if (!response.ok) {
       throw new Error(result.error || "LLM request failed");
     }
 
     if (llmElement) {
   const cleanAnalysis = result.analysis
-  .replace(/\*\*/g, "")
-  .replace(/^\s*[-*]\s+/gm, "")
-  .trim();
+    .replace(/\*\*/g, "")
+    .replace(/Yapay zeka analizi yükleniyor\.\.\./g, "")
+    .replace(/AI analysis is loading\.\.\./g, "")
+    .trim();
 
-typeWriterEffect(llmElement, cleanAnalysis, 18);
+  typeWriterEffect(llmElement, cleanAnalysis, 18);
 }
 
   } catch (error) {
