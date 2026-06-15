@@ -552,8 +552,12 @@ app.post("/api/llm/analyze", async (req, res) => {
       lastPrice,
       rsi14,
       macd,
-      prediction
+      prediction,
+      language
     } = req.body;
+
+const responseLanguage =
+  language === "tr" ? "Turkish" : "English";
 
    const model = genAI.getGenerativeModel({
   model: "gemini-2.5-flash"
@@ -561,6 +565,8 @@ app.post("/api/llm/analyze", async (req, res) => {
 
     const prompt = `
 You are a financial market analysis assistant.
+
+Respond only in ${responseLanguage}.
 
 Do not provide investment advice.
 Do not tell users to buy or sell.
@@ -581,7 +587,7 @@ ${macd ? JSON.stringify(macd) : "MACD data unavailable"}
 AI Prediction:
 ${prediction ? JSON.stringify(prediction) : "AI prediction not available"}
 
-Generate:
+Generate these sections in ${responseLanguage}:
 
 1. Price Range Analysis
 2. RSI Analysis

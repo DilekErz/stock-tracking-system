@@ -264,7 +264,7 @@
       </div>
 
       <div class="prediction-card-two">
-  <p id="llmAnalysis">
+  <p id="llmAnalysis" data-i18n="analysisLoading">
     AI analysis is loading...
   </p>
 </div>
@@ -287,7 +287,7 @@
         </div>
       </section>
 
-      <footer class="footer-note">
+      <footer class="footer-note" data-i18n="footerDisclaimer">
         This application provides AI-based predictions for informational purposes only. It is not investment advice.
       </footer>
     </div>
@@ -329,13 +329,13 @@
   <h3 data-i18n="modelInputWindow"> Model Input Window</h3>
 
   <div class="prediction-window-grid model-window-grid">
-    <button class="active model-window-btn">
+    <button class="active model-window-btn" data-i18n="fiveDayWindow">
       5-Day Window
       <small>(Optimized)</small>
     </button>
   </div>
 
-  <p class="sidebar-note">
+  <p class="sidebar-note" data-i18n="fiveDayWindowDesc">
     ⓘ Model uses the last 5 market days to predict the next movement.
   </p>
 </div>
@@ -346,7 +346,7 @@
 
     <details class="market-accordion">
       <summary>
-        <span>  Stock Indexes (BIST & Global)</span>
+        <span data-i18n="stockIndexes">  Stock Indexes (BIST & Global)</span>
         <span class="accordion-arrow">›</span>
       </summary>
 
@@ -410,42 +410,42 @@
 
     <details class="market-accordion" open>
       <summary>
-        <span> Precious Metals & Commodities</span>
+        <span data-i18n="commodities"> Precious Metals & Commodities</span>
         <span class="accordion-arrow">›</span>
       </summary>
 
       <div class="accordion-content">
         <label class="market-item">
           <input type="radio" name="selectedAsset" value="Gold" checked />
-          <span>🟡 Gold (Ounce)</span>
+          <span  data-i18n="gold">🟡 Gold (Ounce)</span>
           <!-- <strong>Selected</strong> -->
         </label>
 
         <label class="market-item">
           <input type="radio" name="selectedAsset" value="Silver" />
-          <span>⚪ Silver </span>
+          <span data-i18n="silver">⚪ Silver </span>
         </label>
 
         <label class="market-item">
           <input type="radio" name="selectedAsset" value="Brent" />
-          <span>🛢️ Brent Oil</span>
+          <span data-i18n="brent">🛢️ Brent Oil</span>
         </label>
 
         <label class="market-item">
           <input type="radio" name="selectedAsset" value="NaturalGas" />
-          <span>🔋 Natural Gas</span>
+          <span data-i18n="naturalGas">🔋 Natural Gas</span>
         </label>
 
         <label class="market-item">
           <input type="radio" name="selectedAsset" value="Copper" />
-          <span>🪵 Copper</span>
+          <span data-i18n="copper">🪵 Copper</span>
         </label>
       </div>
     </details>
 
     <details class="market-accordion">
       <summary>
-        <span> Currency Pairs</span>
+        <span  data-i18n="currencyPairs"> Currency Pairs</span>
         <span class="accordion-arrow">›</span>
       </summary>
 
@@ -484,7 +484,7 @@
 
     <details class="market-accordion">
       <summary>
-        <span> Government Bonds / Interest Rates</span>
+        <span data-i18n="governmentBonds"> Government Bonds / Interest Rates</span>
         <span class="accordion-arrow">›</span>
       </summary>
 
@@ -503,7 +503,7 @@
   </div>
 
   <!-- GRAPH SETTINGS -->
-  <div class="sidebar-section">
+  <!-- <div class="sidebar-section">
     <h3 data-i18n="graphSettings"> Graph Settings</h3>
     <p class="setting-label">Display Mode:</p>
 
@@ -516,7 +516,7 @@
       <input type="radio" name="currencyView" value="local" />
       <span>Portfolio Currency View</span>
     </label>
-  </div>
+  </div> -->
 
   <!-- CHART RANGE -->
   <div class="sidebar-section">
@@ -530,14 +530,14 @@
   <button data-range="6M">6M</button>
   <button data-range="1Y">1Y</button>
     </div>
-    <p class="sidebar-note">
+    <p class="sidebar-note" data-i18n="chartRangeInfo">
   ⓘ Select how much historical price data is displayed on the chart.
 </p>
   </div>
 
   <!-- INDICATORS -->
   <div class="sidebar-section">
-    <h3 data-i18n="indicators">Indicators</h3>
+    <h3 data-i18n="modelIndicators">Indicators</h3>
 
     <div class="indicator-item">
       <div class="left">
@@ -564,7 +564,7 @@
     <div class="indicator-item">
       <div class="left">
         <input type="checkbox" />
-        <span>Moving Average</span>
+        <span data-i18n="movingAverage">Moving Average</span>
       </div>
       <label class="switch">
         <input type="checkbox" />
@@ -584,34 +584,34 @@
 
     <div class="model-info-grid">
       <div class="model-info-box">
-        <span>Prediction Target:</span>
-<strong>Next Day</strong>
+        <span data-i18n="predictionTarget">Prediction Target:</span>
+<strong data-i18n="nextDay">Next Day</strong>
       </div>
 
       <div class="model-info-box">
-        <span>Indicators:</span>
-        <strong>RSI(14), MACD</strong>
+        <span data-i18n="modelIndicators">Indicators:</span>
+        <strong data-i18n="">RSI(14), MACD</strong>
       </div>
 
       <div class="model-info-box">
-        <span>Accuracy:</span>
+        <span data-i18n="accuracy">Accuracy:</span>
         <strong>58.1%</strong>
       </div>
 
       <div class="model-info-box">
-        <span>Input Window:</span>
-<strong>5-Day Sliding</strong>
+        <span data-i18n="inputWindow">Input Window:</span>
+<strong data-i18n="slidingWindow">5-Day Sliding</strong>
       </div>
     </div>
   </div>
 
   <div class="sidebar-links">
-    <a href="#">Predictions Details <span>›</span></a>
-    <a href="#">About Model <span>›</span></a>
-    <a href="#">Disclaimer <span>›</span></a>
+    <a href="#" data-i18n="predictionDetails">Predictions Details <span>›</span></a>
+    <a href="#" data-i18n="aboutModel">About Model <span>›</span></a>
+    <a href="#" data-i18n="disclaimer">Disclaimer <span>›</span></a>
   </div>
 
-  <button class="predict-action-btn"> PREDICT AND SHOW CHART</button>
+  <button class="predict-action-btn" data-i18n="predictShowChart"> PREDICT AND SHOW CHART</button>
   <div class="sidebar-info-box" id="sidebarInfoBox">
   <button class="info-close-btn" id="closeInfoBox">✕</button>
   <h4 id="infoTitle">Information</h4>

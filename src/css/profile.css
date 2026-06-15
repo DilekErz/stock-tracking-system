@@ -131,7 +131,7 @@ color:#00ff99;
 
 .profile-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 18px;
   margin-top: 22px;
 }
@@ -414,4 +414,21 @@ body.light-mode .profile-dropdown-menu button:hover {
 }
 body.light-mode .profile-dropdown-btn {
   color: #00b66a;
+}
+.profile-helper-text{
+  display:flex;
+  align-items:flex-start;
+  gap:6px;
+
+  color:#9aa8c0;
+  font-size:14px;
+  line-height:1.25;
+
+  margin-top:8px;
+  margin-bottom:16px;
+}
+.profile-helper-text::before{
+  content:"ⓘ";
+  color:#9aa8c0;
+  flex-shrink:0;
 }

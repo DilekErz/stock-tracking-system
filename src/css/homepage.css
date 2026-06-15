@@ -410,8 +410,9 @@ body {
 
 #llmAnalysis{
     color: white;
-    font-size: 13px;
-    line-height: 1.5;
+     font-size: 14px;
+   font-weight: 700;
+  line-height: 1.7;
 
     text-align: left;
 
@@ -774,7 +775,11 @@ body.light-mode {
 }
 
 body.light-mode .dashboard {
-  background: linear-gradient(180deg, #f4f7fb 0%, #e8eef7 100%);
+    background: linear-gradient(
+    180deg,
+    #dde7f2 0%,
+    #d4e0ec 100%
+  );
 }
 
 body.light-mode .topbar {
@@ -798,16 +803,20 @@ body.light-mode .prediction-price {
 
 body.light-mode .chart-card,
 body.light-mode .prediction-card,
+body.light-mode .prediction-card-two,
 body.light-mode .info-box {
   background: #ffffff;
   border: 1px solid rgba(40, 70, 110, 0.15);
+   box-shadow:
+    0 8px 24px rgba(15,23,42,.08);
+     border-top: 3px solid #4fd1c5;
 }
 
 body.light-mode .candlestick-chart,
 body.light-mode .mini-chart {
   background:
-    linear-gradient(to right, rgba(0,0,0,0.07) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0,0,0,0.07) 1px, transparent 1px);
+   linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px),
+linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px);
   background-size: 65px 100%, 100% 33px;
 }
 
@@ -1521,4 +1530,25 @@ body.light-mode .info-box::after {
 #macd-chart {
   width: 100%;
   height: 230px;
+}
+/* Light mode AI analiz yazısı */
+
+body.light-mode #llmAnalysis {
+  color: #102033;
+  font-size: 14px;
+   font-weight: 700;
+  line-height: 1.7;
+}
+
+/* Yükleniyor mesajı */
+
+body.light-mode #llmAnalysis p,
+body.light-mode #analysisLoading {
+  color: #102033;
+  font-weight: 700;
+}
+body.light-mode .prediction-card-two {
+  background: #ffffff;
+  border: 1px solid rgba(40, 70, 110, 0.2);
+  
 }
