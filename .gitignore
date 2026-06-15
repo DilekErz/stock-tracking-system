@@ -24,3 +24,7 @@ venv
 *.sln
 *.sw?
 .env
+
+# Python
+__pycache__/
+*.pyc
