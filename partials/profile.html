@@ -2,9 +2,9 @@
   <div class="profile-container">
 
     <div class="profile-header">
-      <button class="profile-back-btn" id="backToHomepage">← Back to Dashboard</button>
-      <h1>My Profile</h1>
-      <p>Manage your stock tracking account and preferences.</p>
+      <button class="profile-back-btn" id="backToHomepage" data-i18n="backToDashboard">← Back to Dashboard</button>
+      <h1 data-i18n="myProfile">My Profile</h1>
+      <p data-i18n="profileDescription">Manage your stock tracking account and preferences.</p>
     </div>
 
     <div class="profile-card">
@@ -12,54 +12,30 @@
 
       <div class="profile-info">
         <h2 id="profileFullName">User Name</h2>
-        <p>AI Predict User</p>
+        <p data-i18n="aiPredictUser">AI Predict User</p>
       </div>
 
       <div class="profile-actions">
-  <button id="openPhotoModal">Edit Photo</button>
-  <button id="openUsernameModal">Change Username</button>
-  <button id="openPasswordModal">Change Password</button>
+  <button id="openPhotoModal" data-i18n="editPhoto">Edit Photo</button>
+  <button id="openUsernameModal" data-i18n="changeUsername">Change Username</button>
+  <button id="openPasswordModal" data-i18n="changePassword">Change Password</button>
 </div>
 
       <div class="profile-details">
         <div class="profile-row">
-          <span>Username</span>
+          <span data-i18n="username">Username</span>
           <strong id="profileUsername">-</strong>
           </div>
         
 
         <div class="profile-row">
-          <span>Email</span>
+          <span data-i18n="email">Email</span>
           <strong id="profileEmail">-</strong>
         </div>
 
-        <div class="profile-row profile-dropdown-row">
-  <span>Preferred Asset</span>
-  <strong id="profilePreferredAsset">Gold</strong>
-  <button class="profile-dropdown-btn" data-target="assetMenu">⌄</button>
-</div>
-<div class="profile-dropdown-menu" id="assetMenu">
-  <button>Gold</button>
-  <button>BIST100</button>
-  <button>SP500</button>
-  <button>NASDAQ100</button>
-  <button>EUR/USD</button>
-  <button>Brent</button>
-</div>
 
-<div class="profile-row profile-dropdown-row">
-  <span>Portfolio Currency</span>
-  <strong id="profilePortfolioCurrency">TRY</strong>
-  <button class="profile-dropdown-btn" data-target="currencyMenu">⌄</button>
-</div>
-<div class="profile-dropdown-menu" id="currencyMenu">
-  <button>TRY</button>
-  <button>USD</button>
-  <button>EUR</button>
-</div>
-
-<div class="profile-row profile-dropdown-row">
-  <span>Prediction Window</span>
+<!-- <div class="profile-row profile-dropdown-row">
+  <span data-i18n="predictionWindow">Prediction Window</span>
   <strong id="profilePredictionWindow">5 Days</strong>
   <button class="profile-dropdown-btn" data-target="predictionMenu">⌄</button>
 </div>
@@ -68,9 +44,45 @@
   <button>3 Days</button>
   <button>5 Days</button>
   <button>7 Days</button>
+</div> -->
+<div class="profile-row" profile-dropdown-row>
+  <span data-i18n="predictionWindow">Prediction Window</span>
+  <strong data-i18n="fiveDayWindow">5-Day Window (Optimized)</strong>
 </div>
 
-<div class="profile-row profile-dropdown-row">
+
+        <div class="profile-row profile-dropdown-row">
+  <span data-i18n="preferredAsset">Preferred Asset</span>
+  <strong id="profilePreferredAsset">Gold</strong>
+  <button class="profile-dropdown-btn" data-target="assetMenu">⌄</button>
+</div>
+
+<div class="profile-dropdown-menu" id="assetMenu">
+  <button data-asset="Gold" data-i18n="goldText">Gold</button>
+  <button>BIST100</button>
+  <button>SP500</button>
+  <button>NASDAQ100</button>
+  <button>EUR/USD</button>
+  <button data-asset="Brent" data-i18n="brentText">Brent</button>
+</div>
+<p class="profile-helper-text" data-i18n="preferredAssetInfo">
+  ⓘYour selected asset will be displayed as the default market instrument whenever you open the application.
+</p>
+
+<!-- <div class="profile-row profile-dropdown-row">
+  <span>Portfolio Currency</span>
+  <strong id="profilePortfolioCurrency">TRY</strong>
+  <button class="profile-dropdown-btn" data-target="currencyMenu">⌄</button>
+</div>
+<div class="profile-dropdown-menu" id="currencyMenu">
+  <button>TRY</button>
+  <button>USD</button>
+  <button>EUR</button>
+</div> -->
+
+
+
+<!-- <div class="profile-row profile-dropdown-row">
   <span>Display Mode</span>
   <strong id="profileDisplayMode">Original Market</strong>
   <button class="profile-dropdown-btn" data-target="displayMenu">⌄</button>
@@ -78,7 +90,7 @@
 <div class="profile-dropdown-menu" id="displayMenu">
   <button>Original Market</button>
   <button>Local Value</button>
-</div>
+</div> -->
 
 
     </div>
@@ -86,18 +98,18 @@
 
     <div class="profile-grid">
        <div class="profile-stat">
-    <h3>Watchlist</h3>
-    <p>5 Assets</p>
+    <h3 data-i18n="watchlist">Watchlist</h3>
+    <p data-i18n="fiveAssets">5 Assets</p>
   </div>
 
-  <div class="profile-stat">
+  <!-- <div class="profile-stat">
     <h3>Default Prediction</h3>
     <p id="profileDefaultPrediction">5 Days</p>
-  </div>
+  </div> -->
 
   <div class="profile-stat">
-    <h3>Theme</h3>
-    <p id="themeStatus">Dark Mode</p>
+    <h3 data-i18n="theme">Theme</h3>
+    <p id="themeStatus" data-i18n="darkMode">Dark Mode</p>
   </div>
     </div>
 
@@ -106,32 +118,32 @@
   <div class="profile-modal-overlay" id="photoModal">
   <div class="profile-modal">
     <button class="modal-close-btn" data-close="photoModal">×</button>
-    <h2>Edit Photo</h2>
+    <h2 data-i18n="editPhotoTitle">Edit Photo</h2>
 
     <div class="modal-avatar" id="modalAvatar">👤</div>
 
-    <label class="avatar-upload-label">
+    <label class="avatar-upload-label" data-i18n="changePhoto">
       Change Photo
       <input type="file" id="profileImageInput" accept="image/*">
     </label>
 
-    <button id="savePhotoBtn">Save Photo</button>
+    <button id="savePhotoBtn" data-i18n="savePhoto">Save Photo</button>
   </div>
 </div>
 
 <div class="profile-modal-overlay" id="usernameModal">
   <div class="profile-modal">
     <button class="modal-close-btn" data-close="usernameModal">×</button>
-    <h2 class="usernameModalh2">Change Username</h2>
+    <h2 class="usernameModalh2" data-i18n="changeUsernameTitle">Change Username</h2>
 
-    <p class="modal-info-note">
+    <p class="modal-info-note" data-i18n="usernameInfo">
       To change your username, please enter your current password.
     </p>
 
-    <input type="text" id="newUsername" placeholder="New username">
-    <input type="password" id="usernameCurrentPassword" placeholder="Current password">
+    <input type="text" id="newUsername" placeholder="New username" data-i18n-placeholder="newUsername">
+    <input type="password" id="usernameCurrentPassword" placeholder="Current password" data-i18n-placeholder="currentPassword">
 
-    <button id="saveUsernameBtn">Save Username</button>
+    <button id="saveUsernameBtn" data-i18n="saveUsername">Save Username</button>
   </div>
 </div>
 
@@ -140,11 +152,11 @@
     <button class="modal-close-btn" data-close="passwordModal">×</button>
     <h2>Change Password</h2>
 
-    <input type="password" id="oldPassword" placeholder="Current password">
-    <input type="password" id="newPassword" placeholder="New password">
-    <input type="password" id="confirmNewPassword" placeholder="Confirm new password">
+    <input type="password" id="oldPassword" placeholder="Current password"  data-i18n-placeholder="currentPassword">
+    <input type="password" id="newPassword" data-i18n-placeholder="newPassword" placeholder="New password">
+    <input type="password" id="confirmNewPassword" placeholder="Confirm new password" data-i18n-placeholder="confirmNewPassword">
 
-    <button id="savePasswordBtn">Update Password</button>
+    <button id="savePasswordBtn" data-i18n="updatePassword">Update Password</button>
   </div>
 </div>
 </section>
