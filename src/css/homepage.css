@@ -410,8 +410,9 @@ body {
 
 #llmAnalysis{
     color: white;
-    font-size: 13px;
-    line-height: 1.5;
+     font-size: 14px;
+   font-weight: 700;
+  line-height: 1.7;
 
     text-align: left;
 
@@ -1521,4 +1522,25 @@ body.light-mode .info-box::after {
 #macd-chart {
   width: 100%;
   height: 230px;
+}
+/* Light mode AI analiz yazısı */
+
+body.light-mode #llmAnalysis {
+  color: #102033;
+  font-size: 14px;
+   font-weight: 700;
+  line-height: 1.7;
+}
+
+/* Yükleniyor mesajı */
+
+body.light-mode #llmAnalysis p,
+body.light-mode #analysisLoading {
+  color: #102033;
+  font-weight: 700;
+}
+body.light-mode .prediction-card-two {
+  background: #ffffff;
+  border: 1px solid rgba(40, 70, 110, 0.2);
+  
 }

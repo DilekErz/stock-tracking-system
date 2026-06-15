@@ -5,11 +5,17 @@ const API_URL =
     : "https://stock-tracking-system-3myv.onrender.com";
 
 async function getLLMAnalysis(data) {
-  const llmElement = document.getElementById("llmAnalysis");
+    const llmElement = document.getElementById("llmAnalysis");
+  const lang = localStorage.getItem("language") || "tr";
 
   if (llmElement) {
-    llmElement.textContent = "AI analysis is loading...";
+    llmElement.textContent =
+      lang === "tr"
+        ? "Yapay zeka analizi yükleniyor..."
+        : "AI analysis is loading...";
   }
+
+  data.language = lang;
 
   try {
     const response = await fetch(`${API_URL}/api/llm/analyze`, {
@@ -34,8 +40,9 @@ async function getLLMAnalysis(data) {
     console.error("LLM analysis error:", error);
 
     if (llmElement) {
-      llmElement.textContent =
-        "AI analysis is temporarily unavailable. Market data and technical indicators are still displayed.";
+      lang === "tr"
+    ? "Yapay zeka analizi geçici olarak kullanılamıyor. Piyasa verileri ve teknik göstergeler gösterilmeye devam ediyor."
+    : "AI analysis is temporarily unavailable. Market data and technical indicators are still displayed.";
     }
   }
 }
@@ -50,6 +57,10 @@ const marketDataCache = new Map();// apı key e tekrar aynı veri için istek at
 const pendingRequests = new Map();
 
 export async function renderPriceChart(selectedAsset = "USD_TRY", selectedRange = "1M") {
+
+const lang = localStorage.getItem("language") || "tr";
+const locale = lang === "tr" ? "tr-TR" : "en-US";
+
  const requestId = ++latestRequestId;
  console.log("renderPriceChart çalıştı");
   console.log("Seçilen asset:", selectedAsset);
@@ -300,13 +311,15 @@ const visibleSeries =
         const date = new Date(timestamp);
 
         if (selectedRange === "1D") {
-          return date.toLocaleTimeString("tr-TR", {
+          // return date.toLocaleTimeString("tr-TR", {
+          return date.toLocaleTimeString(locale, {
             hour: "2-digit",
             minute: "2-digit"
           });
         }
 
-        return date.toLocaleDateString("tr-TR", {
+        // return date.toLocaleDateString("tr-TR", {
+        return date.toLocaleString(locale, {
           day: "2-digit",
           month: "short"
         });
@@ -330,7 +343,8 @@ const visibleSeries =
         const date = new Date(value);
 
         if (selectedRange === "1D") {
-          return date.toLocaleString("tr-TR", {
+          // return date.toLocaleString("tr-TR", {
+            return date.toLocaleString(locale, {
             day: "2-digit",
             month: "short",
             hour: "2-digit",
@@ -338,7 +352,8 @@ const visibleSeries =
           });
         }
 
-        return date.toLocaleDateString("tr-TR", {
+        // return date.toLocaleDateString("tr-TR", {
+        return date.toLocaleDateString(locale, {
           day: "2-digit",
           month: "short",
           year: "numeric"
@@ -533,6 +548,10 @@ function calculateMACD(data) {
   };
 }
 async function renderRSIChart(chartSeries, selectedRange) {
+
+  const lang = localStorage.getItem("language") || "tr";
+const locale = lang === "tr" ? "tr-TR" : "en-US";
+
   const rsiElement = document.querySelector("#rsi-chart");
   if (!rsiElement) return;
 
@@ -583,7 +602,15 @@ async function renderRSIChart(chartSeries, selectedRange) {
     xaxis: {
       type: "datetime",
       labels: {
-        style: { colors: "#8e8da4" }
+        style: { colors: "#8e8da4" },
+        formatter: function (value, timestamp) {
+      const date = new Date(timestamp);
+
+      return date.toLocaleDateString(locale, {
+        day: "2-digit",
+        month: "short"
+      });
+    }
       }
     },
     yaxis: {
@@ -621,6 +648,10 @@ async function renderRSIChart(chartSeries, selectedRange) {
   await rsiChart.render();
 }
 async function renderMACDChart(chartSeries) {
+
+const lang = localStorage.getItem("language") || "tr";
+const locale = lang === "tr" ? "tr-TR" : "en-US";
+
   const macdElement = document.querySelector("#macd-chart");
   if (!macdElement) return;
 
@@ -673,7 +704,15 @@ async function renderMACDChart(chartSeries) {
     xaxis: {
       type: "datetime",
       labels: {
-        style: { colors: "#8e8da4" }
+        style: { colors: "#8e8da4" },
+        formatter: function (value, timestamp) {
+      const date = new Date(timestamp);
+
+      return date.toLocaleDateString(locale, {
+        day: "2-digit",
+        month: "short"
+      });
+    }
       }
     },
     yaxis: {

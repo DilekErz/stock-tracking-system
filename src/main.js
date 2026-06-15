@@ -117,7 +117,73 @@ const translations = {
   modelLstm: "Sadece LSTM (Yön Tahmini)",
   predictedValue: "Tahmini Değer (Yarın):",
   priceBand: "Olası Aralık:",
-  modelReliability: "Model Güvenilirlik Skoru:"
+  modelReliability: "Model Güvenilirlik Skoru:",
+   fiveDayWindow: "5 Günlük Pencere (Optimize)",
+  fiveDayWindowDesc:
+    "ⓘ Model sonraki hareketi tahmin etmek için son 5 işlem gününü kullanır.",
+     stockIndexes: "Hisse Senedi Endeksleri (BIST ve Küresel)",
+ commodities: "Kıymetli Metaller ve Emtialar",
+ currencyPairs: "Döviz Çiftleri",
+ governmentBonds: "Devlet Tahvilleri / Faiz Oranları",
+ gold:"🟡 Altın (Ons)",
+silver:"⚪ Gümüş",
+brent:"🛢️ Brent Petrol",
+naturalGas:"🔋 Doğal Gaz",
+copper:"🪵 Bakır",
+chartRangeInfo:
+"ⓘ Grafikte gösterilecek geçmiş fiyat verisi miktarını seçin.",
+movingAverage:"Hareketli Ortalama",
+predictionTarget:"Tahmin Hedefi",
+nextDay:"Sonraki İşlem Günü",
+accuracy:"Doğruluk:",
+inputWindow:"Girdi Penceresi:",
+slidingWindow:"5 Günlük Kayan Pencere",
+predictionDetails:"Tahmin Detayları",
+aboutModel:"Model Hakkında",
+disclaimer:"Yasal Uyarı",
+footerDisclaimer:
+"Bu uygulama yalnızca bilgilendirme amaçlı yapay zeka tahminleri sunar. Yatırım tavsiyesi değildir.",
+analysisLoading:"Yapay zeka analizi yükleniyor...",
+ modelIndicators: "Göstergeler:",
+myProfile: "Profilim",
+profileDescription: "Hisse takip hesabınızı ve tercihlerinizi yönetin.",
+aiPredictUser: "AI Predict Kullanıcısı",
+editPhoto: "Fotoğrafı Düzenle",
+changeUsername: "Kullanıcı Adını Değiştir",
+changePassword: "Şifreyi Değiştir",
+username: "Kullanıcı Adı",
+email: "E-posta",
+preferredAsset: "Tercih Edilen Varlık",
+predictionWindow: "Tahmin Penceresi",
+watchlist: "İzleme Listesi",
+theme: "Tema",
+backToDashboard: "← Panele Dön",
+goldText: "Altın",
+brentText: "Brent Petrol",
+fiveAssets: "5 Varlık",
+fiveDays: "5 Gün",
+darkMode: "Karanlık Mod",
+lightMode: "Aydınlık Mod",
+
+preferredAssetInfo:
+"Tercih ettiğiniz varlık, uygulamayı açtığınızda varsayılan olarak görüntülenecek ilk piyasa enstrümanı olacaktır.",
+
+editPhotoTitle: "Fotoğrafı Düzenle",
+changePhoto: "Fotoğrafı Değiştir",
+savePhoto: "Fotoğrafı Kaydet",
+
+changeUsernameTitle: "Kullanıcı Adını Değiştir",
+usernameInfo:
+"Kullanıcı adınızı değiştirmek için mevcut şifrenizi giriniz.",
+newUsername: "Yeni kullanıcı adı",
+currentPassword: "Mevcut şifre",
+saveUsername: "Kullanıcı Adını Kaydet",
+
+changePasswordTitle: "Şifreyi Değiştir",
+newPassword: "Yeni şifre",
+confirmNewPassword: "Yeni şifreyi onayla",
+updatePassword: "Şifreyi Güncelle",
+
   },
   en: {
     priceTimeSeries: "Price Time Series",
@@ -139,7 +205,76 @@ const translations = {
   modelLstm: "LSTM Only (Direction)",
   predictedValue: "Predicted Value (Tomorrow):",
   priceBand: "Likely Range:",
-  modelReliability: "Model Reliability Score:"
+  modelReliability: "Model Reliability Score:",
+   fiveDayWindow: "5-Day Window (Optimized)",
+  fiveDayWindowDesc:
+    "ⓘ Model uses the last 5 market days to predict the next movement.",
+     stockIndexes: "Stock Indexes (BIST & Global)",
+ commodities: "Precious Metals & Commodities",
+ currencyPairs: "Currency Pairs",
+ governmentBonds: "Government Bonds / Interest Rates",
+  gold:"🟡 Gold (Ounce)",
+silver:"⚪ Silver",
+brent:"🛢️ Brent Oil",
+naturalGas:"🔋 Natural Gas",
+copper:"🪵 Copper",
+chartRangeInfo:
+"ⓘ Select how much historical price data is displayed on the chart.",
+movingAverage:"Moving Average",
+predictionTarget:"Prediction Target:",
+nextDay:"Next Day",
+accuracy:"Accuracy:",
+inputWindow:"Input Window:",
+slidingWindow:"5-Day Sliding",
+predictionDetails:"Predictions Details",
+aboutModel:"About Model",
+disclaimer:"Disclaimer",
+footerDisclaimer:
+"This application provides AI-based predictions for informational purposes only. It is not investment advice.",
+analysisLoading:"AI analysis is loading...",
+  modelIndicators: "Indicators:",
+  predictShowChart: " PREDICT AND SHOW CHART",
+  myProfile: "My Profile",
+profileDescription: "Manage your stock tracking account and preferences.",
+aiPredictUser: "AI Predict User",
+editPhoto: "Edit Photo",
+changeUsername: "Change Username",
+changePassword: "Change Password",
+username: "Username",
+email: "Email",
+preferredAsset: "Preferred Asset",
+predictionWindow: "Prediction Window",
+watchlist: "Watchlist",
+theme: "Theme",
+backToDashboard: "← Back to Dashboard",
+lightMode: "Light Mode",
+darkMode: "Dark Mode",
+goldText: "Gold",
+brentText: "Brent",
+fiveAssets: "5 Assets",
+fiveDays: "5 Days",
+darkMode: "Dark Mode",
+lightMode: "Light Mode",
+
+preferredAssetInfo:
+"Your selected asset will be displayed as the default market instrument whenever you open the application.",
+
+editPhotoTitle: "Edit Photo",
+changePhoto: "Change Photo",
+savePhoto: "Save Photo",
+
+changeUsernameTitle: "Change Username",
+usernameInfo:
+"To change your username, please enter your current password.",
+newUsername: "New username",
+currentPassword: "Current password",
+saveUsername: "Save Username",
+
+changePasswordTitle: "Change Password",
+newPassword: "New password",
+confirmNewPassword: "Confirm new password",
+updatePassword: "Update Password",
+
   }
 };
 
@@ -161,6 +296,16 @@ function setupLanguageSwitcher() {
     console.log("Dil:", lang);
 
     applyLanguage(lang);
+    updateThemeStatus();
+    applyPreferencesToHomepage();
+
+    const selectedAsset =
+  localStorage.getItem("selectedAsset") || "Gold";
+
+const selectedRange =
+  document.querySelector(".chart-range-grid button.active")?.dataset.range || "1M";
+
+renderPriceChart(selectedAsset, selectedRange);
   }
 
   trBtn.addEventListener("click", () => setLanguage("tr"));
@@ -234,6 +379,20 @@ replaceLabelKeepValue(
   ["Volatility", "Volatilite"],
   t.volatility
 );
+const preferredAsset =
+  localStorage.getItem("selectedAsset") || "Gold";
+
+const profilePreferredAsset =
+  document.getElementById("profilePreferredAsset");
+
+if (profilePreferredAsset) {
+  profilePreferredAsset.textContent =
+    preferredAsset === "Gold"
+      ? t.goldText
+      : preferredAsset === "Brent"
+        ? t.brentText
+        : preferredAsset.replace("_", "/");
+}
 }
 function replaceLabelKeepValue(element, oldLabels, newLabel) {
   if (!element) return;
@@ -270,10 +429,12 @@ function updateThemeStatus() {
   const themeStatus = document.getElementById("themeStatus");
   if (!themeStatus) return;
 
+  const lang = localStorage.getItem("language") || "tr";
+
   themeStatus.textContent =
     document.body.classList.contains("light-mode")
-      ? "Light Mode"
-      : "Dark Mode";
+       ? translations[lang].lightMode
+      : translations[lang].darkMode;
 }
 
 function setupProfileNavigation() {
@@ -319,9 +480,25 @@ function setupProfilePreferenceDropdowns() {
       const menu = menuButton.closest(".profile-dropdown-menu");
       const value = menuButton.textContent.trim();
 
+//       if (menu.id === "assetMenu") {
+//   document.getElementById("profilePreferredAsset").textContent = value;
+// }
       if (menu.id === "assetMenu") {
-        document.getElementById("profilePreferredAsset").textContent = value;
-      }
+  const assetValue = menuButton.dataset.asset || value.replace("/", "_");
+
+  localStorage.setItem("selectedAsset", assetValue);
+
+  const lang = localStorage.getItem("language") || "tr";
+
+  const assetText =
+    assetValue === "Gold"
+      ? translations[lang].goldText
+      : assetValue === "Brent"
+        ? translations[lang].brentText
+        : assetValue.replace("_", "/");
+
+  document.getElementById("profilePreferredAsset").textContent = assetText;
+}
 
       if (menu.id === "currencyMenu") {
         document.getElementById("profilePortfolioCurrency").textContent = value;
@@ -396,12 +573,22 @@ function applyPreferencesToHomepage() {
 }
 
   if (predictionTitle) {
-    predictionTitle.textContent = `${predictionWindow} Prediction`;
-  }
+  const lang = localStorage.getItem("language") || "tr";
 
-  if (chartTitle) {
-    chartTitle.textContent = `${selectedAsset} Price Chart • 1M • ${displayMode}`;
-  }
+  predictionTitle.textContent =
+    lang === "tr"
+      ? "5 Günlük Pencere (Optimize) Tahmini"
+      : "5-Day Window (Optimized) Prediction";
+}
+
+ if (chartTitle) {
+  const lang = localStorage.getItem("language") || "tr";
+
+  chartTitle.textContent =
+    lang === "tr"
+      ? `${selectedAsset} Fiyat Grafiği`
+      : `${selectedAsset} Price Chart`;
+}
 
   if (confidence) {
     confidence.textContent = `Selected view: ${displayMode}`;
@@ -688,7 +875,8 @@ if (categoryCurrencyOption) {
       market.querySelector("input").checked = true;
 
       const selectedBadge = document.createElement("strong");
-      selectedBadge.textContent = "Selected";
+      const lang = localStorage.getItem("language") || "tr";
+selectedBadge.textContent = lang === "tr" ? "Seçildi" : "Selected";
       market.appendChild(selectedBadge);
       updateDashboardFromSidebar();
     }
@@ -738,23 +926,46 @@ if (categoryCurrencyOption) {
 
       infoBox.classList.add("active");
 
-      if (linkText.includes("Predictions Details")) {
-        infoTitle.textContent = "Prediction Details";
-        infoText.textContent =
-          "The prediction result is generated using the selected asset, technical indicators, chart data and prediction window.";
-      }
+      const lang = localStorage.getItem("language") || "tr";
 
-      if (linkText.includes("About Model")) {
-        infoTitle.textContent = "About Model";
-        infoText.textContent =
-          "This system uses a hybrid LSTM + XGBoost model. LSTM analyzes time-based price movements, while XGBoost supports decision-making with technical indicators.";
-      }
+if (
+  linkText.includes("Predictions Details") ||
+  linkText.includes("Tahmin Detayları")
+) {
+  infoTitle.textContent =
+    lang === "tr" ? "Tahmin Detayları" : "Prediction Details";
 
-      if (linkText.includes("Disclaimer")) {
-        infoTitle.textContent = "Disclaimer";
-        infoText.textContent =
-          "This application provides AI-based financial predictions for informational purposes only. It is not investment advice.";
-      }
+  infoText.textContent =
+    lang === "tr"
+      ? "Tahmin sonucu seçilen varlık, teknik göstergeler, grafik verileri ve tahmin penceresi kullanılarak oluşturulur."
+      : "The prediction result is generated using the selected asset, technical indicators, chart data and prediction window.";
+}
+
+if (
+  linkText.includes("About Model") ||
+  linkText.includes("Model Hakkında")
+) {
+  infoTitle.textContent =
+    lang === "tr" ? "Model Hakkında" : "About Model";
+
+  infoText.textContent =
+    lang === "tr"
+      ? "Bu sistem hibrit LSTM + XGBoost modeli kullanır. LSTM zamana bağlı fiyat hareketlerini analiz eder, XGBoost ise teknik göstergelerle karar sürecini destekler."
+      : "This system uses a hybrid LSTM + XGBoost model. LSTM analyzes time-based price movements, while XGBoost supports decision-making with technical indicators.";
+}
+
+if (
+  linkText.includes("Disclaimer") ||
+  linkText.includes("Yasal Uyarı")
+) {
+  infoTitle.textContent =
+    lang === "tr" ? "Yasal Uyarı" : "Disclaimer";
+
+  infoText.textContent =
+    lang === "tr"
+      ? "Bu uygulama yalnızca bilgilendirme amaçlı yapay zeka destekli finansal tahminler sunar. Yatırım tavsiyesi değildir."
+      : "This application provides AI-based financial predictions for informational purposes only. It is not investment advice.";
+}
     }
 
     const closeInfoBox = event.target.closest("#closeInfoBox");
@@ -1033,10 +1244,14 @@ loadUserProfile();
 
       applyPreferencesToHomepage();
 
+// const selectedAsset =
+// localStorage.getItem("selectedAsset")
+// ||
+// "BIST100";
 const selectedAsset =
-localStorage.getItem("selectedAsset")
-||
-"BIST100";
+  localStorage.getItem("selectedAsset") || "Gold";
+
+
 
 Promise.resolve(renderPriceChart(selectedAsset, "1M")).then(() => {
   const currentLanguage = localStorage.getItem("language") || "tr";
@@ -1151,6 +1366,7 @@ function setupThemeToggle() {
       themeToggle.textContent = "🌙";
     }
     updateHomepageLogo();
+    updateThemeStatus();
   });
 }
 
