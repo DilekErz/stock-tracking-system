@@ -22,6 +22,10 @@ SYMBOL_MAP = {
     # Yahoo'da JPYTRY=X için geçmiş veri yok, ters paritesi (TRYJPY=X) üzerinden hesaplanıyor
     "JPY_TRY": ("TRYJPY=X", True),
     "US10YT": "^TNX",
+    # Yahoo'da HKDTRY=X paritesi yok; HKD/TRY = HKDUSD=X * USDTRY=X çaprazından hesaplanıyor
+    "HKD_TRY": {"type": "cross", "mult": ["HKDUSD=X", "USDTRY=X"]},
+    # Türkiye 10Y tahvili için canlı Yahoo kaynağı yok; public/Global.csv'den okunuyor
+    "TR10YT": {"type": "csv", "metric": "TR10YT"},
 }
 
 FEATURES = ['Open', 'High', 'Low', 'Vol.', 'RSI', 'MACD']
@@ -58,6 +62,52 @@ def add_indicators(df):
     df['MACD'] = df['Open'].ewm(span=12).mean() - df['Open'].ewm(span=26).mean()
     return df.dropna()
 
+CSV_YOLU = os.path.join(os.path.dirname(__file__), "..", "public", "Global.csv")
+
+def _download_yf(ticker, invert=False):
+    """Tek bir Yahoo ticker'ini indirir; invert=True ise ters pariteden çevirir."""
+    df = yf.download(ticker, period="6mo", progress=False)
+    if isinstance(df.columns, pd.MultiIndex):
+        df.columns = df.columns.get_level_values(0)
+    if invert:
+        o, h, l, c = df['Open'], df['High'], df['Low'], df['Close']
+        df['Open'], df['High'], df['Low'], df['Close'] = 1.0 / o, 1.0 / l, 1.0 / h, 1.0 / c
+    return df.rename(columns={'Volume': 'Vol.'})
+
+def _download_cross(t1, t2):
+    """Yahoo'da doğrudan paritesi olmayan semboller için iki ticker'ın çarpımı.
+    Örn. HKD/TRY = HKDUSD=X (t1) * USDTRY=X (t2)."""
+    a, b = _download_yf(t1), _download_yf(t2)
+    idx = a.index.intersection(b.index)
+    df = pd.DataFrame(index=idx)
+    for col in ['Open', 'High', 'Low', 'Close']:
+        df[col] = a.loc[idx, col] * b.loc[idx, col]
+    df['Vol.'] = 0.0
+    return df
+
+def _load_csv(metric):
+    """Canlı kaynağı olmayan semboller (TR10YT) için Global.csv'den OHLV serisi okur."""
+    df = pd.read_csv(CSV_YOLU)
+    sub = df[df['Metric'] == metric].copy()
+    if sub.empty:
+        return None
+    sub['Date'] = pd.to_datetime(sub['Date'])
+    sub = sub.sort_values('Date').set_index('Date')
+    sub = sub[['Open', 'High', 'Low', 'Vol.']].astype(float)
+    sub['Close'] = sub['Open']  # CSV'de Close kolonu yok; anchor fiyat olarak Open kullanılır
+    return sub
+
+def fetch_df(symbol):
+    """Sembolü kaynağına göre (Yahoo / çapraz kur / CSV) yükleyip OHLV+Close döndürür."""
+    info = SYMBOL_MAP[symbol]
+    if isinstance(info, dict):
+        if info["type"] == "cross":
+            return _download_cross(*info["mult"])
+        if info["type"] == "csv":
+            return _load_csv(info["metric"])
+    ticker, invert = info if isinstance(info, tuple) else (info, False)
+    return _download_yf(ticker, invert)
+
 @app.route('/predict', methods=['GET'])
 def predict():
     raw_symbol = request.args.get('symbol', '')
@@ -91,19 +141,10 @@ def predict():
         return jsonify({"error": "Bu sembol için XGBoost modeli bulunamadı"}), 404
 
     try:
-        ticker_info = SYMBOL_MAP[symbol]
-        ticker, invert = ticker_info if isinstance(ticker_info, tuple) else (ticker_info, False)
+        df = fetch_df(symbol)
+        if df is None:
+            return jsonify({"error": "Veri kaynağı bulunamadı"}), 404
 
-        df = yf.download(ticker, period="6mo", progress=False)
-
-        if isinstance(df.columns, pd.MultiIndex):
-            df.columns = df.columns.get_level_values(0)
-
-        if invert:
-            o, h, l, c = df['Open'], df['High'], df['Low'], df['Close']
-            df['Open'], df['High'], df['Low'], df['Close'] = 1.0 / o, 1.0 / l, 1.0 / h, 1.0 / c
-
-        df = df.rename(columns={'Volume': 'Vol.'})
         df = df.dropna(subset=['Open', 'High', 'Low', 'Vol.'])
         if df.empty:
             return jsonify({"error": "Veri boş"}), 400
@@ -155,8 +196,20 @@ def predict():
             result["predicted_price"] = round(predicted_price, 2)
             result["predicted_change_pct"] = round(pred_change_pct, 3)
             result["model_mae"] = model_mae
-            result["price_band_low"] = round(predicted_price - band, 2)
-            result["price_band_high"] = round(predicted_price + band, 2)
+
+            # Olası aralığı tahmin edilen yönle tutarlı hale getir: yükseliş
+            # bekleniyorsa alt sınır güncel fiyat (altına inmez), düşüşte ise
+            # üst sınır güncel fiyat olur. Böylece "yükseliş" deyip aynı anda
+            # güncel fiyatın altını göstermiş olmayız.
+            if prob_up >= 0.5:  # Yükseliş
+                band_low = real_price
+                band_high = max(predicted_price + band, real_price)
+            else:               # Düşüş
+                band_high = real_price
+                band_low = min(predicted_price - band, real_price)
+
+            result["price_band_low"] = round(band_low, 2)
+            result["price_band_high"] = round(band_high, 2)
 
         return jsonify(result)
 
