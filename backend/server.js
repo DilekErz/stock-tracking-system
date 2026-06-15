@@ -541,29 +541,300 @@ app.post("/api/reset-password", async (req, res) => {
     });
   }
 });
-//  LLM İÇİN EKLENDİ
+//  LLM İÇİN EKLENDİ:
+// app.post("/api/llm/analyze", async (req, res) => {
+//   try {
+
+//     const {
+//       symbol,
+//       lowPrice,
+//       highPrice,
+//       lastPrice,
+//       rsi14,
+//       macd,
+//       prediction,
+//       language
+//     } = req.body;
+
+// const responseLanguage =
+//   language === "tr" ? "Turkish" : "English";
+
+//    const model = genAI.getGenerativeModel({
+//   model: "gemini-2.5-flash"
+// });
+
+//     const prompt = `
+// You are a financial market analysis assistant.
+
+// Respond only in ${responseLanguage}.
+
+// Do not provide investment advice.
+// Do not tell users to buy or sell.
+
+// Asset: ${symbol}
+
+// Price Range:
+// Low Price: ${lowPrice}
+// High Price: ${highPrice}
+// Last Price: ${lastPrice}
+
+// RSI(14):
+// ${rsi14 ?? "RSI data unavailable"}
+
+// MACD:
+// ${macd ? JSON.stringify(macd) : "MACD data unavailable"}
+
+// AI Prediction:
+// ${prediction ? JSON.stringify(prediction) : "AI prediction not available"}
+
+// Generate these sections in ${responseLanguage}:
+
+// 1. Price Range Analysis
+// 2. RSI Analysis
+// 3. MACD Analysis
+// 4. AI Prediction Analysis
+// 5. Overall Market Outlook
+
+// Keep response short.
+// `;
+
+//     // const result =
+//     //   await model.generateContent(prompt); yerine: 
+// let result;
+
+// for (let i = 0; i < 3; i++) {
+
+//   try {
+
+//     result = await model.generateContent(prompt);
+
+//     break;
+
+//   } catch (err) {
+
+//     if (err.status === 503) {
+
+//       console.log("Gemini yoğun, tekrar deneniyor...");
+
+//       await new Promise(resolve =>
+//         setTimeout(resolve, 3000)
+//       );
+
+//       continue;
+//     }
+
+//     throw err;
+//   }
+// }
+
+
+
+
+//     const analysis =
+//       result.response.text();
+
+//     res.json({
+//       analysis
+//     });
+
+//   } catch (error) {
+
+//     console.error(error);
+
+//     res.status(500).json({
+//       error: "LLM analysis failed"
+//     });
+
+//   }
+// });
+function createLocalTechnicalAnalysis(data) {
+  const {
+    symbol,
+    lowPrice,
+    highPrice,
+    lastPrice,
+    rsi14,
+    macd,
+    language
+  } = data;
+
+  const isTr = language === "tr";
+
+  const rsiText =
+    rsi14 == null
+      ? isTr
+        ? "RSI verisi mevcut değildir."
+        : "RSI data is not available."
+      : rsi14 >= 70
+        ? isTr
+          ? `RSI değeri ${rsi14} seviyesindedir. Bu seviye aşırı alım bölgesine yakın bir görünüm oluşturur.`
+          : `The RSI value is ${rsi14}, indicating a level close to the overbought zone.`
+        : rsi14 <= 30
+          ? isTr
+            ? `RSI değeri ${rsi14} seviyesindedir. Bu seviye aşırı satım bölgesine yakın bir görünüm oluşturur.`
+            : `The RSI value is ${rsi14}, indicating a level close to the oversold zone.`
+          : isTr
+            ? `RSI değeri ${rsi14} seviyesindedir. Bu durum dengeli bir momentum görünümüne işaret eder.`
+            : `The RSI value is ${rsi14}, suggesting a balanced momentum outlook.`;
+
+  const macdText =
+    macd == null
+      ? isTr
+        ? "MACD verisi mevcut değildir."
+        : "MACD data is not available."
+      : macd > 0
+        ? isTr
+          ? `MACD değeri pozitiftir (${macd}). Bu durum kısa vadeli momentumun yukarı yönlü olduğunu gösterebilir.`
+          : `The MACD value is positive (${macd}), which may indicate upward short-term momentum.`
+        : isTr
+          ? `MACD değeri negatiftir (${macd}). Bu durum kısa vadeli momentumun zayıf olduğunu gösterebilir.`
+          : `The MACD value is negative (${macd}), which may indicate weak short-term momentum.`;
+
+  if (isTr) {
+    return `
+1. Fiyat Aralığı Analizi
+${symbol} için son fiyat ${lastPrice}, gözlenen ${lowPrice} - ${highPrice} aralığı içinde hareket etmektedir.
+
+2. RSI Analizi
+${rsiText}
+
+3. MACD Analizi
+${macdText}
+
+4. Yapay Zeka Tahmini Analizi
+LLM servisi geçici olarak kullanılamadığı için bu yorum yerel teknik analiz kurallarıyla oluşturulmuştur.
+
+5. Genel Piyasa Görünümü
+Mevcut veriler fiyat aralığı, RSI ve MACD göstergeleri birlikte değerlendirilerek yorumlanmıştır. Bu içerik yatırım tavsiyesi değildir.
+`;
+  }
+
+  return `
+1. Price Range Analysis
+For ${symbol}, the latest price is ${lastPrice}, moving within the observed range of ${lowPrice} - ${highPrice}.
+
+2. RSI Analysis
+${rsiText}
+
+3. MACD Analysis
+${macdText}
+
+4. AI Prediction Analysis
+The LLM service is temporarily unavailable, so this response was generated using local technical analysis rules.
+
+5. Overall Market Outlook
+The current view is based on price range, RSI, and MACD indicators. This content is not investment advice.
+`;
+}
+
+async function getGeminiAnalysis(prompt) {
+  const model = genAI.getGenerativeModel({
+    model: "gemini-2.5-flash"
+  });
+
+  let result;
+
+  for (let i = 0; i < 3; i++) {
+    try {
+      result = await model.generateContent(prompt);
+      break;
+    } catch (err) {
+      if (err.status === 503) {
+        console.log("Gemini yoğun, tekrar deneniyor...");
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        continue;
+      }
+
+      throw err;
+    }
+  }
+
+  return result.response.text();
+}
+
+async function getOpenRouterAnalysis(prompt) {
+  if (!process.env.OPENROUTER_API_KEY) {
+    throw new Error("OPENROUTER_API_KEY bulunamadı");
+  }
+
+  const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+    model: "google/gemma-3-4b-it",
+      messages: [
+        {
+          role: "user",
+          content: prompt
+        }
+      ]
+    })
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error?.message || "OpenRouter request failed");
+  }
+
+  return data.choices?.[0]?.message?.content || "";
+}
+
+console.log("SAMBANOVA KEY:", !!process.env.SAMBANOVA_API_KEY);
+async function getSambaNovaAnalysis(prompt) {
+  if (!process.env.SAMBANOVA_API_KEY) {
+    throw new Error("SAMBANOVA_API_KEY bulunamadı");
+  }
+
+  const response = await fetch("https://api.sambanova.ai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${process.env.SAMBANOVA_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "Meta-Llama-3.1-8B-Instruct",
+      messages: [
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      temperature: 0.3,
+      max_tokens: 700
+    })
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error?.message || "SambaNova request failed");
+  }
+
+  return data.choices?.[0]?.message?.content || "";
+}
+
 app.post("/api/llm/analyze", async (req, res) => {
-  try {
+  const requestData = req.body;
 
-    const {
-      symbol,
-      lowPrice,
-      highPrice,
-      lastPrice,
-      rsi14,
-      macd,
-      prediction,
-      language
-    } = req.body;
+  const {
+    symbol,
+    lowPrice,
+    highPrice,
+    lastPrice,
+    rsi14,
+    macd,
+    prediction,
+    language
+  } = requestData;
 
-const responseLanguage =
-  language === "tr" ? "Turkish" : "English";
+  const responseLanguage =
+    language === "tr" ? "Turkish" : "English";
 
-   const model = genAI.getGenerativeModel({
-  model: "gemini-2.5-flash"
-});
-
-    const prompt = `
+  const prompt = `
 You are a financial market analysis assistant.
 
 Respond only in ${responseLanguage}.
@@ -598,55 +869,38 @@ Generate these sections in ${responseLanguage}:
 Keep response short.
 `;
 
-    // const result =
-    //   await model.generateContent(prompt); yerine: 
-let result;
-
-for (let i = 0; i < 3; i++) {
-
   try {
+    const analysis = await getGeminiAnalysis(prompt);
 
-    result = await model.generateContent(prompt);
-
-    break;
-
-  } catch (err) {
-
-    if (err.status === 503) {
-
-      console.log("Gemini yoğun, tekrar deneniyor...");
-
-      await new Promise(resolve =>
-        setTimeout(resolve, 3000)
-      );
-
-      continue;
-    }
-
-    throw err;
-  }
-}
-
-
-
-
-    const analysis =
-      result.response.text();
-
-    res.json({
+    return res.json({
+      provider: "gemini",
       analysis
     });
 
-  } catch (error) {
+  } catch (geminiError) {
+    console.log("Gemini çalışmadı, OpenRouter deneniyor:", geminiError.message);
 
-    console.error(error);
+   try {
+  const analysis = await getSambaNovaAnalysis(prompt);
 
-    res.status(500).json({
-      error: "LLM analysis failed"
-    });
+  return res.json({
+    provider: "sambanova",
+    analysis
+  });
 
+} catch (sambaNovaError) {
+  console.log("SambaNova da çalışmadı, yerel analiz kullanılıyor:", sambaNovaError.message);
+
+  const analysis = createLocalTechnicalAnalysis(requestData);
+
+  return res.json({
+    provider: "local-fallback",
+    analysis
+  });
+}
   }
 });
+
 
 process.on("uncaughtException", (err) => {
   console.error("Yakalanmayan hata:", err);

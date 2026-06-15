@@ -1,4 +1,40 @@
 let latestRequestId = 0;
+let typeWriterTimer = null;
+
+function typeWriterEffect(element, text, speed = 18) {
+  if (!element) return;
+
+  if (typeWriterTimer) {
+    clearInterval(typeWriterTimer);
+  }
+
+  element.textContent = "";
+  const cursor = document.createElement("span");
+  cursor.className = "cursor";
+  cursor.textContent = "|";
+  element.appendChild(cursor);
+
+  let index = 0;
+
+  typeWriterTimer = setInterval(() => {
+    cursor.remove();
+
+    element.append(
+      document.createTextNode(text.charAt(index))
+    );
+
+    element.appendChild(cursor);
+
+    element.scrollTop = element.scrollHeight;
+
+    index++;
+
+    if (index >= text.length) {
+      clearInterval(typeWriterTimer);
+      typeWriterTimer = null;
+    }
+  }, speed);
+}
 const API_URL =
   window.location.hostname === "localhost"
     ? "http://localhost:3000"
@@ -33,14 +69,19 @@ async function getLLMAnalysis(data) {
     }
 
     if (llmElement) {
-  typeWriterEffect(llmElement, result.analysis, 18);
+  const cleanAnalysis = result.analysis
+  .replace(/\*\*/g, "")
+  .replace(/^\s*[-*]\s+/gm, "")
+  .trim();
+
+typeWriterEffect(llmElement, cleanAnalysis, 18);
 }
 
   } catch (error) {
     console.error("LLM analysis error:", error);
 
     if (llmElement) {
-       llmElement.textContent =
+       llmElement.innerHTML =
       lang === "tr"
     ? "Yapay zeka analizi geçici olarak kullanılamıyor. Piyasa verileri ve teknik göstergeler gösterilmeye devam ediyor."
     : "AI analysis is temporarily unavailable. Market data and technical indicators are still displayed.";

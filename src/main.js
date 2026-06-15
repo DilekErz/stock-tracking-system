@@ -1064,42 +1064,42 @@ function setupAiCardsToggle() {
   });
 }
 
-let typeWriterTimer = null;
+// let typeWriterTimer = null;
 
-function typeWriterEffect(element, text, speed = 18) {
-  if (!element) return;
+// function typeWriterEffect(element, text, speed = 18) {
+//   if (!element) return;
 
-  if (typeWriterTimer) {
-    clearInterval(typeWriterTimer);
-  }
+//   if (typeWriterTimer) {
+//     clearInterval(typeWriterTimer);
+//   }
 
-  element.textContent = "";
-  const cursor = document.createElement("span");
-  cursor.className = "cursor";
-  cursor.textContent = "|";
-  element.appendChild(cursor);
+//   element.textContent = "";
+//   const cursor = document.createElement("span");
+//   cursor.className = "cursor";
+//   cursor.textContent = "|";
+//   element.appendChild(cursor);
 
-  let index = 0;
+//   let index = 0;
 
-  typeWriterTimer = setInterval(() => {
-    cursor.remove();
+//   typeWriterTimer = setInterval(() => {
+//     cursor.remove();
 
-    element.append(
-      document.createTextNode(text.charAt(index))
-    );
+//     element.append(
+//       document.createTextNode(text.charAt(index))
+//     );
 
-    element.appendChild(cursor);
+//     element.appendChild(cursor);
 
-    element.scrollTop = element.scrollHeight;
+//     element.scrollTop = element.scrollHeight;
 
-    index++;
+//     index++;
 
-    if (index >= text.length) {
-      clearInterval(typeWriterTimer);
-      typeWriterTimer = null;
-    }
-  }, speed);
-}
+//     if (index >= text.length) {
+//       clearInterval(typeWriterTimer);
+//       typeWriterTimer = null;
+//     }
+//   }, speed);
+// }
 
 function updateDashboardFromSidebar() {
   const selectedAsset =
@@ -1603,7 +1603,7 @@ async function fetchAIPrediction(symbol) {
 
     try {
         // Node.js backend'imize (3000 portu) istek atıyoruz
-        const response = await fetch(`http://localhost:3000/api/prediction?symbol=${symbol}&model=${modelType}`);
+        const response = await fetch(`${API_URL}/api/prediction?symbol=${symbol}&model=${modelType}`);
         const data = await response.json();
 
         if(data.error) {
