@@ -33,13 +33,14 @@ async function getLLMAnalysis(data) {
     }
 
     if (llmElement) {
-      llmElement.textContent = result.analysis;
-    }
+  typeWriterEffect(llmElement, result.analysis, 18);
+}
 
   } catch (error) {
     console.error("LLM analysis error:", error);
 
     if (llmElement) {
+       llmElement.textContent =
       lang === "tr"
     ? "Yapay zeka analizi geçici olarak kullanılamıyor. Piyasa verileri ve teknik göstergeler gösterilmeye devam ediyor."
     : "AI analysis is temporarily unavailable. Market data and technical indicators are still displayed.";

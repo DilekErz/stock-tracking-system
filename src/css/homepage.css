@@ -1552,3 +1552,98 @@ body.light-mode .prediction-card-two {
   border: 1px solid rgba(40, 70, 110, 0.2);
   
 }
+/* grafiklerin uzamam sorunu çözümü:(dilekerz) */
+.top-section.ai-hidden,
+.card-two.ai-hidden {
+  grid-template-columns: 1fr;
+}
+
+.prediction-card.ai-hidden,
+.prediction-card-two.ai-hidden {
+  display: none;
+}
+.medium-chart {
+  width: 100%;
+  max-width: none;
+}
+
+.card-two.ai-hidden > div {
+  width: 100%;
+}
+
+.card-two.ai-hidden .medium-chart {
+  width: 100%;
+  max-width: none;
+}
+.top-section,
+.card-two {
+  grid-template-columns: minmax(0, 2.2fr) minmax(360px, 0.9fr);
+  align-items: stretch;
+}
+
+.top-section > *,
+.card-two > * {
+  min-width: 0;
+}
+
+.card-two > div {
+  width: 100%;
+  min-width: 0;
+}
+
+.big-chart,
+.medium-chart {
+  width: 100%;
+  max-width: none;
+}
+
+.prediction-card,
+.prediction-card-two {
+  width: 100%;
+  min-width: 360px;
+}
+
+.top-section.ai-hidden,
+.card-two.ai-hidden {
+  grid-template-columns: 1fr;
+}
+
+.prediction-card.ai-hidden,
+.prediction-card-two.ai-hidden {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .top-section,
+  .card-two {
+    grid-template-columns: 1fr;
+  }
+
+  .prediction-card,
+  .prediction-card-two {
+    min-width: 0;
+  }
+}
+
+/* llm için yanıp sönen imleç */
+.cursor {
+  display: inline-block;
+  margin-left: 2px;
+  font-weight: bold;
+  animation: blinkCursor 1s infinite;
+   color: #00ff88;
+}
+
+@keyframes blinkCursor {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

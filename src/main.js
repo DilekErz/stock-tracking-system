@@ -72,8 +72,9 @@ console.log("overlay string var mı:", homepageHtml.includes('id="overlay"'));
     updateHomepageLogo();
     loadSavedProfileImage();
     loadUserProfile();
-    addAssetCurrencyMenus();
+    // addAssetCurrencyMenus();
     setupSidebarSelections();
+    setupAiCardsToggle();
     applyPreferencesToHomepage();
     setupLanguageSwitcher();
 
@@ -806,106 +807,106 @@ if (event.target.id === "openPhotoModal") {
   }
 });
 
-function addAssetCurrencyMenus() {
-  const allowedSections = [
-    "Stock Indexes (BIST & Global)",
-    "Precious Metals & Commodities"
-  ];
+// function addAssetCurrencyMenus() {
+//   const allowedSections = [
+//     "Stock Indexes (BIST & Global)",
+//     "Precious Metals & Commodities"
+//   ];
 
-  document.querySelectorAll(".market-accordion").forEach(accordion => {
-    const summary = accordion.querySelector("summary");
-    const titleSpan = summary?.querySelector("span:first-child");
+//   document.querySelectorAll(".market-accordion").forEach(accordion => {
+//     const summary = accordion.querySelector("summary");
+//     const titleSpan = summary?.querySelector("span:first-child");
 
-    const categoryTitle = titleSpan?.textContent.trim();
+//     const categoryTitle = titleSpan?.textContent.trim();
 
-    if (!allowedSections.includes(categoryTitle)) return;
+//     if (!allowedSections.includes(categoryTitle)) return;
 
-    if (summary.querySelector(".category-currency-menu-btn")) return;
+//     if (summary.querySelector(".category-currency-menu-btn")) return;
 
-    const menuBtn = document.createElement("button");
-    menuBtn.type = "button";
-    menuBtn.className = "category-currency-menu-btn";
-    menuBtn.textContent = "⋮";
+//     const menuBtn = document.createElement("button");
+//     menuBtn.type = "button";
+//     menuBtn.className = "category-currency-menu-btn";
+//     menuBtn.textContent = "⋮";
 
-    const menu = document.createElement("div");
-    menu.className = "category-currency-menu";
-    menu.innerHTML = `
-      <p>View all as</p>
-      <button type="button" data-currency="TRY">TRY ₺</button>
-      <button type="button" data-currency="USD">USD $</button>
-      <button type="button" data-currency="EUR">EUR €</button>
-    `;
+//     const menu = document.createElement("div");
+//     menu.className = "category-currency-menu";
+//     menu.innerHTML = `
+//       <p>View all as</p>
+//       <button type="button" data-currency="TRY">TRY ₺</button>
+//       <button type="button" data-currency="USD">USD $</button>
+//       <button type="button" data-currency="EUR">EUR €</button>
+//     `;
 
-    summary.appendChild(menuBtn);
-    summary.appendChild(menu);
-  });
-}
+//     summary.appendChild(menuBtn);
+//     summary.appendChild(menu);
+//   });
+// }
 
 
 function setupSidebarSelections() {
   document.addEventListener("click", function (event) {
 
-  const categoryCurrencyBtn = event.target.closest(".category-currency-menu-btn");
+  // const categoryCurrencyBtn = event.target.closest(".category-currency-menu-btn");
 
-if (categoryCurrencyBtn) {
-  event.preventDefault();
-  event.stopPropagation();
+// if (categoryCurrencyBtn) {
+//   event.preventDefault();
+//   event.stopPropagation();
 
-  const menu = categoryCurrencyBtn.nextElementSibling;
+//   const menu = categoryCurrencyBtn.nextElementSibling;
 
-  document.querySelectorAll(".category-currency-menu").forEach(item => {
-    if (item !== menu) item.classList.remove("active");
-  });
+//   document.querySelectorAll(".category-currency-menu").forEach(item => {
+//     if (item !== menu) item.classList.remove("active");
+//   });
 
-  menu.classList.toggle("active");
-  return;
-}
+//   menu.classList.toggle("active");
+//   return;
+// }
 
-const categoryCurrencyOption = event.target.closest(".category-currency-menu button");
+// // const categoryCurrencyOption = event.target.closest(".category-currency-menu button");
 
-if (categoryCurrencyOption) {
-  event.preventDefault();
-  event.stopPropagation();
+// if (categoryCurrencyOption) {
+//   event.preventDefault();
+//   event.stopPropagation();
 
-  const selectedCurrency = categoryCurrencyOption.dataset.currency;
-  const accordion = categoryCurrencyOption.closest(".market-accordion");
-  const categoryTitle =
-    accordion.querySelector("summary span:first-child")?.textContent.trim();
+//   const selectedCurrency = categoryCurrencyOption.dataset.currency;
+//   const accordion = categoryCurrencyOption.closest(".market-accordion");
+//   const categoryTitle =
+//     accordion.querySelector("summary span:first-child")?.textContent.trim();
 
-  if (categoryTitle.includes("Stock Indexes")) {
-    localStorage.setItem("stockIndexesViewCurrency", selectedCurrency);
-  }
+//   if (categoryTitle.includes("Stock Indexes")) {
+//     localStorage.setItem("stockIndexesViewCurrency", selectedCurrency);
+//   }
 
-  if (categoryTitle.includes("Precious Metals")) {
-    localStorage.setItem("commoditiesViewCurrency", selectedCurrency);
-  }
+//   if (categoryTitle.includes("Precious Metals")) {
+//     localStorage.setItem("commoditiesViewCurrency", selectedCurrency);
+//   }
 
-  const selectedAsset =
-    document.querySelector('input[name="selectedAsset"]:checked')?.value;
+//   const selectedAsset =
+//     document.querySelector('input[name="selectedAsset"]:checked')?.value;
 
-  if (selectedAsset) {
-    const selectedAccordion =
-      document.querySelector('input[name="selectedAsset"]:checked')
-        ?.closest(".market-accordion");
+//   if (selectedAsset) {
+//     const selectedAccordion =
+//       document.querySelector('input[name="selectedAsset"]:checked')
+//         ?.closest(".market-accordion");
 
-    const selectedCategory =
-      selectedAccordion?.querySelector("summary span:first-child")
-        ?.textContent.trim();
+//     const selectedCategory =
+//       selectedAccordion?.querySelector("summary span:first-child")
+//         ?.textContent.trim();
 
-    if (
-      selectedCategory === categoryTitle
-    ) {
-      const currencyText = document.querySelector(".currency");
-      if (currencyText) currencyText.textContent = selectedCurrency;
-    }
-  }
+//     if (
+//       selectedCategory === categoryTitle
+//     ) {
+//       const currencyText = document.querySelector(".currency");
+//       if (currencyText) currencyText.textContent = selectedCurrency;
+//     }
+//   }
 
-  categoryCurrencyOption.closest(".category-currency-menu").classList.remove("active");
+//   categoryCurrencyOption.closest(".category-currency-menu").classList.remove("active");
 
-  console.log(`${categoryTitle} artık ${selectedCurrency} olarak gösterilecek`);
+//   console.log(`${categoryTitle} artık ${selectedCurrency} olarak gösterilecek`);
 
-  return;
-}
+//   return;
+//}
     // const currency = event.target.closest(".currency-option");
     // if (currency) {
     //   document.querySelectorAll(".currency-option").forEach(item => {
@@ -1030,6 +1031,75 @@ if (
   
 }
 
+function setupAiCardsToggle() {
+  const switchInput = document.getElementById("toggleAiCardsSwitch");
+
+  const topSection = document.querySelector(".top-section");
+  const cardTwo = document.querySelector(".card-two");
+  const aiCard = document.querySelector(".prediction-card");
+  const llmCard = document.querySelector(".prediction-card-two");
+
+  if (!switchInput || !topSection || !cardTwo || !aiCard || !llmCard) return;
+
+  function setAiCardsVisible(isVisible) {
+    switchInput.checked = isVisible;
+
+    topSection.classList.toggle("ai-hidden", !isVisible);
+    cardTwo.classList.toggle("ai-hidden", !isVisible);
+    aiCard.classList.toggle("ai-hidden", !isVisible);
+    llmCard.classList.toggle("ai-hidden", !isVisible);
+
+    localStorage.setItem("aiCardsVisible", isVisible ? "true" : "false");
+
+    setTimeout(() => {
+      window.dispatchEvent(new Event("resize"));
+    }, 150);
+  }
+
+  const saved = localStorage.getItem("aiCardsVisible");
+  setAiCardsVisible(saved !== "false");
+
+  switchInput.addEventListener("change", () => {
+    setAiCardsVisible(switchInput.checked);
+  });
+}
+
+let typeWriterTimer = null;
+
+function typeWriterEffect(element, text, speed = 18) {
+  if (!element) return;
+
+  if (typeWriterTimer) {
+    clearInterval(typeWriterTimer);
+  }
+
+  element.textContent = "";
+  const cursor = document.createElement("span");
+  cursor.className = "cursor";
+  cursor.textContent = "|";
+  element.appendChild(cursor);
+
+  let index = 0;
+
+  typeWriterTimer = setInterval(() => {
+    cursor.remove();
+
+    element.append(
+      document.createTextNode(text.charAt(index))
+    );
+
+    element.appendChild(cursor);
+
+    element.scrollTop = element.scrollHeight;
+
+    index++;
+
+    if (index >= text.length) {
+      clearInterval(typeWriterTimer);
+      typeWriterTimer = null;
+    }
+  }, speed);
+}
 
 function updateDashboardFromSidebar() {
   const selectedAsset =
