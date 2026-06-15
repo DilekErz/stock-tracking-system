@@ -393,6 +393,59 @@ if (profilePreferredAsset) {
         ? t.brentText
         : preferredAsset.replace("_", "/");
 }
+
+const tooltipTexts = {
+  tr: {
+    volumeTitle: "Hacim",
+    volumeText: "Seçilen varlık ve grafik aralığı için toplam işlem hacmini gösterir.",
+
+    highLowTitle: "En Yüksek / En Düşük",
+    highLowText: "Seçilen grafik aralığındaki en yüksek ve en düşük fiyatı gösterir.",
+
+    rangeTitle: "Fiyat Aralığı",
+    rangeText: "En yüksek ve en düşük değerler arasındaki fiyat aralığını gösterir.",
+
+    volatilityTitle: "Volatilite",
+    volatilityText: "Seçilen varlığın fiyatındaki dalgalanma oranını gösterir. Daha yüksek volatilite daha yüksek risk anlamına gelir."
+  },
+  en: {
+    volumeTitle: "Volume",
+    volumeText: "Shows the total trading volume for the selected asset and chart range.",
+
+    highLowTitle: "High / Low",
+    highLowText: "Shows the highest and lowest price within the selected chart range.",
+
+    rangeTitle: "Price Range",
+    rangeText: "Displays the current price range between the highest and lowest values.",
+
+    volatilityTitle: "Volatility",
+    volatilityText: "Shows how much the selected asset price fluctuates. Higher volatility means higher risk."
+  }
+};
+
+const tooltips = tooltipTexts[lang];
+
+const infoBoxes = document.querySelectorAll(".info-box");
+
+if (infoBoxes[0]) {
+  infoBoxes[0].dataset.tooltipTitle = tooltips.volumeTitle;
+  infoBoxes[0].dataset.tooltip = tooltips.volumeText;
+}
+
+if (infoBoxes[1]) {
+  infoBoxes[1].dataset.tooltipTitle = tooltips.highLowTitle;
+  infoBoxes[1].dataset.tooltip = tooltips.highLowText;
+}
+
+if (infoBoxes[2]) {
+  infoBoxes[2].dataset.tooltipTitle = tooltips.rangeTitle;
+  infoBoxes[2].dataset.tooltip = tooltips.rangeText;
+}
+
+if (infoBoxes[3]) {
+  infoBoxes[3].dataset.tooltipTitle = tooltips.volatilityTitle;
+  infoBoxes[3].dataset.tooltip = tooltips.volatilityText;
+}
 }
 function replaceLabelKeepValue(element, oldLabels, newLabel) {
   if (!element) return;
