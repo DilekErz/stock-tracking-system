@@ -617,7 +617,29 @@ function applyPreferencesToHomepage() {
   const chartTitle = document.querySelector(".big-chart .chart-title");
   const confidence = document.querySelector(".confidence");
 
-  if (assetName) assetName.textContent = selectedAsset;
+  if (assetName) {
+  const lang = localStorage.getItem("language") || "tr";
+
+  const assetNames = {
+    tr: {
+      Gold: "Altın (Ons)",
+      Silver: "Gümüş",
+      Brent: "Brent Petrol",
+      NaturalGas: "Doğal Gaz",
+      Copper: "Bakır"
+    },
+    en: {
+      Gold: "Gold",
+      Silver: "Silver",
+      Brent: "Brent Oil",
+      NaturalGas: "Natural Gas",
+      Copper: "Copper"
+    }
+  };
+
+  assetName.textContent =
+    assetNames[lang]?.[selectedAsset] || selectedAsset;
+}
   if (currency) {
   // const viewValue = displayMode === "Local Value" ? "local" : "original";
 
