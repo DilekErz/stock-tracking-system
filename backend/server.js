@@ -301,9 +301,10 @@ app.get("/api/prediction", async (req, res) => {
   try {
     const pythonServiceUrl = `http://127.0.0.1:5001/predict?symbol=${symbol}&model=${modelType}`;
 
+    console.log("Python URL:", pythonServiceUrl);
     const response = await fetch(pythonServiceUrl);
     const data = await response.json();
-
+ console.log("Python Response:", data);
     res.json(data);
   } catch (error) {
     res.status(500).json({
@@ -655,6 +656,7 @@ function createLocalTechnicalAnalysis(data) {
     lastPrice,
     rsi14,
     macd,
+     prediction,
     language
   } = data;
 
@@ -689,6 +691,13 @@ function createLocalTechnicalAnalysis(data) {
         : isTr
           ? `MACD değeri negatiftir (${macd}). Bu durum kısa vadeli momentumun zayıf olduğunu gösterebilir.`
           : `The MACD value is negative (${macd}), which may indicate weak short-term momentum.`;
+  const predictionText = prediction
+  ? isTr
+    ? `AI modeli ${prediction.direction} yönünde tahmin üretmiştir. Yükseliş olasılığı %${prediction.probability} seviyesindedir. Güncel değer ${prediction.real_price}, tahmini değer ise ${prediction.predicted_price ?? "mevcut değil"} olarak hesaplanmıştır.`
+    : `The AI model predicts ${prediction.direction}. The probability of increase is ${prediction.probability}%. Current value is ${prediction.real_price}, while the predicted value is ${prediction.predicted_price ?? "not available"}.`
+  : isTr
+    ? "AI tahmin verisi mevcut değildir."
+    : "AI prediction data is not available.";
 
   if (isTr) {
     return `
@@ -702,7 +711,7 @@ ${rsiText}
 ${macdText}
 
 4. Yapay Zeka Tahmini Analizi
-LLM servisi geçici olarak kullanılamadığı için bu yorum yerel teknik analiz kurallarıyla oluşturulmuştur.
+${predictionText}
 
 5. Genel Piyasa Görünümü
 Mevcut veriler fiyat aralığı, RSI ve MACD göstergeleri birlikte değerlendirilerek yorumlanmıştır. Bu içerik yatırım tavsiyesi değildir.
@@ -720,7 +729,7 @@ ${rsiText}
 ${macdText}
 
 4. AI Prediction Analysis
-The LLM service is temporarily unavailable, so this response was generated using local technical analysis rules.
+${predictionText}
 
 5. Overall Market Outlook
 The current view is based on price range, RSI, and MACD indicators. This content is not investment advice.

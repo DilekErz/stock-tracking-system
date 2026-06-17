@@ -497,7 +497,10 @@ await getLLMAnalysis({
   lastPrice,
   rsi14: latestRsi,
   macd: latestMacd,
-  prediction: null
+  prediction:  
+  window.latestPredictionData?.symbol === selectedAsset
+    ? window.latestPredictionData
+    : null
 });
 
 const changeElement = document.querySelector(".change");

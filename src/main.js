@@ -321,6 +321,7 @@ function applyLanguage(lang) {
   const t = translations[lang];
 
   document.querySelectorAll("[data-i18n]").forEach((el) => {
+    if (el.id === "llmAnalysis") return;
   const key = el.dataset.i18n;
 
   if (t[key]) {
@@ -1173,11 +1174,12 @@ if (currencyText) {
     : `Viewing in original market currency: ${getOriginalCurrency(selectedAsset)}`;
   }
 
-  renderPriceChart(selectedAsset, selectedRange).then(() => {
+fetchAIPrediction(selectedAsset).then(() => {
+     renderPriceChart(selectedAsset, selectedRange).then(() => {
   const currentLanguage = localStorage.getItem("language") || "tr";
   applyLanguage(currentLanguage);
 
-  fetchAIPrediction(selectedAsset);
+ });
 
 });
 
@@ -1394,12 +1396,12 @@ const selectedAsset =
   localStorage.getItem("selectedAsset") || "Gold";
 
 
-
+fetchAIPrediction(selectedAsset).then(() => {
 Promise.resolve(renderPriceChart(selectedAsset, "1M")).then(() => {
   const currentLanguage = localStorage.getItem("language") || "tr";
   applyLanguage(currentLanguage);
 
-   fetchAIPrediction(selectedAsset);
+     });
 });
 
 applyPreferencesToHomepage();
@@ -1628,6 +1630,17 @@ const lang = localStorage.getItem("language") || "tr";
         // Node.js backend'imize (3000 portu) istek atıyoruz
         const response = await fetch(`${API_URL}/api/prediction?symbol=${symbol}&model=${modelType}`);
         const data = await response.json();
+
+        window.latestPredictionData = {
+  symbol,
+  direction: data.direction,
+  probability: data.probability,
+  real_price: data.real_price,
+  predicted_price: data.predicted_price,
+  price_band_low: data.price_band_low,
+  price_band_high: data.price_band_high,
+  model_mae: data.model_mae
+};
 
         if(data.error) {
             predPriceEl.textContent = "Hata oluştu";
