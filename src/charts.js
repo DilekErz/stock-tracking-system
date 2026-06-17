@@ -46,11 +46,17 @@ async function getLLMAnalysis(data) {
   const lang = localStorage.getItem("language") || "tr";
 
   if (llmElement) {
-    llmElement.textContent =
-      lang === "tr"
-        ? "Yapay zeka analizi yükleniyor..."
-        : "AI analysis is loading...";
+
+  if (typeWriterTimer) {
+    clearInterval(typeWriterTimer);
+    typeWriterTimer = null;
   }
+
+  llmElement.innerHTML =
+    lang === "tr"
+      ? "Yapay zeka analizi yükleniyor..."
+      : "AI analysis is loading...";
+}
 
   data.language = lang;
 
@@ -74,7 +80,7 @@ console.log(result.analysis);
     }
 
     if (llmElement) {
-  const cleanAnalysis = result.analysis
+  const cleanAnalysis = String(result.analysis || "")
     .replace(/\*\*/g, "")
     .replace(/Yapay zeka analizi yükleniyor\.\.\./g, "")
     .replace(/AI analysis is loading\.\.\./g, "")
@@ -295,7 +301,7 @@ const chartSeries = assetData
   //   ? chartSeries.slice(-7)
   //   : chartSeries;
   const visibleCountMap = {
-  "1D": 24,
+  // "1D": 24,
   "1W": 7,
   "1M": 30,
   "3M": 90,

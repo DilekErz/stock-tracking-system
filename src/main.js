@@ -77,6 +77,7 @@ console.log("overlay string var mı:", homepageHtml.includes('id="overlay"'));
     setupAiCardsToggle();
     applyPreferencesToHomepage();
     setupLanguageSwitcher();
+    setupPredictionModelChange();
 
     setTimeout(() => {
   const currentLanguage = localStorage.getItem("language") || "tr";
@@ -306,7 +307,9 @@ function setupLanguageSwitcher() {
 const selectedRange =
   document.querySelector(".chart-range-grid button.active")?.dataset.range || "1M";
 
-renderPriceChart(selectedAsset, selectedRange);
+renderPriceChart(selectedAsset, selectedRange).then(() => {
+  fetchAIPrediction(selectedAsset);
+});
   }
 
   trBtn.addEventListener("click", () => setLanguage("tr"));
@@ -626,14 +629,14 @@ function applyPreferencesToHomepage() {
   currency.textContent = getOriginalCurrency(selectedAsset);
 }
 
-  if (predictionTitle) {
-  const lang = localStorage.getItem("language") || "tr";
+//   if (predictionTitle) {
+//   const lang = localStorage.getItem("language") || "tr";
 
-  predictionTitle.textContent =
-    lang === "tr"
-      ? "5 Günlük Pencere (Optimize) Tahmini"
-      : "5-Day Window (Optimized) Prediction";
-}
+//   predictionTitle.textContent =
+//     lang === "tr"
+//       ? "5 Günlük Pencere (Optimize) Tahmini"
+//       : "5-Day Window (Optimized) Prediction";
+// }
 
  if (chartTitle) {
   const lang = localStorage.getItem("language") || "tr";
@@ -1146,18 +1149,18 @@ if (currencyText) {
   //       : getOriginalCurrency(selectedAsset);
   currencyText.textContent = getOriginalCurrency(selectedAsset);
 }
+ 
+//   if (predictionPrice) {
+//     // predictionPrice.textContent =
+//     //   `${selectedPrediction.replace("(Recommended)", "").trim()} Prediction`;
+// const lang = localStorage.getItem("language") || "tr";
 
-  if (predictionPrice) {
-    // predictionPrice.textContent =
-    //   `${selectedPrediction.replace("(Recommended)", "").trim()} Prediction`;
-const lang = localStorage.getItem("language") || "tr";
+// predictionPrice.textContent =
+//   lang === "tr"
+//     ? "5 Günlük Pencere (Optimize) Tahmini"
+//     : "5-Day Window (Optimized) Prediction";
 
-predictionPrice.textContent =
-  lang === "tr"
-    ? "5 Günlük Pencere (Optimize) Tahmini"
-    : "5-Day Window (Optimized) Prediction";
-
-  }
+//   }
   if (changeText) {
   changeText.textContent = "N/A";
   changeText.classList.remove("positive", "negative");
@@ -1173,6 +1176,9 @@ predictionPrice.textContent =
   renderPriceChart(selectedAsset, selectedRange).then(() => {
   const currentLanguage = localStorage.getItem("language") || "tr";
   applyLanguage(currentLanguage);
+
+  fetchAIPrediction(selectedAsset);
+
 });
 
   localStorage.setItem("selectedAsset", selectedAsset);
@@ -1305,6 +1311,19 @@ function setupForgotPasswordNavigation() {
   });
 }
 
+function setupPredictionModelChange() {
+  document.addEventListener("change", function (event) {
+    if (event.target.id !== "modelSelect") return;
+
+    const selectedAsset =
+      document.querySelector('input[name="selectedAsset"]:checked')?.value ||
+      localStorage.getItem("selectedAsset") ||
+      "Gold";
+
+    fetchAIPrediction(selectedAsset);
+  });
+}
+
 function setupLogin() {
 
   const loginForm = document.querySelector(".loginform");
@@ -1379,6 +1398,8 @@ const selectedAsset =
 Promise.resolve(renderPriceChart(selectedAsset, "1M")).then(() => {
   const currentLanguage = localStorage.getItem("language") || "tr";
   applyLanguage(currentLanguage);
+
+   fetchAIPrediction(selectedAsset);
 });
 
 applyPreferencesToHomepage();
@@ -1565,22 +1586,23 @@ function setupForgotPasswordSubmit() {
   });
 }
 
-document.body.addEventListener('click', (event) => {
-    // Tıklanan element bizim butonumuz mu kontrol et
-    if (event.target && event.target.classList.contains('predict-action-btn')) {
+//BUTTON OLDUĞUNDA VARLIĞI TETİKLEME KODU:(dilekerz)
+// document.body.addEventListener('click', (event) => {
+//     // Tıklanan element bizim butonumuz mu kontrol et
+//     if (event.target && event.target.classList.contains('predict-action-btn')) {
         
-        // Sol menüdeki seçili sembolü al
-        const selectedAssetNode = document.querySelector('input[name="selectedAsset"]:checked');
+//         // Sol menüdeki seçili sembolü al
+//         const selectedAssetNode = document.querySelector('input[name="selectedAsset"]:checked');
         
-        if (!selectedAssetNode) {
-            console.error("Hata: Seçili bir sembol bulunamadı veya input 'name' değeri uyuşmuyor.");
-            return;
-        }
+//         if (!selectedAssetNode) {
+//             console.error("Hata: Seçili bir sembol bulunamadı veya input 'name' değeri uyuşmuyor.");
+//             return;
+//         }
         
-        // Tahmin fonksiyonunu tetikle
-        fetchAIPrediction(selectedAssetNode.value);
-    }
-});
+//         // Tahmin fonksiyonunu tetikle
+//         fetchAIPrediction(selectedAssetNode.value);
+//     }
+// });
 
 async function fetchAIPrediction(symbol) {
     const predPriceEl = document.getElementById('pred-price');
@@ -1590,9 +1612,10 @@ async function fetchAIPrediction(symbol) {
     const predictedPriceEl = document.getElementById('predicted-price');
     const priceBandEl = document.getElementById('price-band');
     const reliabilityEl = document.getElementById('model-reliability');
-
+const lang = localStorage.getItem("language") || "tr";
     // İstek atılırken ekranda görünecek yükleme durumu
-    predPriceEl.textContent = "Hesaplanıyor...";
+    predPriceEl.textContent = 
+     lang === "tr" ? "Hesaplanıyor..." : "Calculating...";
     predPriceEl.style.color = "";
     realPriceEl.textContent = "-";
     probEl.textContent = "-";
@@ -1617,8 +1640,16 @@ async function fetchAIPrediction(symbol) {
         const probability = data.probability;
 
         // Verileri arayüze basıyoruz
-        predPriceEl.textContent = direction;
-        predPriceEl.style.color = direction === "Yükseliş" ? "#00ff00" : "#ff4444";
+        const isUp = direction === "Yükseliş";
+
+predPriceEl.textContent =
+  lang === "tr"
+    ? direction
+    : isUp
+      ? "Increase"
+      : "Decrease";
+
+predPriceEl.style.color = isUp ? "#00ff00" : "#ff4444";
 
         realPriceEl.textContent = `${realValue.toFixed(2)}`;
         probEl.textContent = `%${probability.toFixed(2)}`;

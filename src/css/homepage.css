@@ -1115,8 +1115,15 @@ body.light-mode .range-buttons button{
 /* CHART RANGE */
 .chart-range-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.chart-range-grid button {
+  min-height: 48px;
+  padding: 0;
+  font-size: 13px;
+  border-radius: 12px;
 }
 
 /* MODEL */
